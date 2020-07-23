@@ -1,0 +1,130 @@
+<div class="panel-body" style="margin-left: 10px; margin-right: 10px;">
+  กลุ่มเรียน : &nbsp;&nbsp;<mat-form-field style="width: 15%;">
+    <mat-label>โปรดเลือกกลุ่มเรียน</mat-label>
+    <mat-select required>
+      <mat-option
+        style="width: auto;"
+        *ngFor="let i of dataGroup; let x = index"
+        [value]="i.study_group_id"
+        (click)="clickGroup(i.study_group_id)"
+      >
+        {{ i.study_group_name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<mat-tab-group>
+  <mat-tab label="ข้อมูลการขอคำปรึกษา">
+    <table class="table" *ngIf="dataAdvice != null">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">ลำดับ</th>
+          <th scope="col">ชื่อนักศึกษา</th>
+          <th scope="col">เรื่องคำปรึกษา</th>
+          <th scope="col">วันที่</th>
+          <th scope="col">ตอบกลับคำขอปรึกษา</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let i of dataAdvice; let x = index">
+          <th scope="row">{{ x + 1 }}</th>
+          <td style="padding-top: 15px;">
+            {{ i.titlename }}{{ i.fname }}&nbsp;&nbsp;{{ i.lname }}
+          </td>
+          <td style="padding-top: 15px;">{{ i.subject_advice }}</td>
+          <td style="padding-top: 15px;">{{ getDate(i.advice_date) }}</td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-primary btn-sm"
+              data-toggle="modal"
+              data-target="#reply_advice"
+              (click)="clickReply(i)"
+            >
+              ตอบกลับคำปรึกษา
+            </button>
+          </td>
+          <!-- The Modal -->
+          <div class="modal" id="reply_advice">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">ตอบกลับคำขอปรึกษา</h4>
+                  <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                  </button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                  <label for="exampleFormControlInput1">เรื่อง</label>
+                  <input
+                    readonly
+                    class="form-control"
+                    type="text"
+                    [value]="dataReply.subject_advice"
+                    required
+                  />
+                  <br />
+                  <label for="exampleFormControlTextarea1">รายละเอียด</label>
+                  <textarea
+                    readonly
+                    class="form-control"
+                    id="exampleFormControlTextarea"
+                    rows="3"
+                    [value]="dataReply.detail"
+                    required
+                  ></textarea>
+                  <br />
+                  <label for="exampleFormControlTextarea1">ตอบกลับคำขอปรึกษา</label>
+                  <textarea
+                    class="form-control"
+                    id="exampleFormControlTextarea"
+                    rows="3"
+                    required
+                  ></textarea>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </tr>
+      </tbody>
+    </table>
+  </mat-tab>
+  <mat-tab label="ประวัติการตอบคำปรึกษา">
+    <table class="table" *ngIf="dataAdvice_notNull != null">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">ลำดับ</th>
+          <th scope="col">ชื่อนักศึกษา</th>
+          <th scope="col">เรื่องคำปรึกษา</th>
+          <th scope="col">ตอบกลับคำขอปรึกษา</th>
+          <th scope="col">วันที่</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let i of dataAdvice_notNull; let x = index">
+          <th scope="row">{{ x + 1 }}</th>
+          <td style="padding-top: 15px;">
+            {{ i.titlename }}{{ i.fname }}&nbsp;&nbsp;{{ i.lname }}
+          </td>
+          <td style="padding-top: 15px;">{{ i.subject_advice }}</td>
+          <td style="padding-top: 15px;">{{ i.reply }}</td>
+          <td style="padding-top: 15px;">{{ getDate(i.reply_advice_date) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </mat-tab>
+</mat-tab-group>
