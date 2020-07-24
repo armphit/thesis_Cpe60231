@@ -35,8 +35,6 @@ export class ManageDataComponent implements OnInit {
   public dataEducational: any = null;
   public dataGroup_branchHead: any = null;
 
-
-
   constructor(public http: HttpService, private formBuilder: FormBuilder) {
     this.getGroup();
     this.getBranchhead();
@@ -276,7 +274,7 @@ export class ManageDataComponent implements OnInit {
   public clickGroup(codeGroup) {
     this.codeGroup = codeGroup;
     // this.getStudent();
-    this.getEducational()
+    this.getEducational();
   }
 
   async uploadFileStudent(evt: any) {
@@ -292,7 +290,6 @@ export class ManageDataComponent implements OnInit {
       const ws: XLSX.WorkSheet = wb.Sheets[wsname];
 
       this.data = XLSX.utils.sheet_to_json(ws, { header: 2 });
-
     };
     reader.readAsBinaryString(target.files[0]);
   }
@@ -310,7 +307,7 @@ export class ManageDataComponent implements OnInit {
     }
 
     // this.getStudent();
-    this.getEducational()
+    this.getEducational();
     Swal.fire({
       position: 'top',
       icon: 'success',
@@ -352,7 +349,7 @@ export class ManageDataComponent implements OnInit {
               timer: 1500,
             });
             // this.getStudent();
-            this.getEducational()
+            this.getEducational();
           } else {
             Swal.fire('ไม่สามารถลบข้อมูลได้!', '', 'error');
           }
@@ -392,9 +389,14 @@ export class ManageDataComponent implements OnInit {
 
   public getGroup_branchHead = async () => {
     let formData = new FormData();
-    formData.append('parent', JSON.parse(localStorage.getItem('userLogin')).branch);
-    let getData: any = await this.http.post('teacher/getGroup_branchHead', formData);
-    console.log(getData);
+    formData.append(
+      'parent',
+      JSON.parse(localStorage.getItem('userLogin')).branch
+    );
+    let getData: any = await this.http.post(
+      'teacher/getGroup_branchHead',
+      formData
+    );
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
         this.dataGroup_branchHead = getData.response.result;

@@ -27,12 +27,13 @@
       </thead>
       <tbody>
         <tr *ngFor="let i of dataAdvice; let x = index">
-          <th scope="row">{{ x + 1 }}</th>
+          <th scope="row" style="padding-top: 15px;">{{ x + 1 }}</th>
           <td style="padding-top: 15px;">
             {{ i.titlename }}{{ i.fname }}&nbsp;&nbsp;{{ i.lname }}
           </td>
           <td style="padding-top: 15px;">{{ i.subject_advice }}</td>
           <td style="padding-top: 15px;">{{ getDate(i.advice_date) }}</td>
+
           <td>
             <button
               type="button"
@@ -45,6 +46,7 @@
             </button>
           </td>
           <!-- The Modal -->
+
           <div class="modal" id="reply_advice">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -57,33 +59,174 @@
                 </div>
 
                 <!-- Modal body -->
+                <form
+                  [formGroup]="formAdvice"
+                  #formChange="ngForm"
+                  (ngSubmit)="formAdvice.valid ? insertReplyAdvice() : ''"
+                >
+                  <div class="modal-body">
+                    <label for="exampleFormControlInput1">เรื่อง</label>
+                    <input
+                      readonly
+                      class="form-control"
+                      type="text"
+                      [value]="dataReply.subject_advice"
+                      required
+                    />
+                    <br />
+                    <label for="exampleFormControlTextarea1">รายละเอียด</label>
+                    <textarea
+                      readonly
+                      class="form-control"
+                      id="exampleFormControlTextarea"
+                      rows="3"
+                      [value]="dataReply.detail"
+                      required
+                    ></textarea>
+                    <br />
+                    <label for="exampleFormControlTextarea1"
+                      >ตอบกลับคำขอปรึกษา</label
+                    >
+                    <textarea
+                      class="form-control"
+                      id="exampleFormControlTextarea"
+                      rows="3"
+                      formControlName="replyAdvice"
+                      required
+                    ></textarea>
+                    <br />
+                    <div class="row">
+                      <div
+                        class="col-md-2.9"
+                        style="padding-top: 5px; padding-left: 15px;"
+                      >
+                        <strong>แนบไฟล์ :</strong>
+                      </div>
+
+                      <div class="col-md-7">
+                        <input
+                          type="file"
+                          class="form-control-file border"
+                          id="customFile"
+                          #fileInput
+                          (change)="uploadFileAdvice(fileInput.files[0])"
+                          required
+                          accept=".pdf"
+                        />
+                      </div>
+                    </div>
+                    <br />
+                    <mat-radio-group formControlName="selected">
+                      <mat-radio-button value="true"
+                        >มีนัดพบติดตามผล</mat-radio-button
+                      >
+                    </mat-radio-group>
+                    <br />
+                    <br />
+                    <div *ngIf="formAdvice.value.selected!">
+                      <label for="exampleFormControlTextarea1"
+                        >ผลที่เกิด/คำแนะนำเพิ่มเติม</label
+                      >
+                      <textarea
+                        class="form-control"
+                        id="exampleFormControlTextarea"
+                        rows="3"
+                        formControlName="suggestion"
+                      ></textarea>
+                      <br />
+                      <label for="exampleFormControlTextarea1">หมายเหตุ</label>
+                      <textarea
+                        class="form-control"
+                        id="exampleFormControlTextarea"
+                        rows="3"
+                        formControlName="detail"
+                      ></textarea>
+                    </div>
+                    <br />
+                    <strong>{{ thDate }}</strong>
+                  </div>
+
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-danger"
+                      data-dismiss="modal"
+                    >
+                      ยกเลิก
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                      บันทึก
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </tr>
+      </tbody>
+    </table>
+  </mat-tab>
+  <mat-tab label="ประวัติการตอบคำปรึกษา">
+    <table class="table" *ngIf="dataAdvice_notNull != null">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">ลำดับ</th>
+          <th scope="col">ชื่อนักศึกษา</th>
+          <th scope="col">เรื่องคำปรึกษา</th>
+          <th scope="col">วันที่</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let i of dataAdvice_notNull; let x = index">
+          <th scope="row" style="padding-top: 15px;">{{ x + 1 }}</th>
+          <td style="padding-top: 15px;">
+            {{ i.titlename }}{{ i.fname }}&nbsp;&nbsp;{{ i.lname }}
+          </td>
+          <td style="padding-top: 15px;">{{ i.subject_advice }}</td>
+          <td style="padding-top: 15px;">{{ getDate(i.reply_advice_date) }}</td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-primary btn-sm"
+              data-toggle="modal"
+              data-target="#updateReplyData"
+            >
+              ข้อมูลการตอบคำปรึกษา
+            </button>
+            &nbsp;&nbsp;
+            <i
+              class="fas fa-edit"
+              style="font-size: 18px; cursor: pointer;"
+              title="แก้ไขข้อมูล"
+              data-toggle="modal"
+              data-target="#updateAdvice"
+            ></i>
+            &nbsp;&nbsp;
+            <span
+              ><i
+                class="fas fa-trash-alt"
+                style="font-size: 18px; color: red; cursor: pointer;"
+                title="ลบข้อมูล"
+              ></i
+            ></span>
+          </td>
+          <!-- The Modal -->
+          <div class="modal" id="updateReplyData">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Modal Heading</h4>
+                  <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                  </button>
+                </div>
+
+                <!-- Modal body -->
                 <div class="modal-body">
-                  <label for="exampleFormControlInput1">เรื่อง</label>
-                  <input
-                    readonly
-                    class="form-control"
-                    type="text"
-                    [value]="dataReply.subject_advice"
-                    required
-                  />
-                  <br />
-                  <label for="exampleFormControlTextarea1">รายละเอียด</label>
-                  <textarea
-                    readonly
-                    class="form-control"
-                    id="exampleFormControlTextarea"
-                    rows="3"
-                    [value]="dataReply.detail"
-                    required
-                  ></textarea>
-                  <br />
-                  <label for="exampleFormControlTextarea1">ตอบกลับคำขอปรึกษา</label>
-                  <textarea
-                    class="form-control"
-                    id="exampleFormControlTextarea"
-                    rows="3"
-                    required
-                  ></textarea>
+                  Modal body..
                 </div>
 
                 <!-- Modal footer -->
@@ -99,30 +242,36 @@
               </div>
             </div>
           </div>
-        </tr>
-      </tbody>
-    </table>
-  </mat-tab>
-  <mat-tab label="ประวัติการตอบคำปรึกษา">
-    <table class="table" *ngIf="dataAdvice_notNull != null">
-      <thead class="thead-dark">
-        <tr>
-          <th scope="col">ลำดับ</th>
-          <th scope="col">ชื่อนักศึกษา</th>
-          <th scope="col">เรื่องคำปรึกษา</th>
-          <th scope="col">ตอบกลับคำขอปรึกษา</th>
-          <th scope="col">วันที่</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let i of dataAdvice_notNull; let x = index">
-          <th scope="row">{{ x + 1 }}</th>
-          <td style="padding-top: 15px;">
-            {{ i.titlename }}{{ i.fname }}&nbsp;&nbsp;{{ i.lname }}
-          </td>
-          <td style="padding-top: 15px;">{{ i.subject_advice }}</td>
-          <td style="padding-top: 15px;">{{ i.reply }}</td>
-          <td style="padding-top: 15px;">{{ getDate(i.reply_advice_date) }}</td>
+          <!-- The Modal -->
+          <div class="modal" id="updateAdvice">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Modal Heading</h4>
+                  <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                  </button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                  Modal body..
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </tr>
       </tbody>
     </table>

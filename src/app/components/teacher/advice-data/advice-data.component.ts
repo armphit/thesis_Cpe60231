@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-advice-data',
   templateUrl: './advice-data.component.html',
-  styleUrls: ['./advice-data.component.scss']
+  styleUrls: ['./advice-data.component.scss'],
 })
 export class AdviceDataComponent implements OnInit {
-
   public codeGroup: any = null;
   public dataGroup: any = null;
   public dataAdvice: any = null;
@@ -34,19 +35,24 @@ export class AdviceDataComponent implements OnInit {
     'พฤศจิกายน',
     'ธันวาคม'
   );
-  public dataReply = {"subject_advice":null,"detail":null};
+  public dataReply = { subject_advice: null, detail: null, advice_id: null };
   public dataAdvice_notNull: any = null;
+  public fileAdvice: File;
+  // selected: any = null;
+  public formAdvice: FormGroup;
+  public thDate: any = null;
 
-
-
-
-  constructor(public http: HttpService) {
-
-    this.getGroup()
-
+  constructor(public http: HttpService, private formBuilder: FormBuilder) {
+    this.getGroup();
   }
 
   ngOnInit(): void {
+    this.formAdvice = this.formBuilder.group({
+      replyAdvice: ['', Validators.required],
+      suggestion: [''],
+      detail: [''],
+      selected: [''],
+    });
   }
   public getGroup = async () => {
     let formData = new FormData();
@@ -85,7 +91,6 @@ export class AdviceDataComponent implements OnInit {
   };
 
   public getDate(date: any) {
-
     var d = new Date(date);
 
     return (
@@ -99,16 +104,22 @@ export class AdviceDataComponent implements OnInit {
     );
   }
   public clickReply(dataReply) {
-
     this.dataReply.subject_advice = dataReply.subject_advice;
     this.dataReply.detail = dataReply.detail;
-    console.log(this.dataReply)
+    this.dataReply.advice_id = dataReply.advice_id;
+
+    this.fileAdvice = null;
+    this.getYear();
+    this.formAdvice.reset();
   }
 
   public getAdvice_notNull = async () => {
     let formData = new FormData();
     formData.append('group', this.codeGroup);
-    let getData: any = await this.http.post('teacher/getAdvice_notNull', formData);
+    let getData: any = await this.http.post(
+      'teacher/getAdvice_notNull',
+      formData
+    );
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
         this.dataAdvice_notNull = getData.response.result;
@@ -119,5 +130,79 @@ export class AdviceDataComponent implements OnInit {
       alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
     }
   };
+  public uploadFileAdvice(file) {
+    if (file) {
+      this.fileAdvice = file;
+    }
+  }
 
+  public getYear = () => {
+    var now = new Date();
+
+    this.thDate =
+      this.thday[now.getDay()] +
+      ' ' +
+      now.getDate() +
+      ' ' +
+      'เดือน' +
+      this.thmonth[now.getMonth()] +
+      ' ' +
+      'พ.ศ.' +
+      (0 + now.getFullYear() + 543);
+  };
+
+  public insertReplyAdvice = async () => {
+    let formData = new FormData();
+    var now = new Date();
+    var date =
+      now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
+
+    formData.append('ID', JSON.parse(localStorage.getItem('userLogin')).userID);
+    formData.append('reply', this.formAdvice.value.replyAdvice);
+    formData.append('adviceID', this.dataReply.advice_id);
+    formData.append('upload', this.fileAdvice);
+    formData.append('dateNow', date);
+
+    // formData.forEach((value, key) => {
+    //   console.log(key + ':' + value);
+    // });
+
+    let getData: any = await this.http.post('teacher/addReplyAdvice', formData);
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
+        let win: any = window;
+        win.$('#reply_advice').modal('hide');
+        this.getAdvice();
+        this.getAdvice_notNull();
+      } else {
+        Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
+      }
+    } else {
+      Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+    }
+
+    if (this.formAdvice.value.selected) {
+      formData.append('suggestion', this.formAdvice.value.suggestion);
+      formData.append('detail', this.formAdvice.value.detail);
+      formData.append('adviceID', this.dataReply.advice_id);
+      formData.append('dateNow', date);
+      let getData: any = await this.http.post(
+        'teacher/addAppointment',
+        formData
+      );
+      console.log(getData);
+      if (getData.connect) {
+        if (getData.response.rowCount > 0) {
+          Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
+          let win: any = window;
+          win.$('#reply_advice').modal('hide');
+        } else {
+          Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
+        }
+      } else {
+        Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+      }
+    }
+  };
 }
