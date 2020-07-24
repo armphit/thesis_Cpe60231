@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-advice-data',
@@ -35,12 +36,23 @@ export class AdviceDataComponent implements OnInit {
     'พฤศจิกายน',
     'ธันวาคม'
   );
-  public dataReply = { subject_advice: null, detail: null, advice_id: null };
+  public dataReply = {
+    subject_advice: null,
+    detail: null,
+    advice_id: null,
+    reply_advice: null,
+  };
   public dataAdvice_notNull: any = null;
   public fileAdvice: File;
-  // selected: any = null;
   public formAdvice: FormGroup;
+  public formAppointment: FormGroup;
   public thDate: any = null;
+  public dataReply_id = {
+    subject_advice: null,
+    detail: null,
+    reply: null,
+    reply_id: null,
+  };
 
   constructor(public http: HttpService, private formBuilder: FormBuilder) {
     this.getGroup();
@@ -49,9 +61,12 @@ export class AdviceDataComponent implements OnInit {
   ngOnInit(): void {
     this.formAdvice = this.formBuilder.group({
       replyAdvice: ['', Validators.required],
-      suggestion: [''],
+    });
+
+    this.formAppointment = this.formBuilder.group({
+      suggestion: ['', Validators.required],
       detail: [''],
-      selected: [''],
+      to: ['', Validators.required],
     });
   }
   public getGroup = async () => {
@@ -130,6 +145,7 @@ export class AdviceDataComponent implements OnInit {
       alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
     }
   };
+
   public uploadFileAdvice(file) {
     if (file) {
       this.fileAdvice = file;
@@ -191,7 +207,6 @@ export class AdviceDataComponent implements OnInit {
         'teacher/addAppointment',
         formData
       );
-      console.log(getData);
       if (getData.connect) {
         if (getData.response.rowCount > 0) {
           Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
@@ -203,6 +218,40 @@ export class AdviceDataComponent implements OnInit {
       } else {
         Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
       }
+    }
+  };
+
+  clickReply_data(dataReply: any) {
+    this.dataReply_id.subject_advice = dataReply.subject_advice;
+    this.dataReply_id.detail = dataReply.detail;
+    this.dataReply_id.reply = dataReply.reply;
+    this.dataReply_id.reply_id = dataReply.reply_advice_id;
+    this.formAppointment.reset();
+  }
+
+  public insertAppointment = async () => {
+    const momentDate = new Date(this.formAppointment.value.to);
+    const formattedDate = moment(momentDate).format('YYYY-MM-DD');
+    let formData = new FormData();
+    formData.append('suggestion', this.formAppointment.value.suggestion);
+    formData.append('detail', this.formAppointment.value.detail);
+    formData.append('reply_adviceID', this.dataReply_id.reply_id);
+    formData.append('dateNow', formattedDate);
+
+    formData.forEach((value, key) => {
+      console.log(key + ':' + value);
+    });
+    let getData: any = await this.http.post('teacher/addAppointment', formData);
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
+        let win: any = window;
+        win.$('#addAppointment').modal('hide');
+      } else {
+        Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
+      }
+    } else {
+      Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
     }
   };
 }

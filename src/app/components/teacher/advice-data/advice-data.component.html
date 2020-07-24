@@ -52,7 +52,7 @@
               <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
-                  <h4 class="modal-title">ตอบกลับคำขอปรึกษา</h4>
+                  <h2 class="modal-title">ตอบกลับคำขอปรึกษา</h2>
                   <button type="button" class="close" data-dismiss="modal">
                     &times;
                   </button>
@@ -115,35 +115,6 @@
                         />
                       </div>
                     </div>
-                    <br />
-                    <mat-radio-group formControlName="selected">
-                      <mat-radio-button value="true"
-                        >มีนัดพบติดตามผล</mat-radio-button
-                      >
-                    </mat-radio-group>
-                    <br />
-                    <br />
-                    <div *ngIf="formAdvice.value.selected!">
-                      <label for="exampleFormControlTextarea1"
-                        >ผลที่เกิด/คำแนะนำเพิ่มเติม</label
-                      >
-                      <textarea
-                        class="form-control"
-                        id="exampleFormControlTextarea"
-                        rows="3"
-                        formControlName="suggestion"
-                      ></textarea>
-                      <br />
-                      <label for="exampleFormControlTextarea1">หมายเหตุ</label>
-                      <textarea
-                        class="form-control"
-                        id="exampleFormControlTextarea"
-                        rows="3"
-                        formControlName="detail"
-                      ></textarea>
-                    </div>
-                    <br />
-                    <strong>{{ thDate }}</strong>
                   </div>
 
                   <!-- Modal footer -->
@@ -167,7 +138,7 @@
       </tbody>
     </table>
   </mat-tab>
-  <mat-tab label="ประวัติการตอบคำปรึกษา">
+  <mat-tab label="ข้อมูลการตอบคำปรึกษา">
     <table class="table" *ngIf="dataAdvice_notNull != null">
       <thead class="thead-dark">
         <tr>
@@ -191,9 +162,20 @@
               type="button"
               class="btn btn-primary btn-sm"
               data-toggle="modal"
-              data-target="#updateReplyData"
+              data-target="#ReplyData"
+              (click)="clickReply_data(i)"
             >
               ข้อมูลการตอบคำปรึกษา
+            </button>
+            &nbsp;&nbsp;
+            <button
+              type="button"
+              class="btn btn-primary btn-sm"
+              data-toggle="modal"
+              data-target="#addAppointment"
+              (click)="clickReply_data(i)"
+            >
+              เพิ่มการนัดหมาย
             </button>
             &nbsp;&nbsp;
             <i
@@ -213,12 +195,12 @@
             ></span>
           </td>
           <!-- The Modal -->
-          <div class="modal" id="updateReplyData">
+          <div class="modal" id="ReplyData">
             <div class="modal-dialog">
               <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
-                  <h4 class="modal-title">Modal Heading</h4>
+                  <h2 class="modal-title">ข้อมูลการตอบคำปรึกษา</h2>
                   <button type="button" class="close" data-dismiss="modal">
                     &times;
                   </button>
@@ -226,7 +208,36 @@
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                  Modal body..
+                  <label for="exampleFormControlInput1">เรื่อง</label>
+                  <input
+                    readonly
+                    class="form-control"
+                    type="text"
+                    [value]="dataReply_id.subject_advice"
+                    required
+                  />
+                  <br />
+                  <label for="exampleFormControlTextarea1">รายละเอียด</label>
+                  <textarea
+                    readonly
+                    class="form-control"
+                    id="exampleFormControlTextarea"
+                    rows="3"
+                    [value]="dataReply_id.detail"
+                    required
+                  ></textarea>
+                  <br />
+                  <label for="exampleFormControlTextarea1"
+                    >ตอบกลับคำขอปรึกษา</label
+                  >
+                  <textarea
+                    readonly
+                    class="form-control"
+                    id="exampleFormControlTextarea"
+                    rows="3"
+                    [value]="dataReply_id.reply"
+                    required
+                  ></textarea>
                 </div>
 
                 <!-- Modal footer -->
@@ -243,12 +254,81 @@
             </div>
           </div>
           <!-- The Modal -->
+          <div class="modal" id="addAppointment">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h2 class="modal-title">เพิ่มการนัดหมาย</h2>
+                  <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                  </button>
+                </div>
+                <form
+                  [formGroup]="formAppointment"
+                  #formChange="ngForm"
+                  (ngSubmit)="formAppointment.valid ? insertAppointment() : ''"
+                >
+                  <!-- Modal body -->
+                  <div class="modal-body">
+                    <label for="exampleFormControlTextarea1"
+                      >ผลที่เกิด/คำแนะนำเพิ่มเติม</label
+                    >
+                    <textarea
+                      class="form-control"
+                      id="exampleFormControlTextarea"
+                      rows="3"
+                      formControlName="suggestion"
+                    ></textarea>
+                    <br />
+                    <label for="exampleFormControlTextarea1">หมายเหตุ</label>
+                    <textarea
+                      class="form-control"
+                      id="exampleFormControlTextarea"
+                      rows="3"
+                      formControlName="detail"
+                    ></textarea>
+                    <br />
+                    <strong>วันที่นัดหมาย : </strong>&nbsp;&nbsp;
+                    <mat-form-field>
+                      <mat-label>โปรดเลือกวันที่</mat-label>
+                      <input
+                        matInput
+                        [matDatepicker]="picker"
+                        formControlName="to"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="picker"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-danger"
+                      data-dismiss="modal"
+                    >
+                      ยกเลิก
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                      บันทึก
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- The Modal -->
           <div class="modal" id="updateAdvice">
             <div class="modal-dialog">
               <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
-                  <h4 class="modal-title">Modal Heading</h4>
+                  <h2 class="modal-title">แก้ไขการตอบคำปรึกษา</h2>
                   <button type="button" class="close" data-dismiss="modal">
                     &times;
                   </button>
@@ -276,4 +356,5 @@
       </tbody>
     </table>
   </mat-tab>
+  <mat-tab label="ข้อมูลการนัดหมาย"> </mat-tab>
 </mat-tab-group>

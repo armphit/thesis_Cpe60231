@@ -6,13 +6,8 @@ import { ManageDataComponent } from './manage-data/manage-data.component';
 import { SharedModules } from 'src/app/shared-modules';
 import { AdviceDataComponent } from './advice-data/advice-data.component';
 
-
 @NgModule({
   declarations: [ManageDataComponent, AdviceDataComponent],
-  imports: [
-    CommonModule,
-    TeacherRoutingModule,
-    SharedModules
-  ]
+  imports: [CommonModule, TeacherRoutingModule, SharedModules],
 })
-export class TeacherModule { }
+export class TeacherModule {}

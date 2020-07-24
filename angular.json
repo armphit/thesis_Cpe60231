@@ -127,5 +127,8 @@
       }
     }
   },
-  "defaultProject": "my-project"
+  "defaultProject": "my-project",
+  "cli": {
+    "analytics": false
+  }
 }
