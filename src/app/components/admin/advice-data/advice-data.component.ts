@@ -45,6 +45,16 @@ export class AdviceDataComponent implements OnInit {
     'พฤศจิกายน',
     'ธันวาคม'
   );
+  public dataStudent: any = null;
+  public dataStudent_id: any = null;
+  public dataAppointment_Student: any = null;
+
+  public dataReply_id = {
+    subject_advice: null,
+    detail: null,
+    reply: null,
+    reply_id: null,
+  };
 
   constructor(private http: HttpService, private formBuilder: FormBuilder) {
     this.getFaculty();
@@ -145,7 +155,7 @@ export class AdviceDataComponent implements OnInit {
     this.groupID = codeGroup;
     // this.groupName = namegroup;
     this.groupUser_name = titlename + fname + ' ' + lname;
-    this.getAdvice();
+    this.getStudent();
   }
 
   public getBranchhead = async () => {
@@ -177,7 +187,7 @@ export class AdviceDataComponent implements OnInit {
 
   public getAdvice = async () => {
     let formData = new FormData();
-    formData.append('group', this.groupID);
+    formData.append('ID', this.dataStudent_id);
     let getData: any = await this.http.post('admin/getAdvice', formData);
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
@@ -202,5 +212,51 @@ export class AdviceDataComponent implements OnInit {
       '  ' +
       (d.getFullYear() + 543)
     );
+  }
+
+  public getStudent = async () => {
+    let formData = new FormData();
+    formData.append('group', this.groupID);
+    let getData: any = await this.http.post('teacher/getStudent', formData);
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        this.dataStudent = getData.response.result;
+      } else {
+        this.dataStudent = null;
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+  };
+
+  async clickStudent(data: any) {
+    this.dataStudent_id = data.userID;
+    this.getAdvice();
+  }
+  clickReply_data(dataReply: any) {
+    console.log(dataReply.reply_advice_id);
+    this.dataReply_id.subject_advice = dataReply.subject_advice;
+    this.dataReply_id.detail = dataReply.detail;
+    this.dataReply_id.reply = dataReply.reply;
+    this.dataReply_id.reply_id = dataReply.reply_advice_id;
+    this.getReply_Student();
+  }
+  async getReply_Student() {
+    let formData = new FormData();
+    formData.append('ID', this.dataReply_id.reply_id);
+    let getData: any = await this.http.post(
+      'teacher/getAppointment_Student',
+      formData
+    );
+    console.log(getData);
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        this.dataAppointment_Student = getData.response.result;
+      } else {
+        this.dataAppointment_Student = null;
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
   }
 }

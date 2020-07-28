@@ -29,7 +29,6 @@ export class StudentDataComponent implements OnInit {
   public groupID: any = null;
   public groupName: any = null;
   public groupUser_name: any = null;
-  public dataStudent: any = null;
   fileCurriculum: File = null;
   public formCurriculum: FormGroup;
   public dataCurriculum: any = null;
@@ -177,8 +176,7 @@ export class StudentDataComponent implements OnInit {
     this.groupID = codeGroup;
     this.groupName = namegroup;
     this.groupUser_name = titlename + fname + ' ' + lname;
-    this.getStudent();
-
+    this.getEducational();
   }
 
   async uploadFile(evt: any) {
@@ -211,7 +209,7 @@ export class StudentDataComponent implements OnInit {
       let getData: any = await this.http.post('admin/uploadStudent', Form);
     }
 
-    this.getStudent();
+    this.getEducational();
     Swal.fire({
       position: 'top',
       icon: 'success',
@@ -221,21 +219,21 @@ export class StudentDataComponent implements OnInit {
     });
   }
 
-  public async getStudent() {
-    let formData = new FormData();
-    formData.append('group', this.groupID);
-    let getData: any = await this.http.post('admin/getStudent', formData);
+  // public async getStudent() {
+  //   let formData = new FormData();
+  //   formData.append('group', this.groupID);
+  //   let getData: any = await this.http.post('admin/getStudent', formData);
 
-    if (getData.connect) {
-      if (getData.response.rowCount > 0) {
-        this.dataStudent = getData.response.result;
-      } else {
-        this.dataStudent = null;
-      }
-    } else {
-      Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
-    }
-  }
+  //   if (getData.connect) {
+  //     if (getData.response.rowCount > 0) {
+  //       this.dataStudent = getData.response.result;
+  //     } else {
+  //       this.dataStudent = null;
+  //     }
+  //   } else {
+  //     Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+  //   }
+  // }
 
   public deleteStudent = async (code: any) => {
     let formData = new FormData();
@@ -253,7 +251,7 @@ export class StudentDataComponent implements OnInit {
               showConfirmButton: false,
               timer: 1500,
             });
-            this.getStudent();
+            this.getEducational();
           } else {
             Swal.fire('ไม่สามารถลบข้อมูลได้!', '', 'error');
           }
@@ -261,11 +259,6 @@ export class StudentDataComponent implements OnInit {
       }
     });
   };
-
-
-
-
-
 
   public getYear = () => {
     var now = new Date();

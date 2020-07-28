@@ -50,8 +50,8 @@
   >
   <br />
 
-  <span *ngIf="codeBranch!"
-    >กลุ่มเรียน:&nbsp;&nbsp;<mat-form-field>
+  <div *ngIf="codeBranch!">
+    กลุ่มเรียน:&nbsp;&nbsp;<mat-form-field>
       <mat-label>โปรดเลือกกลุ่มเรียน</mat-label>
       <mat-select required>
         <mat-option
@@ -70,9 +70,23 @@
         >
           {{ i.study_group_name }}
         </mat-option>
-      </mat-select>
-    </mat-form-field></span
-  >
+      </mat-select> </mat-form-field
+    ><span *ngIf="groupID!" style="padding-left: 15px;"
+      >นักศึกษา : &nbsp;&nbsp;<mat-form-field style="width: 20%;">
+        <mat-label>โปรดเลือกนักศึกษา</mat-label>
+        <mat-select required>
+          <mat-option
+            style="width: auto;"
+            *ngFor="let i of dataStudent; let x = index"
+            [value]="i.userID"
+            (click)="clickStudent(i)"
+          >
+            {{ i.titlename }}{{ i.fname }}&nbsp;&nbsp;{{ i.lname }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field></span
+    >
+  </div>
   <br />
   <span *ngIf="groupID!"
     >อาจารย์ที่ปรึกษา : &nbsp;&nbsp;{{ groupUser_name }}</span
@@ -82,8 +96,8 @@
   <thead class="thead-dark">
     <tr>
       <th scope="col">ลำดับ</th>
-      <th scope="col">รหัสนักศึกษา</th>
-      <th scope="col">ชื่อนักศึกษา</th>
+      <th scope="col">เรื่อง</th>
+      <th scope="col">วันที่</th>
       <th scope="col"></th>
     </tr>
   </thead>
@@ -91,10 +105,10 @@
     <tr *ngFor="let i of dataAdvice; let x = index">
       <th scope="row" style="padding-top: 15px;">{{ x + 1 }}</th>
       <td style="padding-top: 15px;">
-        {{ i.userID }}
+        {{ i.subject_advice }}
       </td>
       <td style="padding-top: 15px;">
-        {{ i.titlename }}{{ i.fname }}&nbsp;&nbsp;{{ i.lname }}
+        {{ getDate(i.advice_date) }}
       </td>
       <td>
         <button
@@ -102,17 +116,18 @@
           class="btn btn-primary btn-sm"
           data-toggle="modal"
           data-target="#Advice"
+          (click)="clickReply_data(i)"
         >
-          ข้อมูลการปรึกษา
+          ข้อมูลการปรึกษาและการนัดหมาย
         </button>
       </td>
 
       <div class="modal" id="Advice">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <!-- Modal Header -->
             <div class="modal-header">
-              <h2 class="modal-title">ข้อมูลการปรึกษา</h2>
+              <h2 class="modal-title">ข้อมูลการปรึกษาและการนัดหมาย</h2>
               <button type="button" class="close" data-dismiss="modal">
                 &times;
               </button>
@@ -120,38 +135,52 @@
 
             <!-- Modal body -->
             <div class="modal-body">
-              <label for="exampleFormControlInput">เรื่อง</label>
-              <input
-                readonly
-                class="form-control"
-                type="text"
-                value="{{ i.subject_advice }}"
-              />
+              <p>
+                <strong>เรื่อง :&nbsp;</strong>{{ dataReply_id.subject_advice }}
+              </p>
               <br />
-              <label for="exampleFormControlTextarea1">รายละเอียด</label>
-              <textarea
-                readonly
-                class="form-control"
-                id="exampleFormControlTextarea"
-                value="{{ i.detail }}"
-                rows="3"
-              ></textarea>
+              <p>
+                <strong>รายละเอียด :<br /></strong>{{ dataReply_id.detail }}
+              </p>
               <br />
-              <strong>วันที่ขอรับการปรึกษา :</strong> &nbsp;&nbsp;
-              {{ getDate(i.advice_date) }}
+              <p>
+                <strong>ตอบกลับคำขอปรึกษา :<br /></strong
+                >{{ dataReply_id.reply }}
+              </p>
               <br />
-              <br />
-              <label for="exampleFormControlTextarea">การตอบกลับ</label>
-              <textarea
-                readonly
-                class="form-control"
-                id="exampleFormControlTextarea"
-                rows="3"
-                value="{{ i.reply }}"
-              ></textarea>
-              <br />
-              <strong>วันที่ตอบรับคำขอการปรึกษา :</strong> &nbsp;&nbsp;
-              {{ getDate(i.reply_advice_date) }}
+              <p>
+                <strong>การนัดหมาย :<br /></strong>
+              </p>
+              <table
+                class="table"
+                *ngIf="dataAppointment_Student != null"
+                style="width: 100%;"
+              >
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">ลำดับ</th>
+                    <th scope="col">
+                      ผลที่เกิด/คำแนะนำเพิ่มเติม
+                    </th>
+                    <th scope="col">หมายเหตุ</th>
+                    <th scope="col">วันที่</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr></tr>
+                  <tr *ngFor="let i of dataAppointment_Student; let x = index">
+                    <th scope="row" style="padding-top: 15px;">{{ x + 1 }}</th>
+                    <td style="padding-top: 15px;">
+                      {{ i.app_suggestion }}
+                    </td>
+                    <td style="padding-top: 15px;">{{ i.app_detail }}</td>
+                    <td style="padding-top: 15px;">
+                      {{ getDate(i.app_date) }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
               <br />
             </div>
 
