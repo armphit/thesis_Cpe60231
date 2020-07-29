@@ -3,6 +3,7 @@ import { HttpService } from 'src/app/services/http.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-manage-data',
@@ -34,16 +35,25 @@ export class ManageDataComponent implements OnInit {
   public formYearTerm: FormGroup;
   public dataEducational: any = null;
   public dataGroup_branchHead: any = null;
+  public date_student: FormGroup;
+  public year_study: Array<any> = [];
+  public date_year: FormGroup;
+  public dataCURDATE = {
+    year: null,
+    //   term: null,
+  };
+  public dataCalendar: any = null;
 
   constructor(public http: HttpService, private formBuilder: FormBuilder) {
     this.getGroup();
-    this.getBranchhead();
     this.getAdvisor();
-    this.getYear();
+    this.getBranchhead();
+
     this.getGroup_branchHead();
   }
 
   ngOnInit(): void {
+    this.getYear();
     this.formGroup = this.formBuilder.group({
       group: ['', Validators.required],
       brunch: ['', Validators.required],
@@ -59,6 +69,17 @@ export class ManageDataComponent implements OnInit {
       year: ['', Validators.required],
       term: ['', Validators.required],
     });
+    this.date_student = this.formBuilder.group({
+      start: ['', Validators.required],
+      end: ['', Validators.required],
+      selected_year: ['', Validators.required],
+      selected_term: ['', Validators.required],
+    });
+
+    this.date_year = this.formBuilder.group({
+      _year: [``, Validators.required],
+    });
+    this.getCURDATE();
   }
 
   public getAdvisor = async () => {
@@ -358,7 +379,10 @@ export class ManageDataComponent implements OnInit {
     });
   };
   public getTerm(e) {
-    this.getEducational();
+    this.date_year = this.formBuilder.group({
+      _year: [e, Validators.required],
+    });
+    this.getCalendar();
   }
 
   public getEducational = async () => {
@@ -383,7 +407,7 @@ export class ManageDataComponent implements OnInit {
     var now = new Date();
     var year = 0 + now.getFullYear() + 543;
     for (var i = 0; i < 10; i++) {
-      this.range[i] = { value: year - i };
+      this.range[i] = { value: `${year - i}` };
     }
   };
 
@@ -405,6 +429,93 @@ export class ManageDataComponent implements OnInit {
       }
     } else {
       Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+    }
+  };
+  public clickCalendar = () => {
+    this.date_student.reset();
+    this.getYearCalendar();
+  };
+
+  public getYearCalendar = () => {
+    var now = new Date();
+    var year = 0 + now.getFullYear() + 543;
+    for (var i = 0; i < 10; i++) {
+      this.year_study[i] = { value: year - i };
+    }
+  };
+  public insertCalendar = async () => {
+    const momentDate = new Date(this.date_student.value.start);
+    const formattedDate = moment(momentDate).format('YYYY-MM-DD');
+    const momentDate2 = new Date(this.date_student.value.end);
+    const formattedDate2 = moment(momentDate2).format('YYYY-MM-DD');
+    let formData = new FormData();
+    formData.append('year', this.date_student.value.selected_year);
+    formData.append('term', this.date_student.value.selected_term);
+    formData.append('start', formattedDate);
+    formData.append('end', formattedDate2);
+
+    if (formattedDate > formattedDate2) {
+      Swal.fire(
+        'ไม่สามารถเพิ่มปีการศึกษาได้',
+        'วันเปิดเทอม - วันปิดเทอม ไม่ถูกต้อง',
+        'error'
+      );
+    } else {
+      let getData: any = await this.http.post('teacher/addCalendar', formData);
+      console.log(getData);
+      if (getData.connect) {
+        if (getData.response.result) {
+          Swal.fire('เพิ่มปีการศึกษาเสร็จสิ้น', '', 'success');
+          let win: any = window;
+          win.$('#addCalendar').modal('hide');
+          // this.getGroup();
+        } else if (getData.response.error) {
+          Swal.fire(
+            'ไม่สามารถเพิ่มปีการศึกษาได้',
+            'ข้อมูลภาคการศึกษาซ้ำ',
+            'error'
+          );
+        } else {
+          Swal.fire('ไม่สามารถเพิ่มปีการศึกษาได้', '', 'error');
+        }
+      } else {
+        Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+      }
+    }
+  };
+
+  public getCURDATE = async () => {
+    let getData: any = await this.http.post('teacher/getCURDATE');
+
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        this.dataCURDATE.year = getData.response.result[0].year;
+        //this.dataCURDATE.term = getData.response.result[0].term ;
+
+        this.date_year.patchValue({
+          _year: getData.response.result[0].year,
+        });
+        this.getCalendar();
+      } else {
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+  };
+
+  public getCalendar = async () => {
+    let formData = new FormData();
+    formData.append('year', this.date_year.value._year);
+    let getData: any = await this.http.post('teacher/getCalendar', formData);
+    console.log(getData);
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        this.dataCalendar = getData.response.result;
+      } else {
+        this.dataCalendar = null;
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
     }
   };
 }

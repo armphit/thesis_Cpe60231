@@ -1,204 +1,64 @@
 <mat-tab-group>
-  <mat-tab label="สำหรับอาจารย์ที่ปรึกษา" *ngIf="dataAdvisor != null">
-    <mat-tab-group>
-      <mat-tab label="ข้อมูลกลุ่มเรียน">
-        <div class="panel-body" style="margin-left: 10px; margin-right: 10px;">
-          <form
-            [formGroup]="formGroup"
-            #formChange="ngForm"
-            (ngSubmit)="formGroup.valid ? insertGroup() : ''"
+  <mat-tab label="สำหรับอาจารย์ที่ปรึกษา">
+    <div *ngIf="dataAdvisor != null">
+      <mat-tab-group>
+        <mat-tab label="ข้อมูลกลุ่มเรียน">
+          <div
+            class="panel-body"
+            style="margin-left: 10px; margin-right: 10px;"
           >
-            <button
-              type="button"
-              class="btn btn-primary"
-              data-toggle="modal"
-              data-target="#addGroup"
-              (click)="getBranch() && clearFrom()"
+            <form
+              [formGroup]="formGroup"
+              #formChange="ngForm"
+              (ngSubmit)="formGroup.valid ? insertGroup() : ''"
             >
-              <i class="fas fa-plus"></i>
-              เพิ่มกลุ่มเรียน
-            </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-toggle="modal"
+                data-target="#addGroup"
+                (click)="getBranch() && clearFrom()"
+              >
+                <i class="fas fa-plus"></i>
+                เพิ่มกลุ่มเรียน
+              </button>
 
-            <div class="modal" id="addGroup">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <!-- Modal Header -->
-                  <div class="modal-header">
-                    <h2 class="modal-title">เพิ่มกลุ่มเรียน</h2>
-                    <button type="button" class="close" data-dismiss="modal">
-                      &times;
-                    </button>
-                  </div>
-
-                  <!-- Modal body -->
-                  <div class="modal-body">
-                    โปรแกรมวิชา : &nbsp;&nbsp;
-                    <mat-form-field style="width: 80%;">
-                      <mat-label>โปรดเลือกโปรแกรมวิชา</mat-label>
-                      <mat-select formControlName="brunch" required>
-                        <mat-option
-                          style="width: auto;"
-                          *ngFor="let i of dataBranch; let x = index"
-                          [value]="i.code"
-                          (click)="clickBranch(i.code, i.name, i.acronym)"
-                        >
-                          {{ i.name }}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-
-                    กลุ่มเรียน :&nbsp;&nbsp; <span> {{ acronym }}</span>
-                    &nbsp;&nbsp;.&nbsp;&nbsp;
-                    <mat-form-field class="example-full-width">
-                      <mat-label>โปรดระบุรหัสกลุ่มเรียน</mat-label>
-                      <input
-                        matInput
-                        maxlength="6"
-                        formControlName="group"
-                        onkeyup="this.value = this.value.toUpperCase()"
-                        required
-                      />
-                    </mat-form-field>
-
-                    <div class="row">
-                      <div
-                        class="col-sm-1.9"
-                        style="padding-top: 20px; padding-left: 15px;"
-                      >
-                        แผนการเรียน :
-                      </div>
-
-                      <div class="col-sm-9" style="padding-top: 16px;">
-                        <input
-                          type="file"
-                          class="form-control-file border"
-                          formControlName="upload"
-                          #fileInput
-                          (change)="uploadCurriculum(fileInput.files[0])"
-                          required
-                          accept=".pdf"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Modal footer -->
-                  <div class="modal-footer">
-                    <button
-                      type="button"
-                      class="btn btn-danger"
-                      data-dismiss="modal"
-                    >
-                      ยกเลิก
-                    </button>
-                    <button type="submit" class="btn btn-success">ตกลง</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-        <table class="table" *ngIf="dataGroup != null">
-          <thead class="thead-dark">
-            <tr>
-              <th scope="col">ลำดับ</th>
-              <th scope="col">กลุ่มเรียน</th>
-              <th scope="col">โปรแกรมวิชา</th>
-              <th scope="col"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let i of dataGroup; let x = index">
-              <th scope="row" style="padding-top: 15px;">{{ x + 1 }}</th>
-              <td style="padding-top: 15px;">
-                {{ i.study_group_name }}
-              </td>
-              <td style="padding-top: 15px;">
-                {{ i.name }}
-              </td>
-              <td>
-                <button
-                  type="button"
-                  class="btn btn-success btn-sm"
-                  [disabled]="i.file_curriculum == null"
-                >
-                  <a
-                    href="{{ http.PathPDF }}{{ i.file_curriculum }}"
-                    target="_blank"
-                    ><font color="white">คลิกดูแผนการเรียน</font></a
-                  >
-                </button>
-                &nbsp;&nbsp;&nbsp;
-                <span
-                  (click)="
-                    clickUpdateGroup(
-                      i.study_group_id,
-                      i.study_group_name,
-                      i.file_curriculum,
-                      i.branch_id
-                    )
-                  "
-                  ><i
-                    class="fas fa-edit"
-                    style="font-size: 18px; cursor: pointer;"
-                    title="แก้ไขข้อมูล"
-                    data-toggle="modal"
-                    data-target="#updateGroup"
-                  ></i
-                ></span>
-                &nbsp;&nbsp;&nbsp;
-                <span (click)="deleteGroup(i.study_group_id)"
-                  ><i
-                    class="fas fa-trash-alt"
-                    style="font-size: 18px; color: red; cursor: pointer;"
-                    title="ลบข้อมูล"
-                  ></i
-                ></span>
-              </td>
-            </tr>
-
-            <!-- The Modal -->
-            <div class="modal" id="updateGroup">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <form
-                    [formGroup]="formCurriculum"
-                    #formChange="ngForm"
-                    (ngSubmit)="
-                      formCurriculum.valid ? clickUploadCurriculum() : ''
-                    "
-                  >
+              <div class="modal" id="addGroup">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <!-- Modal Header -->
                     <div class="modal-header">
-                      <h2 class="modal-title">แก้ไขกลุ่มเรียน</h2>
+                      <h2 class="modal-title">เพิ่มกลุ่มเรียน</h2>
                       <button type="button" class="close" data-dismiss="modal">
                         &times;
                       </button>
                     </div>
 
+                    <!-- Modal body -->
                     <div class="modal-body">
                       โปรแกรมวิชา : &nbsp;&nbsp;
                       <mat-form-field style="width: 80%;">
                         <mat-label>โปรดเลือกโปรแกรมวิชา</mat-label>
-                        <mat-select formControlName="brunchEdit" required>
+                        <mat-select formControlName="brunch" required>
                           <mat-option
                             style="width: auto;"
-                            *ngFor="let i of dataBranchEdit; let x = index"
+                            *ngFor="let i of dataBranch; let x = index"
                             [value]="i.code"
-                            (click)="clickBranchEdit(i.code)"
+                            (click)="clickBranch(i.code, i.name, i.acronym)"
                           >
                             {{ i.name }}
                           </mat-option>
                         </mat-select>
                       </mat-form-field>
 
-                      กลุ่มเรียน :&nbsp;&nbsp; <span> {{ acronymEdit }}</span>
+                      กลุ่มเรียน :&nbsp;&nbsp; <span> {{ acronym }}</span>
                       &nbsp;&nbsp;.&nbsp;&nbsp;
                       <mat-form-field class="example-full-width">
                         <mat-label>โปรดระบุรหัสกลุ่มเรียน</mat-label>
                         <input
                           matInput
                           maxlength="6"
-                          formControlName="groupEdit"
+                          formControlName="group"
                           onkeyup="this.value = this.value.toUpperCase()"
                           required
                         />
@@ -216,10 +76,9 @@
                           <input
                             type="file"
                             class="form-control-file border"
-                            #fileInputUpdate
-                            (change)="
-                              updateCurriculum(fileInputUpdate.files[0])
-                            "
+                            formControlName="upload"
+                            #fileInput
+                            (change)="uploadCurriculum(fileInput.files[0])"
                             required
                             accept=".pdf"
                           />
@@ -227,6 +86,7 @@
                       </div>
                     </div>
 
+                    <!-- Modal footer -->
                     <div class="modal-footer">
                       <button
                         type="button"
@@ -235,208 +95,517 @@
                       >
                         ยกเลิก
                       </button>
-
                       <button type="submit" class="btn btn-success">
                         ตกลง
                       </button>
                     </div>
-                  </form>
+                  </div>
                 </div>
               </div>
-            </div>
-          </tbody>
-        </table>
-      </mat-tab>
-      <mat-tab label="ข้อมูลนักศึกษา">
-        <div class="panel-body" style="margin-left: 10px; margin-right: 10px;">
-          กลุ่มเรียน : &nbsp;&nbsp;<mat-form-field style="width: 15%;">
-            <mat-label>โปรดเลือกกลุ่มเรียน</mat-label>
-            <mat-select required>
-              <mat-option
-                style="width: auto;"
-                *ngFor="let i of dataGroup; let x = index"
-                [value]="i.study_group_id"
-                (click)="clickGroup(i.study_group_id)"
-              >
-                {{ i.study_group_name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <br />
-          <form [formGroup]="formYearTerm" #formChange="ngForm">
-            <span *ngIf="codeGroup!"
-              >ภาคการศึกษา : &nbsp;&nbsp;
-              <mat-form-field style="width: 13%;">
-                <mat-label>เลือกปีการศึกษา</mat-label>
-                <mat-select
-                  formControlName="year"
-                  required
-                  [(value)]="selected"
-                >
-                  <mat-option *ngFor="let i of range" [value]="i.value">
-                    {{ i.value }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              /
-              <mat-form-field style="width: 25;" *ngIf="selected">
-                <mat-label>เลือกภาคการเรียน</mat-label>
-                <mat-select
-                  formControlName="term"
-                  [(value)]="term"
-                  required
-                  (selectionChange)="getTerm($event.value)"
-                >
-                  <mat-option value="1">ภาคเรียนที่ 1</mat-option>
-                  <mat-option value="2">ภาคเรียนที่ 2</mat-option>
-                  <mat-option value="3">ภาคเรียนฤดูร้อน</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </span>
-          </form>
-          <div class="row" *ngIf="codeGroup!">
-            <div class="col-md-2.9" style="padding-top: 5px;">
-              เพิ่มนักศึกษา :
-            </div>
-
-            <div class="col-md-3">
-              <input
-                type="file"
-                class="form-control-file border"
-                id="customFile"
-                (change)="uploadFileStudent($event)"
-                required
-                accept=".xlsx,.csv"
-              />
-            </div>
-
-            <div class="col-1">
-              <button
-                type="button"
-                class="btn btn-primary btn-sm"
-                (click)="uploadStudent()"
-              >
-                ยืนยัน
-              </button>
-            </div>
-            <div class="col-7"></div>
+            </form>
           </div>
-        </div>
-        <table class="table" *ngIf="dataEducational != null">
-          <thead class="thead-dark">
-            <tr>
-              <th scope="col">ลำดับ</th>
-              <th scope="col">รหัสนักศึกษา</th>
-              <th scope="col">ชื่อนักศึกษา</th>
-              <th scope="col"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let i of dataEducational; let x = index">
-              <th scope="row" style="padding-top: 15px;">{{ x + 1 }}</th>
-              <td style="padding-top: 15px;">
-                {{ i.userID }}
-              </td>
-              <td style="padding-top: 15px;">{{ i.titlename }}{{ i.fname }}&nbsp;&nbsp;{{ i.lname }}</td>
-              <td>
+          <table class="table" *ngIf="dataGroup != null">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">ลำดับ</th>
+                <th scope="col">กลุ่มเรียน</th>
+                <th scope="col">โปรแกรมวิชา</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let i of dataGroup; let x = index">
+                <th scope="row" style="padding-top: 15px;">{{ x + 1 }}</th>
+                <td style="padding-top: 15px;">
+                  {{ i.study_group_name }}
+                </td>
+                <td style="padding-top: 15px;">
+                  {{ i.name }}
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-success btn-sm"
+                    [disabled]="i.file_curriculum == null"
+                  >
+                    <a
+                      href="{{ http.PathPDF }}{{ i.file_curriculum }}"
+                      target="_blank"
+                      ><font color="white">คลิกดูแผนการเรียน</font></a
+                    >
+                  </button>
+                  &nbsp;&nbsp;&nbsp;
+                  <span
+                    (click)="
+                      clickUpdateGroup(
+                        i.study_group_id,
+                        i.study_group_name,
+                        i.file_curriculum,
+                        i.branch_id
+                      )
+                    "
+                    ><i
+                      class="fas fa-edit"
+                      style="font-size: 18px; cursor: pointer;"
+                      title="แก้ไขข้อมูล"
+                      data-toggle="modal"
+                      data-target="#updateGroup"
+                    ></i
+                  ></span>
+                  &nbsp;&nbsp;&nbsp;
+                  <span (click)="deleteGroup(i.study_group_id)"
+                    ><i
+                      class="fas fa-trash-alt"
+                      style="font-size: 18px; color: red; cursor: pointer;"
+                      title="ลบข้อมูล"
+                    ></i
+                  ></span>
+                </td>
+              </tr>
+
+              <!-- The Modal -->
+              <div class="modal" id="updateGroup">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <form
+                      [formGroup]="formCurriculum"
+                      #formChange="ngForm"
+                      (ngSubmit)="
+                        formCurriculum.valid ? clickUploadCurriculum() : ''
+                      "
+                    >
+                      <div class="modal-header">
+                        <h2 class="modal-title">แก้ไขกลุ่มเรียน</h2>
+                        <button
+                          type="button"
+                          class="close"
+                          data-dismiss="modal"
+                        >
+                          &times;
+                        </button>
+                      </div>
+
+                      <div class="modal-body">
+                        โปรแกรมวิชา : &nbsp;&nbsp;
+                        <mat-form-field style="width: 80%;">
+                          <mat-label>โปรดเลือกโปรแกรมวิชา</mat-label>
+                          <mat-select formControlName="brunchEdit" required>
+                            <mat-option
+                              style="width: auto;"
+                              *ngFor="let i of dataBranchEdit; let x = index"
+                              [value]="i.code"
+                              (click)="clickBranchEdit(i.code)"
+                            >
+                              {{ i.name }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+
+                        กลุ่มเรียน :&nbsp;&nbsp; <span> {{ acronymEdit }}</span>
+                        &nbsp;&nbsp;.&nbsp;&nbsp;
+                        <mat-form-field class="example-full-width">
+                          <mat-label>โปรดระบุรหัสกลุ่มเรียน</mat-label>
+                          <input
+                            matInput
+                            maxlength="6"
+                            formControlName="groupEdit"
+                            onkeyup="this.value = this.value.toUpperCase()"
+                            required
+                          />
+                        </mat-form-field>
+
+                        <div class="row">
+                          <div
+                            class="col-sm-1.9"
+                            style="padding-top: 20px; padding-left: 15px;"
+                          >
+                            แผนการเรียน :
+                          </div>
+
+                          <div class="col-sm-9" style="padding-top: 16px;">
+                            <input
+                              type="file"
+                              class="form-control-file border"
+                              #fileInputUpdate
+                              (change)="
+                                updateCurriculum(fileInputUpdate.files[0])
+                              "
+                              required
+                              accept=".pdf"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-danger"
+                          data-dismiss="modal"
+                        >
+                          ยกเลิก
+                        </button>
+
+                        <button type="submit" class="btn btn-success">
+                          ตกลง
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </tbody>
+          </table>
+        </mat-tab>
+        <mat-tab label="ข้อมูลนักศึกษา">
+          <div
+            class="panel-body"
+            style="margin-left: 10px; margin-right: 10px;"
+          >
+            กลุ่มเรียน : &nbsp;&nbsp;<mat-form-field style="width: 15%;">
+              <mat-label>โปรดเลือกกลุ่มเรียน</mat-label>
+              <mat-select required>
+                <mat-option
+                  style="width: auto;"
+                  *ngFor="let i of dataGroup; let x = index"
+                  [value]="i.study_group_id"
+                  (click)="clickGroup(i.study_group_id)"
+                >
+                  {{ i.study_group_name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <br />
+            <form [formGroup]="formYearTerm" #formChange="ngForm">
+              <span *ngIf="codeGroup!"
+                >ภาคการศึกษา : &nbsp;&nbsp;
+                <mat-form-field style="width: 13%;">
+                  <mat-label>เลือกปีการศึกษา</mat-label>
+                  <mat-select
+                    formControlName="year"
+                    required
+                    [(value)]="selected"
+                  >
+                    <mat-option *ngFor="let i of range" [value]="i.value">
+                      {{ i.value }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                /
+                <mat-form-field style="width: 25;" *ngIf="selected">
+                  <mat-label>เลือกภาคการเรียน</mat-label>
+                  <mat-select
+                    formControlName="term"
+                    [(value)]="term"
+                    required
+                    (selectionChange)="getTerm($event.value)"
+                  >
+                    <mat-option value="1">ภาคเรียนที่ 1</mat-option>
+                    <mat-option value="2">ภาคเรียนที่ 2</mat-option>
+                    <mat-option value="3">ภาคเรียนฤดูร้อน</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </span>
+            </form>
+            <div class="row" *ngIf="codeGroup!">
+              <div class="col-md-2.9" style="padding-top: 5px;">
+                เพิ่มนักศึกษา :
+              </div>
+
+              <div class="col-md-3">
+                <input
+                  type="file"
+                  class="form-control-file border"
+                  id="customFile"
+                  (change)="uploadFileStudent($event)"
+                  required
+                  accept=".xlsx,.csv"
+                />
+              </div>
+
+              <div class="col-1">
                 <button
                   type="button"
                   class="btn btn-primary btn-sm"
-                  [disabled]="i.file_profile == null"
+                  (click)="uploadStudent()"
                 >
-                  <a
-                    href="{{ http.PathPDF }}{{ i.file_profile }}"
-                    target="_blank"
-                    ><font color="white">ประวัติส่วนตัว</font></a
-                  >
+                  ยืนยัน
                 </button>
-                &nbsp;&nbsp;
-                <button
-                  type="button"
-                  class="btn btn-secondary btn-sm"
-                  [disabled]="i.file_class_schedule == null"
-                >
-                  <a
-                    href="{{ http.PathPDF }}{{ i.file_class_schedule }}"
-                    target="_blank"
-                    ><font color="white">ตารางเรียน</font></a
+              </div>
+              <div class="col-7"></div>
+            </div>
+          </div>
+          <table class="table" *ngIf="dataEducational != null">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">ลำดับ</th>
+                <th scope="col">รหัสนักศึกษา</th>
+                <th scope="col">ชื่อนักศึกษา</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let i of dataEducational; let x = index">
+                <th scope="row" style="padding-top: 15px;">{{ x + 1 }}</th>
+                <td style="padding-top: 15px;">
+                  {{ i.userID }}
+                </td>
+                <td style="padding-top: 15px;">
+                  {{ i.titlename }}{{ i.fname }}&nbsp;&nbsp;{{ i.lname }}
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-sm"
+                    [disabled]="i.file_profile == null"
                   >
-                </button>
-                &nbsp;&nbsp;
-                <button
-                  type="button"
-                  class="btn btn-success btn-sm"
-                  [disabled]="i.file_course == null"
-                >
-                  <a
-                    href="{{ http.PathPDF }}{{ i.file_course }}"
-                    target="_blank"
-                    ><font color="white">ผลการเรียน</font></a
+                    <a
+                      href="{{ http.PathPDF }}{{ i.file_profile }}"
+                      target="_blank"
+                      ><font color="white">ประวัติส่วนตัว</font></a
+                    >
+                  </button>
+                  &nbsp;&nbsp;
+                  <button
+                    type="button"
+                    class="btn btn-secondary btn-sm"
+                    [disabled]="i.file_class_schedule == null"
                   >
-                </button>
-                &nbsp;&nbsp;
-                <span
-                  ><i
-                    class="fas fa-edit"
-                    style="font-size: 18px; cursor: pointer;"
-                    title="แก้ไขข้อมูล"
-                    data-toggle="modal"
-                    data-target="#updateGroup"
-                  ></i
-                ></span>
+                    <a
+                      href="{{ http.PathPDF }}{{ i.file_class_schedule }}"
+                      target="_blank"
+                      ><font color="white">ตารางเรียน</font></a
+                    >
+                  </button>
+                  &nbsp;&nbsp;
+                  <button
+                    type="button"
+                    class="btn btn-success btn-sm"
+                    [disabled]="i.file_course == null"
+                  >
+                    <a
+                      href="{{ http.PathPDF }}{{ i.file_course }}"
+                      target="_blank"
+                      ><font color="white">ผลการเรียน</font></a
+                    >
+                  </button>
+                  &nbsp;&nbsp;
+                  <span
+                    ><i
+                      class="fas fa-edit"
+                      style="font-size: 18px; cursor: pointer;"
+                      title="แก้ไขข้อมูล"
+                      data-toggle="modal"
+                      data-target="#updateGroup"
+                    ></i
+                  ></span>
 
-                &nbsp;&nbsp;&nbsp;
-                <span (click)="deleteStudent(i.userID)"
-                  ><i
-                    class="fas fa-trash-alt"
-                    style="font-size: 18px; color: red; cursor: pointer;"
-                    title="ลบข้อมูล"
-                  ></i
-                ></span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </mat-tab>
-    </mat-tab-group>
+                  &nbsp;&nbsp;&nbsp;
+                  <span (click)="deleteStudent(i.userID)"
+                    ><i
+                      class="fas fa-trash-alt"
+                      style="font-size: 18px; color: red; cursor: pointer;"
+                      title="ลบข้อมูล"
+                    ></i
+                  ></span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </mat-tab>
+        <mat-tab label="ข้อมูลปีการศึกษา">
+          <div
+            class="panel-body"
+            style="margin-left: 10px; margin-right: 10px;"
+          >
+            <div id="calender_yearr">
+              <form [formGroup]="date_year">
+                ภาคการศึกษา : &nbsp;&nbsp;
+                <mat-form-field style="width: 25%;" *ngIf="range.length > 0">
+                  <mat-label>เลือกปีการศึกษา</mat-label>
+                  <mat-select
+                    formControlName="_year"
+                    (selectionChange)="getTerm($event.value)"
+                    required
+                  >
+                    <mat-option *ngFor="let i of range" [value]="i.value">
+                      {{ i.value }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </form>
+            </div>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-toggle="modal"
+              data-target="#addCalendar"
+              (click)="clickCalendar()"
+            >
+              จัดการข้อมูลปีการศึกษา
+            </button>
+            <br /><br />
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">ภาคการเรียน</th>
+                  <th scope="col">ปีการศึกษา</th>
+                  <th scope="col">วันเปิดภาคการศึกษา</th>
+                  <th scope="col">วันเปิดภาคการศึกษา</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let i of dataCalendar; let x = index">
+                  <th scope="row">{{ x + 1 }}</th>
+                  <td>{{ i.term }}</td>
+                  <td>{{ i.year }}</td>
+                  <td>{{ i.date_start }}</td>
+                  <td>{{ i.end }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- The Modal -->
+          <div class="modal" id="addCalendar">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h2 class="modal-title">จัดการข้อมูลปีการศึกษา</h2>
+                  <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                  </button>
+                </div>
+                <form
+                  [formGroup]="date_student"
+                  #formChange="ngForm"
+                  (ngSubmit)="date_student.valid ? insertCalendar() : ''"
+                >
+                  <!-- Modal body -->
+                  <div class="modal-body">
+                    <div>
+                      ภาคการศึกษา : &nbsp;&nbsp;
+                      <mat-form-field style="width: 25%;">
+                        <mat-label>เลือกปีการศึกษา</mat-label>
+                        <mat-select required formControlName="selected_year">
+                          <mat-option
+                            *ngFor="let i of year_study"
+                            [value]="i.value"
+                          >
+                            {{ i.value }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      /
+                      <mat-form-field
+                        style="width: 30;"
+                        *ngIf="date_student.value.selected_year"
+                      >
+                        <mat-label>เลือกภาคการเรียน</mat-label>
+                        <mat-select formControlName="selected_term" required>
+                          <mat-option value="1">ภาคเรียนที่ 1</mat-option>
+                          <mat-option value="2">ภาคเรียนที่ 2</mat-option>
+                          <mat-option value="3">ภาคเรียนฤดูร้อน</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+
+                    <div *ngIf="date_student.value.selected_term">
+                      วันเปิดเทอม - วันปิดเทอม : &nbsp;&nbsp;
+                      <mat-form-field style="width: 130px;">
+                        <mat-label>โปรดเลือกวันเปิดเทอม</mat-label>
+                        <input
+                          matInput
+                          [matDatepicker]="picker"
+                          formControlName="start"
+                        />
+                        <mat-datepicker-toggle
+                          matSuffix
+                          [for]="picker"
+                        ></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field>
+                      &nbsp;&nbsp;-&nbsp;&nbsp;<mat-form-field
+                        style="width: 130px;"
+                      >
+                        <mat-label>โปรดเลือกวันปิดเทอม</mat-label>
+                        <input
+                          matInput
+                          [matDatepicker]="picker3"
+                          formControlName="end"
+                        />
+                        <mat-datepicker-toggle
+                          matSuffix
+                          [for]="picker3"
+                        ></mat-datepicker-toggle>
+                        <mat-datepicker #picker3></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-danger"
+                        data-dismiss="modal"
+                      >
+                        ยกเลิก
+                      </button>
+                      <button type="sumit" class="btn btn-success">
+                        บันทึก
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
   </mat-tab>
 
-  <mat-tab label="สำหรับหัวหน้าสาขา" *ngIf="dataBranchhead != null">
-    <table class="table" *ngIf="dataGroup_branchHead != null">
-      <thead class="thead-dark">
-        <tr>
-          <th scope="col">ลำดับ</th>
-          <th scope="col">ชื่อกลุ่มเรียน</th>
-          <th scope="col">ชื่ออาจารย์ที่ปรึกษา</th>
-          <th scope="col">ชื่อโปรแกมวิชา</th>
-          <th scope="col">แผนการเรียน</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let i of dataGroup_branchHead; let x = index">
-          <th scope="row" style="padding-top: 15px;">{{ x + 1 }}</th>
-          <td style="padding-top: 15px;">
-            {{ i.study_group_name }}
-          </td>
-          <td style="padding-top: 15px;">{{ i.titlename }}{{ i.fname }}&nbsp;&nbsp;{{ i.lname }}</td>
-          <td style="padding-top: 15px;">
-            {{ i.name }}
-          </td>
-          <td>
-            <button
-                  type="button"
-                  class="btn btn-success btn-sm"
-                  [disabled]="i.file_curriculum == null"
+  <mat-tab label="สำหรับหัวหน้าสาขา">
+    <div *ngIf="dataBranchhead != null">
+      <table class="table" *ngIf="dataGroup_branchHead != null">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">ลำดับ</th>
+            <th scope="col">ชื่อกลุ่มเรียน</th>
+            <th scope="col">ชื่ออาจารย์ที่ปรึกษา</th>
+            <th scope="col">ชื่อโปรแกมวิชา</th>
+            <th scope="col">แผนการเรียน</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let i of dataGroup_branchHead; let x = index">
+            <th scope="row" style="padding-top: 15px;">{{ x + 1 }}</th>
+            <td style="padding-top: 15px;">
+              {{ i.study_group_name }}
+            </td>
+            <td style="padding-top: 15px;">
+              {{ i.titlename }}{{ i.fname }}&nbsp;&nbsp;{{ i.lname }}
+            </td>
+            <td style="padding-top: 15px;">
+              {{ i.name }}
+            </td>
+            <td>
+              <button
+                type="button"
+                class="btn btn-success btn-sm"
+                [disabled]="i.file_curriculum == null"
+              >
+                <a
+                  href="{{ http.PathPDF }}{{ i.file_curriculum }}"
+                  target="_blank"
+                  ><font color="white">คลิกดูแผนการเรียน</font></a
                 >
-                  <a
-                    href="{{ http.PathPDF }}{{ i.file_curriculum }}"
-                    target="_blank"
-                    ><font color="white">คลิกดูแผนการเรียน</font></a
-                  >
-                </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </mat-tab>
 </mat-tab-group>
