@@ -13,15 +13,7 @@ export class AdviceDataComponent implements OnInit {
   public codeGroup: any = null;
   public dataGroup: any = null;
   public dataAdvice: any = null;
-  public thday = new Array(
-    'วันอาทิตย์ ที่',
-    'วันจันทร์ ที่',
-    'วันอังคาร ที่',
-    'วันพุธ ที่',
-    'วันพฤหัส ที่',
-    'วันศุกร์ ที่',
-    'วันเสาร์ ที่'
-  );
+
   public thmonth = new Array(
     'มกราคม',
     'กุมภาพันธ์',
@@ -65,9 +57,13 @@ export class AdviceDataComponent implements OnInit {
   public dataAppointment_Student: any = null;
   public app_detail: string = null;
   public reply_advice_id: string = null;
+  public advice_year: FormGroup;
+  public range: Array<any> = [];
 
   constructor(public http: HttpService, private formBuilder: FormBuilder) {
     this.getGroup();
+    this.getCURDATE();
+    this.getYear();
   }
 
   ngOnInit(): void {
@@ -79,6 +75,10 @@ export class AdviceDataComponent implements OnInit {
       suggestion: ['', Validators.required],
       detail: [''],
       to: ['', Validators.required],
+    });
+
+    this.advice_year = this.formBuilder.group({
+      _year: [``, Validators.required],
     });
   }
   public getGroup = async () => {
@@ -106,6 +106,7 @@ export class AdviceDataComponent implements OnInit {
   public getAdvice = async () => {
     let formData = new FormData();
     formData.append('group', this.codeGroup);
+    formData.append('year', this.advice_year.value._year);
     let getData: any = await this.http.post('teacher/getAdvice', formData);
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
@@ -122,7 +123,7 @@ export class AdviceDataComponent implements OnInit {
     var d = new Date(date);
 
     return (
-      this.thday[d.getDay()] +
+      'วันที่' +
       '  ' +
       d.getDate() +
       '  ' +
@@ -144,6 +145,7 @@ export class AdviceDataComponent implements OnInit {
   public getAdvice_notNull = async () => {
     let formData = new FormData();
     formData.append('group', this.codeGroup);
+    formData.append('year', this.advice_year.value._year);
     let getData: any = await this.http.post(
       'teacher/getAdvice_notNull',
       formData
@@ -165,20 +167,20 @@ export class AdviceDataComponent implements OnInit {
     }
   }
 
-  public getYear = () => {
-    var now = new Date();
+  // public getYear = () => {
+  //   var now = new Date();
 
-    this.thDate =
-      this.thday[now.getDay()] +
-      ' ' +
-      now.getDate() +
-      ' ' +
-      'เดือน' +
-      this.thmonth[now.getMonth()] +
-      ' ' +
-      'พ.ศ.' +
-      (0 + now.getFullYear() + 543);
-  };
+  //   this.thDate =
+  //     this.thday[now.getDay()] +
+  //     ' ' +
+  //     now.getDate() +
+  //     ' ' +
+  //     'เดือน' +
+  //     this.thmonth[now.getMonth()] +
+  //     ' ' +
+  //     'พ.ศ.' +
+  //     (0 + now.getFullYear() + 543);
+  // };
 
   public insertReplyAdvice = async () => {
     let formData = new FormData();
@@ -212,12 +214,28 @@ export class AdviceDataComponent implements OnInit {
     }
   };
 
-  clickReply_data(dataReply: any) {
+  async clickReply_data(dataReply: any) {
     this.dataReply_id.subject_advice = dataReply.subject_advice;
     this.dataReply_id.detail = dataReply.detail;
     this.dataReply_id.reply = dataReply.reply;
     this.dataReply_id.reply_id = dataReply.reply_advice_id;
     this.formAppointment.reset();
+    let formData = new FormData();
+    formData.append('ID', this.dataReply_id.reply_id);
+    let getData: any = await this.http.post(
+      'teacher/getAppointment_Student',
+      formData
+    );
+    console.log(getData);
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        this.dataAppointment_Student = getData.response.result;
+      } else {
+        this.dataAppointment_Student = null;
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
   }
 
   public insertAppointment = async () => {
@@ -242,7 +260,7 @@ export class AdviceDataComponent implements OnInit {
         Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
         let win: any = window;
         win.$('#addAppointment').modal('hide');
-        this.getReply_Student();
+        this.getAppointment_Student();
       } else {
         Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
       }
@@ -308,6 +326,7 @@ export class AdviceDataComponent implements OnInit {
             });
             this.getAdvice();
             this.getAdvice_notNull();
+            this.getStudent();
           } else {
             Swal.fire('ไม่สามารถลบข้อมูลได้!', '', 'error');
           }
@@ -319,6 +338,8 @@ export class AdviceDataComponent implements OnInit {
   public getStudent = async () => {
     let formData = new FormData();
     formData.append('group', this.codeGroup);
+    formData.append('year', this.advice_year.value._year);
+    this.advice_year;
     let getData: any = await this.http.post('teacher/getStudent', formData);
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
@@ -331,15 +352,20 @@ export class AdviceDataComponent implements OnInit {
     }
   };
 
-  async clickStudent(data: any) {
+  public async clickStudent(data: any) {
     this.adviceUser = data.userID;
+    this.reply_advice_id = null;
+    this.getReply_Student();
+  }
+  public async getReply_Student() {
     let formData = new FormData();
-    formData.append('ID', data.userID);
+    formData.append('ID', this.adviceUser);
+    formData.append('year', this.advice_year.value._year);
+
     let getData: any = await this.http.post(
       'teacher/getReply_Student',
       formData
     );
-    console.log(getData);
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
         this.dataReply_Student = getData.response.result;
@@ -353,9 +379,9 @@ export class AdviceDataComponent implements OnInit {
 
   async clickReply_Student(data: any) {
     this.reply_advice_id = data.reply_advice_id;
-    this.getReply_Student();
+    this.getAppointment_Student();
   }
-  async getReply_Student() {
+  async getAppointment_Student() {
     let formData = new FormData();
     formData.append('ID', this.reply_advice_id);
     let getData: any = await this.http.post(
@@ -393,7 +419,7 @@ export class AdviceDataComponent implements OnInit {
               showConfirmButton: false,
               timer: 1500,
             });
-            this.getReply_Student();
+            this.getAppointment_Student();
           } else {
             Swal.fire('ไม่สามารถลบข้อมูลได้!', '', 'error');
           }
@@ -434,12 +460,50 @@ export class AdviceDataComponent implements OnInit {
         Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
         let win: any = window;
         win.$('#updateAppointment').modal('hide');
-        this.getReply_Student();
+        this.getAppointment_Student();
       } else {
         Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
       }
     } else {
       alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+  };
+
+  public getCURDATE = async () => {
+    let getData: any = await this.http.post('teacher/getCURDATE');
+
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        //this.dataCURDATE.term = getData.response.result[0].term ;
+        this.advice_year.patchValue({
+          _year: getData.response.result[0].year,
+        });
+        // this.getAdvice();
+        // this.getAdvice_notNull();
+        // this.getStudent();
+        // this.getCalendar();
+      } else {
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+  };
+
+  public getYearAdvice(e) {
+    this.advice_year = this.formBuilder.group({
+      _year: [e, Validators.required],
+    });
+    this.getAdvice();
+    this.getAdvice_notNull();
+    this.getStudent();
+    this.adviceUser = null;
+    // this.getCalendar();
+  }
+  public getYear = () => {
+    var now = new Date();
+    var year = 0 + now.getFullYear() + 543;
+    for (var i = 0; i < 10; i++) {
+      this.range[i] = { value: `${year - i}` };
     }
   };
 }

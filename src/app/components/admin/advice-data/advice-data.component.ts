@@ -204,7 +204,7 @@ export class AdviceDataComponent implements OnInit {
     var d = new Date(date);
 
     return (
-      this.thday[d.getDay()] +
+      'วันที่' +
       '  ' +
       d.getDate() +
       '  ' +

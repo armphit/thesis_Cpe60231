@@ -1,17 +1,36 @@
 <div class="panel-body" style="margin-left: 10px; margin-right: 10px;">
-  กลุ่มเรียน : &nbsp;&nbsp;<mat-form-field style="width: 15%;">
-    <mat-label>โปรดเลือกกลุ่มเรียน</mat-label>
-    <mat-select required>
-      <mat-option
-        style="width: auto;"
-        *ngFor="let i of dataGroup; let x = index"
-        [value]="i.study_group_id"
-        (click)="clickGroup(i.study_group_id)"
-      >
-        {{ i.study_group_name }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+  <div>
+    กลุ่มเรียน : &nbsp;&nbsp;<mat-form-field style="width: 15%;">
+      <mat-label>โปรดเลือกกลุ่มเรียน</mat-label>
+      <mat-select required>
+        <mat-option
+          style="width: auto;"
+          *ngFor="let i of dataGroup; let x = index"
+          [value]="i.study_group_id"
+          (click)="clickGroup(i.study_group_id)"
+        >
+          {{ i.study_group_name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div *ngIf="codeGroup!">
+    <form [formGroup]="advice_year">
+      ปีการศึกษา : &nbsp;&nbsp;
+      <mat-form-field style="width: 25%;">
+        <mat-label>เลือกปีการศึกษา</mat-label>
+        <mat-select
+          formControlName="_year"
+          (selectionChange)="getYearAdvice($event.value)"
+          required
+        >
+          <mat-option *ngFor="let i of range" [value]="i.value">
+            {{ i.value }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </div>
 </div>
 <mat-tab-group>
   <mat-tab label="ข้อมูลการขอคำปรึกษา">
@@ -65,24 +84,6 @@
                   (ngSubmit)="formAdvice.valid ? insertReplyAdvice() : ''"
                 >
                   <div class="modal-body">
-                    <!-- <label for="exampleFormControlInput1">เรื่อง</label>
-                    <input
-                      readonly
-                      class="form-control"
-                      type="text"
-                      [value]="dataReply.subject_advice"
-                      required
-                    />
-                    <br /> -->
-                    <!-- <mat-form-field appearance="fill" style="width: 100%;">
-                      <mat-label>เรื่อง</mat-label>
-                      <input
-                        matInput
-                        readonly
-                        [value]="dataReply.subject_advice"
-                        required
-                      />
-                    </mat-form-field> -->
                     <p>
                       <strong>เรื่อง :&nbsp;</strong
                       >{{ dataReply.subject_advice }}
@@ -92,46 +93,6 @@
                       <strong>รายละเอียด :<br /></strong>{{ dataReply.detail }}
                     </p>
                     <br />
-                    <!-- <label for="exampleFormControlTextarea1">รายละเอียด</label>
-                    <textarea
-                      readonly
-                      class="form-control"
-                      id="exampleFormControlTextarea"
-                      rows="3"
-                      [value]="dataReply.detail"
-                      required
-                    ></textarea>
-                    <br />
-                    <mat-form-field appearance="fill">
-                      <mat-label>รายละเอียด</mat-label>
-                      <input matInput readonly
-                      class="form-control"
-                      type="text"
-                      [value]="dataReply.subject_advice"
-                      required>
-                    </mat-form-field>
-                    <br>
-                    <label for="exampleFormControlTextarea1"
-                      >ตอบกลับคำขอปรึกษา</label
-                    >
-                    <textarea
-                      class="form-control"
-                      id="exampleFormControlTextarea"
-                      rows="3"
-                      formControlName="replyAdvice"
-                      required
-                    ></textarea>
-                    <br /> -->
-                    <!-- <mat-form-field style="width: 100%;" appearance="fill">
-                      <mat-label>รายละเอียด</mat-label>
-                      <textarea
-                        matInput
-                        readonly
-                        [value]="dataReply.subject_advice"
-                        rows="3"
-                      ></textarea>
-                    </mat-form-field>
-                    <br /> -->
                     <mat-form-field style="width: 100%;" appearance="fill">
                       <mat-label>ตอบกลับคำขอปรึกษา</mat-label>
                       <textarea
@@ -141,26 +102,6 @@
                       ></textarea>
                     </mat-form-field>
                     <br />
-                    <!-- <div class="row">
-                      <div
-                        class="col-md-2.9"
-                        style="padding-top: 5px; padding-left: 15px;"
-                      >
-                        <strong>แนบไฟล์ :</strong>
-                      </div>
-
-                      <div class="col-md-7">
-                        <input
-                          type="file"
-                          class="form-control-file border"
-                          id="customFile"
-                          #fileInput
-                          (change)="uploadFileAdvice(fileInput.files[0])"
-                          required
-                          accept=".pdf"
-                        />
-                      </div>
-                    </div> -->
                   </div>
 
                   <!-- Modal footer -->
@@ -244,7 +185,7 @@
           </td>
           <!-- The Modal -->
           <div class="modal" id="ReplyData">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
               <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
@@ -270,36 +211,44 @@
                     >{{ dataReply_id.reply }}
                   </p>
                   <br />
-                  <!-- <label for="exampleFormControlInput1">เรื่อง</label>
-                  <input
-                    readonly
-                    class="form-control"
-                    type="text"
-                    [value]="dataReply_id.subject_advice"
-                    required
-                  />
-                  <br />
-                  <label for="exampleFormControlTextarea1">รายละเอียด</label>
-                  <textarea
-                    readonly
-                    class="form-control"
-                    id="exampleFormControlTextarea"
-                    rows="3"
-                    [value]="dataReply_id.detail"
-                    required
-                  ></textarea>
-                  <br />
-                  <label for="exampleFormControlTextarea1"
-                    >ตอบกลับคำขอปรึกษา</label
+                  <p>
+                    <strong>การนัดหมาย :<br /></strong>
+                  </p>
+                  <table
+                    class="table"
+                    *ngIf="dataAppointment_Student != null"
+                    style="width: 100%;"
                   >
-                  <textarea
-                    readonly
-                    class="form-control"
-                    id="exampleFormControlTextarea"
-                    rows="3"
-                    [value]="dataReply_id.reply"
-                    required
-                  ></textarea> -->
+                    <thead class="thead-dark">
+                      <tr>
+                        <th scope="col">ลำดับ</th>
+                        <th scope="col">
+                          ผลที่เกิด/คำแนะนำเพิ่มเติม
+                        </th>
+                        <th scope="col">หมายเหตุ</th>
+                        <th scope="col">วันที่นัดหมาย</th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr></tr>
+                      <tr
+                        *ngFor="let i of dataAppointment_Student; let x = index"
+                      >
+                        <th scope="row" style="padding-top: 15px;">
+                          {{ x + 1 }}
+                        </th>
+                        <td style="padding-top: 15px;">
+                          {{ i.app_suggestion }}
+                        </td>
+                        <td style="padding-top: 15px;">{{ i.app_detail }}</td>
+                        <td style="padding-top: 15px;">
+                          {{ getDate(i.app_date) }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <br />
                 </div>
 
                 <!-- Modal footer -->
@@ -446,41 +395,7 @@
     </table>
   </mat-tab>
   <mat-tab label="ข้อมูลการนัดหมาย">
-    <!-- <div class="row">
-      <div class="col-sm-5" style="padding-left: 25px;">
-        นักศึกษา : &nbsp;&nbsp;<mat-form-field style="width: 70%;">
-          <mat-label>โปรดเลือกนักศึกษา</mat-label>
-          <mat-select required>
-            <mat-option
-              style="width: auto;"
-              *ngFor="let i of dataStudent; let x = index"
-              [value]="i.userID"
-              (click)="clickStudent(i)"
-            >
-              {{ i.titlename }}{{ i.fname }}&nbsp;&nbsp;{{ i.lname }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div class="col-sm-7" *ngIf="adviceUser!">
-        เรื่องการปรึกษา : &nbsp;&nbsp;<mat-form-field style="width: 80%;">
-          <mat-label>โปรดเลือกเรื่องการปรึกษา</mat-label>
-          <mat-select required>
-            <mat-option
-              style="width: auto;"
-              *ngFor="let i of dataReply_Student; let x = index"
-              [value]="i.reply_advice_id"
-              (click)="clickReply_Student(i)"
-            >
-              <strong>เรื่อง : </strong>{{ i.subject_advice }}&nbsp;&nbsp;{{
-                getDate(i.advice_date)
-              }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div> -->
-    <div style="padding-left: 15px;">
+    <div style="padding-left: 15px;" *ngIf="codeGroup!">
       นักศึกษา : &nbsp;&nbsp;<mat-form-field style="width: 20%;">
         <mat-label>โปรดเลือกนักศึกษา</mat-label>
         <mat-select required>
@@ -513,11 +428,7 @@
       </span>
     </div>
 
-    <table
-      class="table"
-      *ngIf="dataAppointment_Student != null"
-      style="width: 100%;"
-    >
+    <table class="table" *ngIf="reply_advice_id != null" style="width: 100%;">
       <thead class="thead-dark">
         <tr>
           <th scope="col">ลำดับ</th>

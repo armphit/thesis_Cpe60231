@@ -17,7 +17,23 @@
     </p>
     <p>กลุ่มเรียน :{{ i.nameG }}</p>
     <p>อาจารย์ที่ปรึกษา:{{ i.t }}{{ i.f }}&nbsp;&nbsp;{{ i.l }}</p>
-
+    <div id="calender_yearr">
+      <form [formGroup]="advice_year">
+        ปีการศึกษา : &nbsp;&nbsp;
+        <mat-form-field style="width: 15%;">
+          <mat-label>เลือกปีการศึกษา</mat-label>
+          <mat-select
+            formControlName="_year"
+            (selectionChange)="getYearAdvice($event.value)"
+            required
+          >
+            <mat-option *ngFor="let i of range" [value]="i.value">
+              {{ i.value }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
+    </div>
     <form
       [formGroup]="inAdvice"
       #formChange="ngForm"
@@ -47,28 +63,23 @@
 
             <!-- Modal body -->
             <div class="modal-body">
-              <label for="exampleFormControlInput1">เรื่อง</label>
-              <input
-                class="form-control"
-                type="text"
-                formControlName="subject"
-                required
-              />
-              <br />
-              <label for="exampleFormControlTextarea1">รายละเอียด</label>
-              <textarea
-                class="form-control"
-                id="exampleFormControlTextarea"
-                rows="3"
-                formControlName="details"
-                required
-              ></textarea>
-              <br />
-              <p>
-                อาจารย์ที่ปรึกษา : &nbsp;{{ i.t }}{{ i.f }}&nbsp;&nbsp;{{ i.l }}
-              </p>
-              <p>{{ thDate }}</p>
-              <p>{{ thTime }}</p>
+              <div>
+                <mat-form-field style="width: 100%;">
+                  <mat-label>เรื่อง</mat-label>
+                  <input matInput formControlName="subject" required />
+                </mat-form-field>
+              </div>
+              <div>
+                <mat-form-field style="width: 100%;">
+                  <mat-label>รายละเอียด</mat-label>
+                  <textarea
+                    matInput
+                    formControlName="details"
+                    required
+                    rows="3"
+                  ></textarea>
+                </mat-form-field>
+              </div>
             </div>
 
             <!-- Modal footer -->
@@ -94,7 +105,7 @@
         <tr>
           <th scope="col">ลำดับ</th>
           <th scope="col">เรื่องคำปรึกษา</th>
-          <th scope="col">วันที่</th>
+          <th scope="col">วันที่ขอคำปรึกษา</th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -151,24 +162,14 @@
 
             <!-- Modal body -->
             <div class="modal-body">
-              <label for="exampleFormControlInput1">เรื่อง</label>
-              <input
-                readonly
-                class="form-control"
-                type="text"
-                formControlName="subject"
-                required
-              />
-              <br />
-              <label for="exampleFormControlTextarea1">รายละเอียด</label>
-              <textarea
-                readonly
-                class="form-control"
-                id="exampleFormControlTextarea"
-                rows="3"
-                formControlName="details"
-                required
-              ></textarea>
+              <div>
+                <strong>เรื่อง :</strong>&nbsp;&nbsp;
+                {{ inAdvice.value.subject }}
+              </div>
+              <div>
+                <strong>รายละเอียด :</strong><br />
+                {{ inAdvice.value.details }}
+              </div>
             </div>
 
             <!-- Modal footer -->
@@ -189,7 +190,7 @@
         <tr>
           <th scope="col">ลำดับ</th>
           <th scope="col">เรื่องคำปรึกษา</th>
-          <th scope="col">วันที่</th>
+          <th scope="col">วันที่ตอบกลับคำปรึกษา</th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -199,7 +200,7 @@
           <td>
             {{ i.subject_advice }}
           </td>
-          <td>{{ i.advice_date }}</td>
+          <td>{{ getDate(i.reply_advice_date) }}</td>
           <td>
             <button
               type="button"
@@ -225,7 +226,7 @@
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                  <label for="exampleFormControlInput">เรื่อง</label>
+                  <!-- <label for="exampleFormControlInput">เรื่อง</label>
                   <input
                     readonly
                     class="form-control"
@@ -249,7 +250,19 @@
                     id="exampleFormControlTextarea"
                     rows="3"
                     value="{{ i.reply }}"
-                  ></textarea>
+                  ></textarea> -->
+                  <div>
+                    <strong>เรื่อง :</strong>&nbsp;&nbsp;
+                    {{ i.subject_advice }}
+                  </div>
+                  <div>
+                    <strong>รายละเอียด :</strong><br />
+                    {{ i.detail }}
+                  </div>
+                  <div>
+                    <strong>การตอบกลับ :</strong><br />
+                    {{ i.reply }}
+                  </div>
                 </div>
 
                 <!-- Modal footer -->
@@ -290,22 +303,23 @@
 
         <!-- Modal body -->
         <div class="modal-body">
-          <label for="exampleFormControlInput1">เรื่อง</label>
-          <input
-            class="form-control"
-            type="text"
-            formControlName="subject"
-            required
-          />
-          <br />
-          <label for="exampleFormControlTextarea1">รายละเอียด</label>
-          <textarea
-            class="form-control"
-            id="exampleFormControlTextarea"
-            rows="3"
-            formControlName="details"
-            required
-          ></textarea>
+          <div>
+            <mat-form-field style="width: 100%;">
+              <mat-label>เรื่อง</mat-label>
+              <input matInput formControlName="subject" required />
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field style="width: 100%;">
+              <mat-label>รายละเอียด</mat-label>
+              <textarea
+                matInput
+                formControlName="details"
+                required
+                rows="3"
+              ></textarea>
+            </mat-form-field>
+          </div>
         </div>
 
         <!-- Modal footer -->

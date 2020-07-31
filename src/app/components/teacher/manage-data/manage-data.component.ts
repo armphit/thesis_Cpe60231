@@ -21,11 +21,10 @@ export class ManageDataComponent implements OnInit {
   public dataCurriculum: any = null;
   public formCurriculum: FormGroup;
   public groupID: any = null;
-  public groupName: any = null;
-  public file_curriculum: any = null;
   public dataBranchEdit: any = null;
   public acronymEdit: any = null;
   public updateFile: any = null;
+  public updateFile_name: any = 'โปรดเลือกไฟล์';
   public codeGroup: any = null;
   public data: any = null;
   public dataStudent: any = null;
@@ -38,17 +37,30 @@ export class ManageDataComponent implements OnInit {
   public date_student: FormGroup;
   public year_study: Array<any> = [];
   public date_year: FormGroup;
-  public dataCURDATE = {
-    year: null,
-    //   term: null,
-  };
   public dataCalendar: any = null;
+  public thmonth = new Array(
+    'มกราคม',
+    'กุมภาพันธ์',
+    'มีนาคม',
+    'เมษายน',
+    'พฤษภาคม',
+    'มิถุนายน',
+    'กรกฎาคม',
+    'สิงหาคม',
+    'กันยายน',
+    'ตุลาคม',
+    'พฤศจิกายน',
+    'ธันวาคม'
+  );
+  public fileStudentName: any = 'โปรดเลือกไฟล์';
+  public upload_curriculum: File = null;
+  public upload_curriculum_name: any = 'โปรดเลือกไฟล์';
 
   constructor(public http: HttpService, private formBuilder: FormBuilder) {
     this.getGroup();
     this.getAdvisor();
     this.getBranchhead();
-
+    this.getCURDATE();
     this.getGroup_branchHead();
   }
 
@@ -57,7 +69,6 @@ export class ManageDataComponent implements OnInit {
     this.formGroup = this.formBuilder.group({
       group: ['', Validators.required],
       brunch: ['', Validators.required],
-      upload: ['', Validators.required],
     });
 
     this.formCurriculum = this.formBuilder.group({
@@ -79,7 +90,6 @@ export class ManageDataComponent implements OnInit {
     this.date_year = this.formBuilder.group({
       _year: [``, Validators.required],
     });
-    this.getCURDATE();
   }
 
   public getAdvisor = async () => {
@@ -181,7 +191,8 @@ export class ManageDataComponent implements OnInit {
 
   uploadCurriculum(file) {
     if (file) {
-      this.formGroup.value.upload = file;
+      this.upload_curriculum = file;
+      this.upload_curriculum_name = file.name;
     }
   }
 
@@ -191,48 +202,50 @@ export class ManageDataComponent implements OnInit {
       'group_name',
       this.acronym + '.' + this.formGroup.value.group.toUpperCase()
     );
-    formData.append('upload', this.formGroup.value.upload);
+    formData.append('upload', this.upload_curriculum);
     formData.append('branch', this.formGroup.value.brunch);
     formData.append('ID', JSON.parse(localStorage.getItem('userLogin')).userID);
 
     // formData.append('ID', this.inGroup.value.getTC);
-    let getData: any = await this.http.post('teacher/addGroup', formData);
-
-    if (getData.connect) {
-      if (getData.response.result) {
-        Swal.fire('เพิ่มกลุ่มเรียนเสร็จสิ้น', '', 'success');
-        let win: any = window;
-        win.$('#addGroup').modal('hide');
-        this.getGroup();
-      } else {
-        Swal.fire('ไม่สามารถเพิ่มกลุ่มเรียนได้', 'กลุ่มเรียนซ้ำ', 'error');
-      }
+    if (this.upload_curriculum == null) {
+      Swal.fire('ไม่สามารถเพิ่มกลุ่มเรียนได้', 'โปรดเลือกไฟล์', 'error');
     } else {
-      Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+      let getData: any = await this.http.post('teacher/addGroup', formData);
+
+      if (getData.connect) {
+        if (getData.response.result) {
+          Swal.fire('เพิ่มกลุ่มเรียนเสร็จสิ้น', '', 'success');
+          this.upload_curriculum = null;
+          this.upload_curriculum_name = 'โปรดเลือกไฟล์';
+          let win: any = window;
+          win.$('#addGroup').modal('hide');
+          this.getGroup();
+        } else {
+          Swal.fire('ไม่สามารถเพิ่มกลุ่มเรียนได้', 'กลุ่มเรียนซ้ำ', 'error');
+        }
+      } else {
+        Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+      }
     }
   };
   public clearFrom() {
+    this.upload_curriculum = null;
+    this.upload_curriculum_name = 'โปรดเลือกไฟล์';
     this.formGroup.reset();
   }
 
-  public clickUpdateGroup(
-    study_group_id,
-    study_group_name,
-    file_curriculum,
-    branch_id
-  ) {
+  public clickUpdateGroup(study_group_id, study_group_name, branch_id) {
     let a = study_group_name.split('.', 1);
     let b = study_group_name.replace(a + '.', '');
 
     this.groupID = study_group_id;
-    this.groupName = study_group_name;
-    this.file_curriculum = file_curriculum;
     this.formCurriculum = this.formBuilder.group({
       groupEdit: [b, Validators.required],
       brunchEdit: [branch_id, Validators.required],
     });
     this.getBranchEdit();
     this.updateFile = null;
+    this.updateFile_name = 'โปรดเลือกไฟล์';
   }
 
   public getBranchEdit = async () => {
@@ -255,6 +268,7 @@ export class ManageDataComponent implements OnInit {
   updateCurriculum(file) {
     if (file) {
       this.updateFile = file;
+      this.updateFile_name = file.name;
     }
   }
 
@@ -272,7 +286,6 @@ export class ManageDataComponent implements OnInit {
       this.acronymEdit + '.' + this.formCurriculum.value.groupEdit
     );
     formData.append('branch_id', this.formCurriculum.value.brunchEdit);
-    formData.append('curriculum', this.file_curriculum);
     let getData: any = await this.http.post(
       'teacher/addUploadCurriculum',
       formData
@@ -299,7 +312,7 @@ export class ManageDataComponent implements OnInit {
   }
 
   async uploadFileStudent(evt: any) {
-    // this.filesName = evt.target.files[0].name;
+    this.fileStudentName = evt.target.files[0].name;
 
     const target: DataTransfer = <DataTransfer>evt.target;
     if (target.files.length !== 1) throw new Error('Cannot use');
@@ -316,26 +329,33 @@ export class ManageDataComponent implements OnInit {
   }
 
   public async uploadStudent() {
-    for (let i = 0; i < this.data.length; i++) {
-      //  let getData: any = await this.http.get('admin/uploadStudent/'+this.data[i]);
-      //  console.log(getData)
-      let Form = new FormData();
-      Object.keys(this.data[i]).forEach((key) => {
-        Form.append(key, this.data[i][key]);
-      });
-      Form.append('group', this.codeGroup);
-      let getData: any = await this.http.post('admin/uploadStudent', Form);
-    }
+    console.log(this.data);
+    if (this.data == null) {
+      Swal.fire('โปรดเลือกไฟล์!', '', 'error');
+    } else {
+      for (let i = 0; i < this.data.length; i++) {
+        //  let getData: any = await this.http.get('admin/uploadStudent/'+this.data[i]);
+        //  console.log(getData)
+        let Form = new FormData();
+        Object.keys(this.data[i]).forEach((key) => {
+          Form.append(key, this.data[i][key]);
+        });
+        Form.append('group', this.codeGroup);
+        let getData: any = await this.http.post('admin/uploadStudent', Form);
+      }
 
-    // this.getStudent();
-    this.getEducational();
-    Swal.fire({
-      position: 'top',
-      icon: 'success',
-      title: 'เพิ่มข้อมูลสำเร็จ',
-      showConfirmButton: false,
-      timer: 1500,
-    });
+      // this.getStudent();
+      this.getEducational();
+      this.fileStudentName = 'โปรดเลือกไฟล์';
+      this.data = null;
+      Swal.fire({
+        position: 'top',
+        icon: 'success',
+        title: 'เพิ่มข้อมูลสำเร็จ',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
   }
   // public async getStudent() {
   //   let formData = new FormData();
@@ -378,13 +398,27 @@ export class ManageDataComponent implements OnInit {
       }
     });
   };
+  public getYearTerm(e) {
+    this.formYearTerm = this.formBuilder.group({
+      year: [e, Validators.required],
+      term: [this.formYearTerm.value.term, Validators.required],
+    });
+    this.getEducational();
+  }
   public getTerm(e) {
+    this.formYearTerm = this.formBuilder.group({
+      year: [this.formYearTerm.value.year, Validators.required],
+      term: [e, Validators.required],
+    });
+    this.getEducational();
+  }
+
+  public getYearStudy(e) {
     this.date_year = this.formBuilder.group({
       _year: [e, Validators.required],
     });
     this.getCalendar();
   }
-
   public getEducational = async () => {
     let formData = new FormData();
     formData.append('group', this.codeGroup);
@@ -392,6 +426,7 @@ export class ManageDataComponent implements OnInit {
     formData.append('term', this.formYearTerm.value.term);
 
     let getData: any = await this.http.post('admin/getEducational', formData);
+    console.log(getData);
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
         this.dataEducational = getData.response.result;
@@ -440,7 +475,7 @@ export class ManageDataComponent implements OnInit {
     var now = new Date();
     var year = 0 + now.getFullYear() + 543;
     for (var i = 0; i < 10; i++) {
-      this.year_study[i] = { value: year - i };
+      this.year_study[i] = { value: `${year - i}` };
     }
   };
   public insertCalendar = async () => {
@@ -489,9 +524,11 @@ export class ManageDataComponent implements OnInit {
 
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
-        this.dataCURDATE.year = getData.response.result[0].year;
         //this.dataCURDATE.term = getData.response.result[0].term ;
-
+        this.formYearTerm = this.formBuilder.group({
+          year: [getData.response.result[0].year, Validators.required],
+          term: [getData.response.result[0].term, Validators.required],
+        });
         this.date_year.patchValue({
           _year: getData.response.result[0].year,
         });
@@ -507,7 +544,7 @@ export class ManageDataComponent implements OnInit {
     let formData = new FormData();
     formData.append('year', this.date_year.value._year);
     let getData: any = await this.http.post('teacher/getCalendar', formData);
-    console.log(getData);
+
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
         this.dataCalendar = getData.response.result;
@@ -516,6 +553,106 @@ export class ManageDataComponent implements OnInit {
       }
     } else {
       alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+  };
+
+  public getDate(date: any) {
+    var d = new Date(date);
+
+    return (
+      'วันที่' +
+      '  ' +
+      d.getDate() +
+      '  ' +
+      this.thmonth[d.getMonth()] +
+      '  ' +
+      (d.getFullYear() + 543)
+    );
+  }
+
+  public deleteCalendar = async (year: any, term: any) => {
+    let formData = new FormData();
+    formData.append('year', year);
+    formData.append('term', term);
+    this.http.confirmAlert('ลบรายการนี้หรือไม่?').then(async (value: any) => {
+      if (value) {
+        let getData: any = await this.http.post(
+          'teacher/delCalendar',
+          formData
+        );
+        if (getData.connect) {
+          if (getData.response.rowCount > 0) {
+            Swal.fire({
+              position: 'top',
+              icon: 'success',
+              title: 'ลบข้อมูลสำเร็จ',
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            this.getCalendar();
+          } else {
+            Swal.fire('ไม่สามารถลบข้อมูลได้!', '', 'error');
+          }
+        }
+      }
+    });
+  };
+
+  public clickEditCalendar(data) {
+    this.getYearCalendar();
+    this.date_student = this.formBuilder.group({
+      start: [data.date_start, Validators.required],
+      end: [data.date_end, Validators.required],
+      selected_year: [data.year, Validators.required],
+      selected_term: [data.term, Validators.required],
+      year: [data.year, Validators.required],
+      term: [data.term, Validators.required],
+    });
+  }
+
+  public updateCalendar = async () => {
+    const momentDate = new Date(this.date_student.value.start);
+    const formattedDate = moment(momentDate).format('YYYY-MM-DD');
+    const momentDate2 = new Date(this.date_student.value.end);
+    const formattedDate2 = moment(momentDate2).format('YYYY-MM-DD');
+    let formData = new FormData();
+    formData.append('year', this.date_student.value.selected_year);
+    formData.append('term', this.date_student.value.selected_term);
+    formData.append('start', formattedDate);
+    formData.append('end', formattedDate2);
+    formData.append('yearEdit', this.date_student.value.year);
+    formData.append('termEdit', this.date_student.value.term);
+
+    // formData.forEach((value, key) => {
+    //   console.log(key + ':' + value);
+    // });
+
+    if (formattedDate > formattedDate2) {
+      Swal.fire(
+        'ไม่สามารถเพิ่มปีการศึกษาได้',
+        'วันเปิดเทอม - วันปิดเทอม ไม่ถูกต้อง',
+        'error'
+      );
+    } else {
+      let getData: any = await this.http.post(
+        'teacher/updateCalendar',
+        formData
+      );
+
+      if (getData.connect) {
+        if (getData.response.rowCount > 0) {
+          let win: any = window;
+          win.$('#editCalendar').modal('hide');
+          Swal.fire('แก้ไขข้อมูลเสร็จสิ้น', '', 'success');
+          this.getCalendar();
+        } else if (getData.response.error) {
+          Swal.fire('แก้ไขข้อมูลไม่สำเร็จ', 'ภาคการศึกษาซ้ำ', 'error');
+        } else {
+          Swal.fire('แก้ไขข้อมูลไม่สำเร็จ', '', 'error');
+        }
+      } else {
+        Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+      }
     }
   };
 }
