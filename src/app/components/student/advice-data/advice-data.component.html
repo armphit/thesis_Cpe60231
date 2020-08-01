@@ -207,6 +207,7 @@
               class="btn btn-info btn-xs"
               data-toggle="modal"
               data-target="#detailReply"
+              (click)="clickDetail(i)"
             >
               <i class="fas fa-info-circle"></i>&nbsp;ดูรายละเอียด
             </button>
@@ -214,7 +215,7 @@
 
           <!-- The Modal -->
           <div class="modal" id="detailReply">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
               <div class="modal-content">
                 <!-- Modal Header -->
                 <div class="modal-header">
@@ -262,6 +263,47 @@
                   <div>
                     <strong>การตอบกลับ :</strong><br />
                     {{ i.reply }}
+                  </div>
+                  <div>
+                    <strong>การนัดหมาย :<br /></strong>
+
+                    <table
+                      class="table"
+                      *ngIf="dataAppointment_Student != null"
+                      style="width: 100%;"
+                    >
+                      <thead class="thead-dark">
+                        <tr>
+                          <th scope="col">ลำดับ</th>
+                          <th scope="col">
+                            ผลที่เกิด/คำแนะนำเพิ่มเติม
+                          </th>
+                          <th scope="col">หมายเหตุ</th>
+                          <th scope="col">วันที่นัดหมาย</th>
+                          <th scope="col"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr></tr>
+                        <tr
+                          *ngFor="
+                            let i of dataAppointment_Student;
+                            let x = index
+                          "
+                        >
+                          <th scope="row" style="padding-top: 15px;">
+                            {{ x + 1 }}
+                          </th>
+                          <td style="padding-top: 15px;">
+                            {{ i.app_suggestion }}
+                          </td>
+                          <td style="padding-top: 15px;">{{ i.app_detail }}</td>
+                          <td style="padding-top: 15px;">
+                            {{ getDate(i.app_date) }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
 

@@ -82,18 +82,21 @@
       >ภาคการศึกษา : &nbsp;&nbsp;
       <mat-form-field style="width: 13%;">
         <mat-label>เลือกปีการศึกษา</mat-label>
-        <mat-select formControlName="year" required [(value)]="selected">
+        <mat-select
+          (selectionChange)="getYearTerm($event.value)"
+          formControlName="year"
+          required
+        >
           <mat-option *ngFor="let i of range" [value]="i.value">
             {{ i.value }}
           </mat-option>
         </mat-select>
       </mat-form-field>
       /
-      <mat-form-field style="width: 25;" *ngIf="selected">
+      <mat-form-field style="width: 25;">
         <mat-label>เลือกภาคการเรียน</mat-label>
         <mat-select
           formControlName="term"
-          [(value)]="term"
           required
           (selectionChange)="getTerm($event.value)"
         >
@@ -132,7 +135,7 @@
     <div class="col-7"></div>
   </div>
 </div>
-<table class="table" *ngIf="dataEducational != null">
+<table class="table" *ngIf="groupID!">
   <thead class="thead-dark">
     <tr>
       <th scope="col">ลำดับ</th>

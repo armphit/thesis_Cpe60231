@@ -153,7 +153,21 @@
               >
                 แผนการเรียน :
               </div>
-              <div class="col-sm-6">
+              <div class="col-md-7">
+                <input
+                  type="file"
+                  class="custom-file-input"
+                  id="customFile"
+                  #fileInput
+                  (change)="uploadCurriculum(fileInput.files[0])"
+                  required
+                  accept=".pdf"
+                />
+                <label class="custom-file-label text-left" for="customFile">{{
+                  filesName2
+                }}</label>
+              </div>
+              <!-- <div class="col-sm-6">
                 <input
                   type="file"
                   class="form-control-file border"
@@ -162,7 +176,7 @@
                   required
                   accept=".pdf"
                 />
-              </div>
+              </div> -->
             </div>
 
             อาจารย์ที่ปรึกษา : &nbsp;&nbsp;<mat-form-field style="width: 30%;">
@@ -195,7 +209,7 @@
   </form>
 </div>
 
-<table class="table" *ngIf="dataGroup != null">
+<table class="table" *ngIf="codeBranch != null">
   <thead class="thead-dark">
     <tr>
       <th scope="col">ลำดับ</th>
@@ -223,7 +237,9 @@
         </button>
         &nbsp;&nbsp;&nbsp;
         <span
-          (click)="getIDgroup(i.advisor_id, i.study_group_id, i.study_group_name)"
+          (click)="
+            getIDgroup(i.advisor_id, i.study_group_id, i.study_group_name)
+          "
           ><i
             class="fas fa-edit"
             style="font-size: 18px; cursor: pointer;"
@@ -285,7 +301,21 @@
             >
               แผนการเรียน :
             </div>
-            <div class="col-sm-6">
+            <div class="col-md-7">
+              <input
+                type="file"
+                class="custom-file-input"
+                id="customFile"
+                #fileInputUpdate
+                (change)="uploadCurriculumUpdate(fileInputUpdate.files[0])"
+                required
+                accept=".pdf"
+              />
+              <label class="custom-file-label text-left" for="customFile">{{
+                filesName3
+              }}</label>
+            </div>
+            <!-- <div class="col-sm-6">
               <input
                 type="file"
                 class="form-control-file border"
@@ -294,7 +324,7 @@
                 required
                 accept=".pdf"
               />
-            </div>
+            </div> -->
           </div>
           <br />
           อาจารย์ที่ปรึกษา : &nbsp;&nbsp;<mat-form-field style="width: 30%;">

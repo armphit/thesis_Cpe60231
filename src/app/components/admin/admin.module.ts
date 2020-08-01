@@ -8,10 +8,11 @@ import { StudentDataComponent } from './manage-data/student-data/student-data.co
 import { SharedModules } from 'src/app/shared-modules';
 import { MatIconModule } from '@angular/material/icon';
 import { AdviceDataComponent } from './advice-data/advice-data.component';
+import { SemesterDataComponent } from './manage-data/semester-data/semester-data.component';
 
 
 @NgModule({
-  declarations: [ManageDataComponent, GroupComponent, StudentDataComponent, AdviceDataComponent],
+  declarations: [ManageDataComponent, GroupComponent, StudentDataComponent, AdviceDataComponent, SemesterDataComponent],
   imports: [
     CommonModule,
     AdminRoutingModule,

@@ -18,7 +18,6 @@ import { StudentComponent } from './components/student/student.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,7 +25,7 @@ import { AuthGuard } from './guards/auth.guard';
     AdminComponent,
     TeacherComponent,
     StudentComponent,
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -37,9 +36,9 @@ import { AuthGuard } from './guards/auth.guard';
     MatButtonModule,
     MatSidenavModule,
     MatListModule,
-    SharedModules
+    SharedModules,
   ],
   providers: [AuthGuard],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

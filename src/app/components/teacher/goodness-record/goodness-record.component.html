@@ -1,0 +1,132 @@
+<div class="panel-body" style="margin-left: 10px; margin-right: 10px;">
+  <div>
+    กลุ่มเรียน : &nbsp;&nbsp;<mat-form-field style="width: 15%;">
+      <mat-label>โปรดเลือกกลุ่มเรียน</mat-label>
+      <mat-select required>
+        <mat-option
+          style="width: auto;"
+          *ngFor="let i of dataGroup; let x = index"
+          [value]="i.study_group_id"
+          (click)="clickGroup(i.study_group_id)"
+        >
+          {{ i.study_group_name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div *ngIf="codeGroup!">
+    <form [formGroup]="advice_year">
+      ปีการศึกษา : &nbsp;&nbsp;
+      <mat-form-field style="width: 25%;">
+        <mat-label>เลือกปีการศึกษา</mat-label>
+        <mat-select
+          formControlName="_year"
+          (selectionChange)="getYearAdvice($event.value)"
+          required
+        >
+          <mat-option *ngFor="let i of range" [value]="i.value">
+            {{ i.value }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </div>
+  <!-- Button to Open the Modal -->
+  <button
+    type="button"
+    class="btn btn-primary"
+    data-toggle="modal"
+    data-target="#myModal"
+    *ngIf="codeGroup!"
+    (click)="clickAddGoddness()"
+  >
+    <i class="fas fa-plus"></i> เพิ่มพฤติกรรมดีเด่นของนักศึกษา
+  </button>
+
+  <!-- The Modal -->
+  <div class="modal" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h2 class="modal-title">พฤติกรรมดีเด่นของนักศึกษา</h2>
+          <button type="button" class="close" data-dismiss="modal">
+            &times;
+          </button>
+        </div>
+        <form
+          [formGroup]="formGoodness"
+          #formChange="ngForm"
+          (ngSubmit)="formGoodness.valid ? insertGoodness() : ''"
+        >
+          <!-- Modal body -->
+          <div class="modal-body">
+            <div>
+              <strong>ประเภทพฤติกรรมดีเด่น :</strong>&nbsp;&nbsp;
+              <mat-form-field style="width: 25;">
+                <mat-label>เลือกประเภท</mat-label>
+                <mat-select formControlName="type" required>
+                  <mat-option value="ด้านการเรียนดีเด่น"
+                    >ด้านการเรียนดีเด่น</mat-option
+                  >
+                  <mat-option value="ด้านกิจกรรมดีเด่น"
+                    >ด้านกิจกรรมดีเด่น</mat-option
+                  >
+                  <mat-option value="ด้านคุณธรรมจริยธรรมดีเด่น"
+                    >ด้านคุณธรรมจริยธรรมดีเด่น</mat-option
+                  >
+                  <mat-option value="ด้านบำเพ็ญประโยชน์เพื่อสังคม"
+                    >ด้านบำเพ็ญประโยชน์เพื่อสังคม</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field style="width: 100%;" appearance="fill">
+                <mat-label>รายละเอียด</mat-label>
+                <textarea matInput formControlName="detail" rows="3"></textarea>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field style="width: 100%;" appearance="fill">
+                <mat-label>รางวัลที่ได้รับ</mat-label>
+                <textarea matInput formControlName="awards" rows="3"></textarea>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field style="width: 100%;" appearance="fill">
+                <mat-label>หมายเหตุ</mat-label>
+                <textarea matInput formControlName="note" rows="3"></textarea>
+              </mat-form-field>
+            </div>
+
+            <div>
+              นักศึกษา : &nbsp;&nbsp;<mat-form-field style="width: 50%;">
+                <mat-label>โปรดเลือกนักศึกษา</mat-label>
+                <mat-select formControlName="student" required>
+                  <mat-option
+                    style="width: auto;"
+                    *ngFor="let i of dataStudent; let x = index"
+                    [value]="i.userID"
+                  >
+                    {{ i.titlename }}{{ i.fname }}&nbsp;&nbsp;{{ i.lname }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">
+                ยกเลิก
+              </button>
+              <button type="submit" class="btn btn-success">
+                บันทึก
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

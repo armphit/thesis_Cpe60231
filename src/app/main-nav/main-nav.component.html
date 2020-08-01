@@ -82,6 +82,14 @@
           >ข้อมูลคำปรึกษา</strong
         ></a
       >
+      <a
+        mat-list-item
+        [routerLink]="['/teacher/goodness-record']"
+        [routerLinkActive]="['link-active']"
+        ><i class="fas fa-clipboard"></i>&nbsp;&nbsp;<strong
+          >บันทึกรายงานพฤติกรรมดีเด่น</strong
+        ></a
+      >
       <a mat-list-item (click)="onLogout()"
         ><font color="#CD5C5C"
           ><i class="fas fa-sign-out-alt"></i>&nbsp;&nbsp;
@@ -102,10 +110,7 @@
         <i class="fas fa-ellipsis-v"></i>
       </button>
 
-      <span
-        >ระบบแฟ้มอาจารย์ที่ปรึกษา<br />Advisor file
-        system</span
-      >
+      <span>ระบบแฟ้มอาจารย์ที่ปรึกษา<br />Advisor file system</span>
     </mat-toolbar>
     <router-outlet></router-outlet>
     <!-- Add Content Here -->

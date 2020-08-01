@@ -35,6 +35,8 @@ export class AdviceDataComponent implements OnInit {
   public advice_year: FormGroup;
   public range: Array<any> = [];
   public year_now: any = null;
+  public dataAppointment_Student: any = null;
+  public reply_advice_id: any = null;
 
   constructor(private http: HttpService, private formBuilder: FormBuilder) {
     this.getStudent();
@@ -261,4 +263,27 @@ export class AdviceDataComponent implements OnInit {
       alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
     }
   };
+  public clickDetail(data) {
+    this.reply_advice_id = data.reply_advice_id;
+
+    this.getAppointment_Student();
+  }
+  async getAppointment_Student() {
+    let formData = new FormData();
+    formData.append('ID', this.reply_advice_id);
+    let getData: any = await this.http.post(
+      'teacher/getAppointment_Student',
+      formData
+    );
+    console.log(getData);
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        this.dataAppointment_Student = getData.response.result;
+      } else {
+        this.dataAppointment_Student = null;
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+  }
 }

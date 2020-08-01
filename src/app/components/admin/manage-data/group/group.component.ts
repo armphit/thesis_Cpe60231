@@ -35,7 +35,6 @@ export class GroupComponent implements OnInit {
   public filesName3: any = null;
   public formCurriculum: FormGroup;
 
-
   constructor(public http: HttpService, private formBuilder: FormBuilder) {
     this.getFaculty();
   }
@@ -69,6 +68,10 @@ export class GroupComponent implements OnInit {
   };
 
   public async clickFaculty(codeFaculty, nameFaculty) {
+    this.codeMajor = null;
+    this.codeBranch = null;
+    // this.dataStudent_id = null;
+    // this.groupID = null;
     this.codeFaculty = codeFaculty.substr(0, 2);
     let formData = new FormData();
     formData.append('code', this.codeFaculty);
@@ -86,6 +89,7 @@ export class GroupComponent implements OnInit {
   }
 
   public async clickMajor(codeMajor, nameMajor, acronym) {
+    this.codeBranch = null;
     this.nameMajor = nameMajor;
     this.codeMajor = codeMajor;
     let formData = new FormData();
@@ -132,6 +136,8 @@ export class GroupComponent implements OnInit {
   public clearFrom() {
     this.inGroup.reset();
     this.inBranchhead.reset();
+    this.uploadCurriculumFile = null;
+    this.filesName2 = null;
   }
 
   public getIDBranchhead(codeBranchhead) {
@@ -201,7 +207,7 @@ export class GroupComponent implements OnInit {
     if (file) {
       this.uploadCurriculumFile = file;
       this.filesName2 = file.name;
-      console.log(this.uploadCurriculumFile)
+      console.log(this.uploadCurriculumFile);
     }
   }
 
@@ -275,6 +281,8 @@ export class GroupComponent implements OnInit {
   };
 
   public getIDgroup = async (advisorID: any, group_id: any, group_name) => {
+    this.curriculumFileupdate = null;
+    this.filesName3 = null;
     let a = group_name.substring(4);
     this.inGroup = this.formBuilder.group({
       group: [a, Validators.required],
@@ -287,14 +295,17 @@ export class GroupComponent implements OnInit {
     if (file) {
       this.curriculumFileupdate = file;
       this.filesName3 = file.name;
-      console.log(this.curriculumFileupdate)
+      console.log(this.curriculumFileupdate);
     }
   }
 
   public updateGroup = async () => {
     let formData = new FormData();
     formData.append('ID', this.inGroup.value.advisorID);
-    formData.append('group_name', this.acronym + '.' +this.inGroup.value.group);
+    formData.append(
+      'group_name',
+      this.acronym + '.' + this.inGroup.value.group
+    );
     formData.append('group_id', this.groupID_edit);
     formData.append('upload', this.curriculumFileupdate);
 
@@ -306,7 +317,7 @@ export class GroupComponent implements OnInit {
         win.$('#updateGroup').modal('hide');
         Swal.fire('แก้ไขข้อมูลเสร็จสิ้น', '', 'success');
         this.getGroup();
-        this.curriculumFileupdate=null;
+        this.curriculumFileupdate = null;
       } else {
         Swal.fire('แก้ไขข้อมูลไม่สำเร็จ', '', 'error');
       }

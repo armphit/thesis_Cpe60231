@@ -1,3 +1,4 @@
+import { GoodnessRecordComponent } from './goodness-record/goodness-record.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ManageDataComponent } from './manage-data/manage-data.component';
@@ -16,6 +17,10 @@ const routes: Routes = [
       {
         path: 'advice-data',
         component: AdviceDataComponent,
+      },
+      {
+        path: 'goodness-record',
+        component: GoodnessRecordComponent,
       },
       {
         path: '',

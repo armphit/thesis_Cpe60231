@@ -34,14 +34,13 @@ export class StudentDataComponent implements OnInit {
   public dataCurriculum: any = null;
   public filesName2: any = 'โปรดเลือกไฟล์';
   public range: Array<any> = [];
-  term: any = null;
-  selected: any = null;
   public formYearTerm: FormGroup;
   public dataEducational: any = null;
 
   constructor(public http: HttpService, private formBuilder: FormBuilder) {
     this.getFaculty();
     this.getYear();
+    this.getCURDATE();
   }
 
   ngOnInit(): void {
@@ -69,6 +68,10 @@ export class StudentDataComponent implements OnInit {
 
   public async clickFaculty(codeFaculty, nameFaculty) {
     this.dataMajor = null;
+    this.codeMajor = null;
+    this.codeBranch = null;
+    this.groupID = null;
+
     this.codeFaculty = codeFaculty.substr(0, 2);
     let formData = new FormData();
     formData.append('code', this.codeFaculty);
@@ -86,6 +89,8 @@ export class StudentDataComponent implements OnInit {
   }
 
   public async clickMajor(codeMajor, nameMajor, acronym) {
+    this.codeBranch = null;
+    this.groupID = null;
     this.nameMajor = nameMajor;
     this.codeMajor = codeMajor;
     let formData = new FormData();
@@ -117,6 +122,7 @@ export class StudentDataComponent implements OnInit {
   }
 
   public clickBranch(codeBranch, name, acronym) {
+    this.groupID = null;
     this.acronym = acronym;
     this.codeBranch = codeBranch;
     this.getGroup();
@@ -264,11 +270,23 @@ export class StudentDataComponent implements OnInit {
     var now = new Date();
     var year = 0 + now.getFullYear() + 543;
     for (var i = 0; i < 10; i++) {
-      this.range[i] = { value: year - i };
+      this.range[i] = { value: `${year - i}` };
     }
   };
 
+  public getYearTerm(e) {
+    this.formYearTerm = this.formBuilder.group({
+      year: [e, Validators.required],
+      term: [this.formYearTerm.value.term, Validators.required],
+    });
+    this.getEducational();
+  }
+
   public getTerm(e) {
+    this.formYearTerm = this.formBuilder.group({
+      year: [this.formYearTerm.value.year, Validators.required],
+      term: [e, Validators.required],
+    });
     this.getEducational();
   }
 
@@ -287,6 +305,26 @@ export class StudentDataComponent implements OnInit {
       }
     } else {
       Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+    }
+  };
+  public getCURDATE = async () => {
+    let getData: any = await this.http.post('teacher/getCURDATE');
+
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        // this.dataCURDATE.term = getData.response.result[0].term ;
+        this.formYearTerm = this.formBuilder.group({
+          year: [getData.response.result[0].year, Validators.required],
+          term: [getData.response.result[0].term, Validators.required],
+        });
+        // this.date_year.patchValue({
+        //   _year: getData.response.result[0].year,
+        // });
+        // this.getCalendar();
+      } else {
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
     }
   };
 }

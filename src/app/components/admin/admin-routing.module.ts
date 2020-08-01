@@ -5,6 +5,7 @@ import { ManageDataComponent } from './manage-data/manage-data.component';
 import { GroupComponent } from './manage-data/group/group.component';
 import { StudentDataComponent } from './manage-data/student-data/student-data.component';
 import { AdviceDataComponent } from './advice-data/advice-data.component';
+import { SemesterDataComponent } from './manage-data/semester-data/semester-data.component';
 
 const routes: Routes = [
   {
@@ -23,12 +24,16 @@ const routes: Routes = [
             path: 'student-data',
             component: StudentDataComponent,
           },
+          {
+            path: 'semester-data',
+            component: SemesterDataComponent,
+          },
         ],
       },
 
       {
         path: 'advice-data',
-        component: AdviceDataComponent
+        component: AdviceDataComponent,
       },
 
       {

@@ -76,6 +76,10 @@ export class AdviceDataComponent implements OnInit {
   };
 
   public async clickFaculty(codeFaculty, nameFaculty) {
+    this.codeMajor = null;
+    this.codeBranch = null;
+    this.dataStudent_id = null;
+    this.groupID = null;
     this.codeFaculty = codeFaculty.substr(0, 2);
     let formData = new FormData();
     formData.append('code', this.codeFaculty);
@@ -93,6 +97,9 @@ export class AdviceDataComponent implements OnInit {
   }
 
   public async clickMajor(codeMajor, nameMajor, acronym) {
+    this.codeBranch = null;
+    this.dataStudent_id = null;
+    this.groupID = null;
     this.nameMajor = nameMajor;
     this.codeMajor = codeMajor;
     let formData = new FormData();
@@ -125,6 +132,8 @@ export class AdviceDataComponent implements OnInit {
   }
 
   public clickBranch(codeBranch, name, acronym) {
+    this.dataStudent_id = null;
+    this.groupID = null;
     this.acronym = acronym;
     this.codeBranch = codeBranch;
     this.getGroup();
@@ -152,6 +161,7 @@ export class AdviceDataComponent implements OnInit {
     fname: any,
     lname: any
   ) {
+    this.dataStudent_id = null;
     this.groupID = codeGroup;
     // this.groupName = namegroup;
     this.groupUser_name = titlename + fname + ' ' + lname;
@@ -217,7 +227,7 @@ export class AdviceDataComponent implements OnInit {
   public getStudent = async () => {
     let formData = new FormData();
     formData.append('group', this.groupID);
-    let getData: any = await this.http.post('teacher/getStudent', formData);
+    let getData: any = await this.http.post('admin/getStudent', formData);
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
         this.dataStudent = getData.response.result;
@@ -234,7 +244,6 @@ export class AdviceDataComponent implements OnInit {
     this.getAdvice();
   }
   clickReply_data(dataReply: any) {
-    console.log(dataReply.reply_advice_id);
     this.dataReply_id.subject_advice = dataReply.subject_advice;
     this.dataReply_id.detail = dataReply.detail;
     this.dataReply_id.reply = dataReply.reply;
@@ -248,7 +257,7 @@ export class AdviceDataComponent implements OnInit {
       'teacher/getAppointment_Student',
       formData
     );
-    console.log(getData);
+
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
         this.dataAppointment_Student = getData.response.result;
