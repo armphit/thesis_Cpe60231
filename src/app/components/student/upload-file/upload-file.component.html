@@ -49,7 +49,11 @@
         <div class="row">
           <div class="col-sm-3" style="padding-left: 15px;">
             ประวัติส่วนตัว :&nbsp;&nbsp;
-            <button type="button" class="btn btn-danger btn-sm">
+            <button
+              type="button"
+              class="btn btn-danger btn-sm"
+              *ngIf="getHistory != null"
+            >
               <a href="{{ http.PathPDF }}{{ getHistory }}" target="_blank"
                 ><font color="white">คลิกดูประวัติส่วนตัว</font></a
               >

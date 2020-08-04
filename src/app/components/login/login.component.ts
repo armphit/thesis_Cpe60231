@@ -30,21 +30,16 @@ export class LoginComponent implements OnInit {
     });
 
     this.activeRoute.queryParams.subscribe((value: any) => {
-
       // if (value.oldPath) this.oldPath = value.oldPath;
       if (value.sso) {
         this.service
           .get(`/loginsso?perid=${value.perid}`)
           .then((value: any) => {
-            console.log(value.response.data.userID)
-
             if (value.response.success) {
-
               let a = value.response.data.userID;
 
               this.onlogin(a);
-            }
-            else {
+            } else {
               window.location.replace(environment.ssoLogout);
               this.service.alertLog('error', 'ไม่พบข้อมูลผู้ใช้งาน');
             }
@@ -54,8 +49,8 @@ export class LoginComponent implements OnInit {
   }
 
   public async submitlogin() {
-    console.log(this.formLogin.value.username)
-    console.log(this.formLogin.value.password)
+    console.log(this.formLogin.value.username);
+    console.log(this.formLogin.value.password);
     let formData = new FormData();
     formData.append('ID', this.formLogin.value.username);
     formData.append('pass', this.formLogin.value.password);
@@ -73,7 +68,7 @@ export class LoginComponent implements OnInit {
             'userLogin',
             JSON.stringify(httpRespon.response.data)
           );
-        }else if(httpRespon.response.data.status == '2500'){
+        } else if (httpRespon.response.data.status == '2500') {
           this.service.alertLog('success', 'เข้าสู่ระบบสำเร็จ');
           this.service.navRouter(this.teacherPath);
 
@@ -81,7 +76,7 @@ export class LoginComponent implements OnInit {
             'userLogin',
             JSON.stringify(httpRespon.response.data)
           );
-      }
+        }
       } else {
         this.service.alertLog('error', 'ชื่อหรือรหัสผ่านไม่ถูกต้อง');
       }
@@ -93,7 +88,6 @@ export class LoginComponent implements OnInit {
     let formData = new FormData();
     formData.append('ID', a);
     let httpRespon: any = await this.service.post('login', formData);
-
 
     if (httpRespon.connect) {
       if (httpRespon.response.success) {

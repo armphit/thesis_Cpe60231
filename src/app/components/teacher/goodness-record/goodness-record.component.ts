@@ -15,6 +15,8 @@ export class GoodnessRecordComponent implements OnInit {
   public range: Array<any> = [];
   public dataStudent: any = null;
   public formGoodness: FormGroup;
+  private yearNow: any = null;
+  public dataGoodness: any = null;
 
   constructor(public http: HttpService, private formBuilder: FormBuilder) {
     this.getGroup();
@@ -55,6 +57,7 @@ export class GoodnessRecordComponent implements OnInit {
     // this.getAdvice();
     // this.getAdvice_notNull();
     this.getGoodnessStudent();
+    this.getGoodness();
   }
 
   public getYearAdvice(e) {
@@ -77,7 +80,7 @@ export class GoodnessRecordComponent implements OnInit {
 
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
-        //this.dataCURDATE.term = getData.response.result[0].term ;
+        this.yearNow = getData.response.result[0].year;
         this.advice_year.patchValue({
           _year: getData.response.result[0].year,
         });
@@ -120,6 +123,127 @@ export class GoodnessRecordComponent implements OnInit {
   //   console.log(data);
   // }
   public insertGoodness = async () => {
-    console.log(this.formGoodness.value);
+    let formData = new FormData();
+    if (
+      this.formGoodness.value.note == null &&
+      this.formGoodness.value.awards == null
+    ) {
+      this.formGoodness.value.note = '';
+      this.formGoodness.value.awards = '';
+    } else if (this.formGoodness.value.note == null) {
+      this.formGoodness.value.note = '';
+    } else if (this.formGoodness.value.awards == null) {
+      this.formGoodness.value.awards = '';
+    }
+    formData.append(
+      'detail',
+      this.formGoodness.value.type + ' ' + this.formGoodness.value.detail
+    );
+    formData.append('awards', this.formGoodness.value.awards);
+    formData.append('note', this.formGoodness.value.note);
+    formData.append('student', this.formGoodness.value.student);
+    formData.append('year', this.yearNow);
+
+    let getData: any = await this.http.post('teacher/addGoodness', formData);
+
+    if (getData.connect) {
+      if (getData.response.result) {
+        Swal.fire('เพิ่มข้อมูลสำเร็จ', '', 'success');
+        let win: any = window;
+        win.$('#AddGoddness').modal('hide');
+        this.getGoodness();
+      } else {
+        Swal.fire('เพิ่มข้อมูลไม่สำเร็จ', '', 'error');
+      }
+    } else {
+      Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+    }
+  };
+
+  public async getGoodness() {
+    let formData = new FormData();
+    formData.append('group', this.codeGroup);
+    formData.append('year', this.advice_year.value._year);
+    let getData: any = await this.http.post('teacher/getGoodness', formData);
+
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        this.dataGoodness = getData.response.result;
+      } else {
+        this.dataGoodness = null;
+      }
+    } else {
+      Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+    }
+  }
+
+  public clickUpdateGoodness(data) {
+    this.getGoodnessStudent();
+    let a = data.osb_detail.split(' ', 1);
+    let b = data.osb_detail.replace(a + ' ', '');
+    this.formGoodness = this.formBuilder.group({
+      type: [a[0], Validators.required],
+      detail: [b, Validators.required],
+      awards: [data.osb_award],
+      note: [data.osb_note],
+      student: [data.osb_student, Validators.required],
+      osb_id: [data.osb_id, Validators.required],
+    });
+  }
+
+  public updateGoodness = async () => {
+    let formData = new FormData();
+    formData.append(
+      'detail',
+      this.formGoodness.value.type + ' ' + this.formGoodness.value.detail
+    );
+    formData.append('awards', this.formGoodness.value.awards);
+    formData.append('note', this.formGoodness.value.note);
+    formData.append('student', this.formGoodness.value.student);
+    formData.append('year', this.yearNow);
+    formData.append('ID', this.formGoodness.value.osb_id);
+
+    let getData: any = await this.http.post('teacher/updateGoodness', formData);
+
+    if (getData.connect) {
+      if (getData.response.result) {
+        this.getGoodness();
+        Swal.fire('เพิ่มข้อมูลสำเร็จ', '', 'success');
+        let win: any = window;
+        win.$('#updateGoodness').modal('hide');
+      } else {
+        Swal.fire('เพิ่มข้อมูลไม่สำเร็จ', '', 'error');
+      }
+    } else {
+      Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+    }
+  };
+
+  public deleteGoodness = async (data: any) => {
+    let formData = new FormData();
+    formData.append('ID', data);
+
+    this.http.confirmAlert('ลบรายการนี้หรือไม่?').then(async (value: any) => {
+      if (value) {
+        let getData: any = await this.http.post(
+          'teacher/delGoodness',
+          formData
+        );
+        if (getData.connect) {
+          if (getData.response.rowCount > 0) {
+            this.getGoodness();
+            Swal.fire({
+              position: 'top',
+              icon: 'success',
+              title: 'ลบข้อมูลสำเร็จ',
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          } else {
+            Swal.fire('ไม่สามารถลบข้อมูลได้!', '', 'error');
+          }
+        }
+      }
+    });
   };
 }

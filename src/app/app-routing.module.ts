@@ -1,3 +1,4 @@
+import { AdminGuard } from './guards/admin.guard';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { MainNavComponent } from './main-nav/main-nav.component';
@@ -5,7 +6,6 @@ import { AuthGuard } from './guards/auth.guard';
 import { LoginComponent } from './components/login/login.component';
 import { StudentGuard } from './guards/student.guard';
 import { TeacherGuard } from './guards/teacher.guard';
-
 
 const routes: Routes = [
   {
@@ -15,7 +15,7 @@ const routes: Routes = [
     children: [
       {
         path: 'admin',
-        canActivate: [AuthGuard],
+        canActivate: [AdminGuard],
         loadChildren: () =>
           import('./components/admin/admin.module').then((m) => m.AdminModule),
       },
@@ -45,6 +45,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

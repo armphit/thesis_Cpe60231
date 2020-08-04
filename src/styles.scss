@@ -20,7 +20,8 @@ mat-form-field {
 .modal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place front is invalid - may break your css so removed */
-  padding-top: 100px; /* Location of the box - don't know what this does?  If it is to move your modal down by 100px, then just change top below to 100px and remove this*/
+  padding-top: 100px;
+  padding-left: 80px; /* Location of the box - don't know what this does?  If it is to move your modal down by 100px, then just change top below to 100px and remove this*/
   left: 0;
   right: 0; /* Full width (left and right 0) */
   top: 0;

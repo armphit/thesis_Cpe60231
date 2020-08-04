@@ -181,6 +181,33 @@
                   </tr>
                 </tbody>
               </table>
+              <div
+                    style="padding-bottom: 15px;"
+                    *ngIf="dataReply_id.advice_advisor != null"
+                  >
+                    <strong>ไฟล์แนบ :</strong> &nbsp;&nbsp;<button
+                      type="button"
+                      class="btn btn-primary btn-sm"
+                      [disabled]="dataReply_id.reply_advice_file == null"
+                    >
+                      <a
+                        href="{{ http.PathPDF }}{{
+                          dataReply_id.reply_advice_file
+                        }}"
+                        target="_blank"
+                        ><font color="white">คลิกดูข้อมูลการปรึกษา</font></a
+                      >
+                    </button>
+                  </div>
+                  <div *ngIf="dataReply_id.advice_advisor == null">
+                    <button type="button" class="btn btn-primary btn-sm">
+                      Export to Excel
+                    </button>
+                    &nbsp;&nbsp;&nbsp;
+                    <button type="button" class="btn btn-primary btn-sm">
+                      Export to Word
+                    </button>
+                  </div>
               <br />
             </div>
 
@@ -196,30 +223,3 @@
     </tr>
   </tbody>
 </table>
-
-<!-- The Modal -->
-<div class="modal" id="myModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h2 class="modal-title">ข้อมูลการปรึกษา</h2>
-        <button type="button" class="close" data-dismiss="modal">
-          &times;
-        </button>
-      </div>
-
-      <!-- Modal body -->
-      <div class="modal-body">
-        Modal body..
-      </div>
-
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
-</div>

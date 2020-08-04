@@ -38,14 +38,14 @@ const routes: Routes = [
 
       {
         path: '',
-        redirectTo: '/admin/manage-data',
+        redirectTo: '/admin/manage-data/group',
         pathMatch: 'full',
       },
     ],
   },
   {
     path: '',
-    redirectTo: '/admin',
+    redirectTo: '/admin/manage-data',
     pathMatch: 'full',
   },
 ];

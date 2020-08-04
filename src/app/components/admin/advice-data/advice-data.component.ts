@@ -54,9 +54,11 @@ export class AdviceDataComponent implements OnInit {
     detail: null,
     reply: null,
     reply_id: null,
+    advice_advisor: null,
+    reply_advice_file: null,
   };
 
-  constructor(private http: HttpService, private formBuilder: FormBuilder) {
+  constructor(public http: HttpService, private formBuilder: FormBuilder) {
     this.getFaculty();
   }
 
@@ -248,6 +250,8 @@ export class AdviceDataComponent implements OnInit {
     this.dataReply_id.detail = dataReply.detail;
     this.dataReply_id.reply = dataReply.reply;
     this.dataReply_id.reply_id = dataReply.reply_advice_id;
+    this.dataReply_id.advice_advisor = dataReply.advice_advisor;
+    this.dataReply_id.reply_advice_file = dataReply.reply_advice_file;
     this.getReply_Student();
   }
   async getReply_Student() {

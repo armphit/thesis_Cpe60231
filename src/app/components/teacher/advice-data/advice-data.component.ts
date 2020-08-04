@@ -33,6 +33,7 @@ export class AdviceDataComponent implements OnInit {
     detail: null,
     advice_id: null,
     reply_advice: null,
+    advice_Advisor: null,
   };
   public dataAdvice_notNull: any = null;
   public fileAdvice: File;
@@ -44,12 +45,16 @@ export class AdviceDataComponent implements OnInit {
     detail: null,
     reply: null,
     reply_id: null,
+    advice_advisor: null,
+    reply_advice_file: null,
   };
   public dataUpdateReply = {
     subject_advice: null,
     detail: null,
     reply: null,
     reply_id: null,
+    advice_Advisor: null,
+    date: null,
   };
   public dataStudent: any = null;
   public dataReply_Student: any = null;
@@ -59,6 +64,10 @@ export class AdviceDataComponent implements OnInit {
   public reply_advice_id: string = null;
   public advice_year: FormGroup;
   public range: Array<any> = [];
+  public dataStudent_Advice: any = null;
+  public inAdvice: FormGroup;
+  public year_now: any = null;
+  public filesName: any = null;
 
   constructor(public http: HttpService, private formBuilder: FormBuilder) {
     this.getGroup();
@@ -69,6 +78,12 @@ export class AdviceDataComponent implements OnInit {
   ngOnInit(): void {
     this.formAdvice = this.formBuilder.group({
       replyAdvice: ['', Validators.required],
+    });
+
+    this.inAdvice = this.formBuilder.group({
+      subject: ['', Validators.required],
+      details: ['', Validators.required],
+      student: ['', Validators.required],
     });
 
     this.formAppointment = this.formBuilder.group({
@@ -97,6 +112,8 @@ export class AdviceDataComponent implements OnInit {
     }
   };
   public clickGroup(codeGroup) {
+    this.adviceUser = null;
+    this.reply_advice_id = null;
     this.codeGroup = codeGroup;
     this.getAdvice();
     this.getAdvice_notNull();
@@ -136,10 +153,13 @@ export class AdviceDataComponent implements OnInit {
     this.dataReply.subject_advice = dataReply.subject_advice;
     this.dataReply.detail = dataReply.detail;
     this.dataReply.advice_id = dataReply.advice_id;
+    this.dataReply.advice_Advisor = dataReply.advice_advisor;
 
     this.fileAdvice = null;
+    this.filesName = null;
     this.getYear();
     this.formAdvice.reset();
+    console.log(this.dataReply.advice_Advisor);
   }
 
   public getAdvice_notNull = async () => {
@@ -164,23 +184,9 @@ export class AdviceDataComponent implements OnInit {
   public uploadFileAdvice(file) {
     if (file) {
       this.fileAdvice = file;
+      this.filesName = file.name;
     }
   }
-
-  // public getYear = () => {
-  //   var now = new Date();
-
-  //   this.thDate =
-  //     this.thday[now.getDay()] +
-  //     ' ' +
-  //     now.getDate() +
-  //     ' ' +
-  //     'เดือน' +
-  //     this.thmonth[now.getMonth()] +
-  //     ' ' +
-  //     'พ.ศ.' +
-  //     (0 + now.getFullYear() + 543);
-  // };
 
   public insertReplyAdvice = async () => {
     let formData = new FormData();
@@ -197,20 +203,26 @@ export class AdviceDataComponent implements OnInit {
     // formData.forEach((value, key) => {
     //   console.log(key + ':' + value);
     // });
-
-    let getData: any = await this.http.post('teacher/addReplyAdvice', formData);
-    if (getData.connect) {
-      if (getData.response.rowCount > 0) {
-        Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
-        let win: any = window;
-        win.$('#reply_advice').modal('hide');
-        this.getAdvice();
-        this.getAdvice_notNull();
-      } else {
-        Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
-      }
+    if (this.fileAdvice == null) {
+      Swal.fire('โปรดเลือกไฟล์', '', 'error');
     } else {
-      Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+      let getData: any = await this.http.post(
+        'teacher/addReplyAdvice',
+        formData
+      );
+      if (getData.connect) {
+        if (getData.response.rowCount > 0) {
+          Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
+          let win: any = window;
+          win.$('#reply_advice').modal('hide');
+          this.getAdvice();
+          this.getAdvice_notNull();
+        } else {
+          Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
+        }
+      } else {
+        Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+      }
     }
   };
 
@@ -219,6 +231,8 @@ export class AdviceDataComponent implements OnInit {
     this.dataReply_id.detail = dataReply.detail;
     this.dataReply_id.reply = dataReply.reply;
     this.dataReply_id.reply_id = dataReply.reply_advice_id;
+    this.dataReply_id.advice_advisor = dataReply.advice_advisor;
+    this.dataReply_id.reply_advice_file = dataReply.reply_advice_file;
     this.formAppointment.reset();
     let formData = new FormData();
     formData.append('ID', this.dataReply_id.reply_id);
@@ -226,7 +240,7 @@ export class AdviceDataComponent implements OnInit {
       'teacher/getAppointment_Student',
       formData
     );
-    console.log(getData);
+
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
         this.dataAppointment_Student = getData.response.result;
@@ -241,6 +255,8 @@ export class AdviceDataComponent implements OnInit {
   public insertAppointment = async () => {
     const momentDate = new Date(this.formAppointment.value.to);
     const formattedDate = moment(momentDate).format('YYYY-MM-DD');
+    const currentDate = new Date();
+    const formattedCurrentDate = moment(currentDate).format('YYYY-MM-DD');
 
     if (this.formAppointment.value.detail == null) {
       this.formAppointment.value.detail = '';
@@ -251,21 +267,27 @@ export class AdviceDataComponent implements OnInit {
     formData.append('reply_adviceID', this.dataReply_id.reply_id);
     formData.append('dateNow', formattedDate);
 
-    // formData.forEach((value, key) => {
-    //   console.log(key + ':' + value);
-    // });
-    let getData: any = await this.http.post('teacher/addAppointment', formData);
-    if (getData.connect) {
-      if (getData.response.rowCount > 0) {
-        Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
-        let win: any = window;
-        win.$('#addAppointment').modal('hide');
-        this.getAppointment_Student();
-      } else {
-        Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
-      }
+    if (formattedDate < formattedCurrentDate) {
+      Swal.fire('วันที่ไม่ถูกต้อง', '', 'error');
     } else {
-      Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+      let getData: any = await this.http.post(
+        'teacher/addAppointment',
+        formData
+      );
+      if (getData.connect) {
+        if (getData.response.rowCount > 0) {
+          Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
+          let win: any = window;
+          win.$('#addAppointment').modal('hide');
+          this.getAppointment_Student();
+          //this.getReply_Student();
+          this.getStudent();
+        } else {
+          Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
+        }
+      } else {
+        Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+      }
     }
   };
 
@@ -273,7 +295,10 @@ export class AdviceDataComponent implements OnInit {
     this.dataUpdateReply.subject_advice = dataReply.subject_advice;
     this.dataUpdateReply.detail = dataReply.detail;
     this.dataUpdateReply.reply_id = dataReply.reply_advice_id;
-
+    this.dataUpdateReply.date = dataReply.reply_advice_date;
+    this.dataUpdateReply.advice_Advisor = dataReply.advice_advisor;
+    this.fileAdvice = null;
+    this.filesName = null;
     this.formAdvice = this.formBuilder.group({
       replyAdvice: [dataReply.reply, Validators.required],
     });
@@ -281,20 +306,18 @@ export class AdviceDataComponent implements OnInit {
 
   public updateReplyAdvice = async () => {
     let formData = new FormData();
-    var now = new Date();
-    var date =
-      now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
 
     formData.append('reply', this.formAdvice.value.replyAdvice);
     formData.append('adviceID', this.dataUpdateReply.reply_id);
-    formData.append('dateNow', date);
-
+    formData.append('dateNow', this.dataUpdateReply.date);
+    formData.append('advisor', this.dataUpdateReply.advice_Advisor);
+    formData.append('upload', this.fileAdvice);
     // formData.forEach((value, key) => {
     //   console.log(key + ':' + value);
     // });
 
     let getData: any = await this.http.post('teacher/updateReply', formData);
-    console.log(getData);
+
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
         Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
@@ -388,7 +411,7 @@ export class AdviceDataComponent implements OnInit {
       'teacher/getAppointment_Student',
       formData
     );
-    console.log(getData);
+
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
         this.dataAppointment_Student = getData.response.result;
@@ -420,6 +443,8 @@ export class AdviceDataComponent implements OnInit {
               timer: 1500,
             });
             this.getAppointment_Student();
+            this.getReply_Student();
+            this.getStudent();
           } else {
             Swal.fire('ไม่สามารถลบข้อมูลได้!', '', 'error');
           }
@@ -440,6 +465,8 @@ export class AdviceDataComponent implements OnInit {
   public updateAppointment = async () => {
     const momentDate = new Date(this.formAppointment.value.to);
     const formattedDate = moment(momentDate).format('YYYY-MM-DD');
+    const currentDate = new Date();
+    const formattedCurrentDate = moment(currentDate).format('YYYY-MM-DD');
 
     if (this.formAppointment.value.detail == null) {
       this.formAppointment.value.detail = '';
@@ -450,22 +477,26 @@ export class AdviceDataComponent implements OnInit {
     formData.append('ID', this.formAppointment.value.id);
     formData.append('dateNow', formattedDate);
 
-    let getData: any = await this.http.post(
-      'teacher/updateAppointment',
-      formData
-    );
-    console.log(getData);
-    if (getData.connect) {
-      if (getData.response.rowCount > 0) {
-        Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
-        let win: any = window;
-        win.$('#updateAppointment').modal('hide');
-        this.getAppointment_Student();
-      } else {
-        Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
-      }
+    if (formattedDate < formattedCurrentDate) {
+      Swal.fire('วันที่ไม่ถูกต้อง', '', 'error');
     } else {
-      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+      let getData: any = await this.http.post(
+        'teacher/updateAppointment',
+        formData
+      );
+
+      if (getData.connect) {
+        if (getData.response.rowCount > 0) {
+          Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
+          let win: any = window;
+          win.$('#updateAppointment').modal('hide');
+          this.getAppointment_Student();
+        } else {
+          Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
+        }
+      } else {
+        alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+      }
     }
   };
 
@@ -478,6 +509,7 @@ export class AdviceDataComponent implements OnInit {
         this.advice_year.patchValue({
           _year: getData.response.result[0].year,
         });
+        this.year_now = getData.response.result[0].year;
         // this.getAdvice();
         // this.getAdvice_notNull();
         // this.getStudent();
@@ -490,6 +522,7 @@ export class AdviceDataComponent implements OnInit {
   };
 
   public getYearAdvice(e) {
+    this.reply_advice_id = null;
     this.advice_year = this.formBuilder.group({
       _year: [e, Validators.required],
     });
@@ -505,5 +538,123 @@ export class AdviceDataComponent implements OnInit {
     for (var i = 0; i < 10; i++) {
       this.range[i] = { value: `${year - i}` };
     }
+  };
+  public async getStudent_Advice() {
+    let formData = new FormData();
+    formData.append('group', this.codeGroup);
+    let getData: any = await this.http.post(
+      'teacher/getGoodnessStudent',
+      formData
+    );
+
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        this.dataStudent_Advice = getData.response.result;
+      } else {
+        this.dataStudent_Advice = null;
+      }
+    } else {
+      Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+    }
+  }
+  public clickAddAdvice_Teacher() {
+    this.inAdvice.reset();
+    this.getStudent_Advice();
+  }
+
+  public insertAdvice = async () => {
+    let formData = new FormData();
+    var now = new Date();
+    var date =
+      now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
+
+    formData.append('ID', this.inAdvice.value.student);
+    formData.append('group', this.codeGroup);
+    formData.append('subject', this.inAdvice.value.subject);
+    formData.append('details', this.inAdvice.value.details);
+    formData.append('dateNow', date);
+    formData.append('year_study', this.year_now);
+    formData.append(
+      'teacher',
+      JSON.parse(localStorage.getItem('userLogin')).userID
+    );
+    // formData.forEach((value,key) => {
+    //   console.log(key+":"+value)
+    // });
+
+    let getData: any = await this.http.post('teacher/addAdvice', formData);
+
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
+        let win: any = window;
+        win.$('#addAdvice_Teacher').modal('hide');
+        this.getAdvice();
+      } else {
+        Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
+      }
+    } else {
+      Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+    }
+  };
+  public clickUpdateAdvice(i) {
+    this.getStudent_Advice();
+    this.inAdvice = this.formBuilder.group({
+      subject: [i.subject_advice, Validators.required],
+      details: [i.detail, Validators.required],
+      student: [i.adviceUser, Validators.required],
+      advice_id: [i.advice_id, Validators.required],
+    });
+  }
+
+  public updateAdvice = async () => {
+    let formData = new FormData();
+    formData.append('subject', this.inAdvice.value.subject);
+    formData.append('detail', this.inAdvice.value.details);
+    formData.append('student', this.inAdvice.value.student);
+
+    formData.append('code', this.inAdvice.value.advice_id);
+
+    // formData.forEach((value, key) => {
+    //   console.log(key + ':' + value);
+    // });
+    let getData: any = await this.http.post('teacher/editAdvice', formData);
+    console.log(getData);
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        let win: any = window;
+        win.$('#editAdvice').modal('hide');
+        Swal.fire('แก้ไขข้อมูลเสร็จสิ้น', '', 'success');
+        this.getAdvice();
+      } else {
+        Swal.fire('แก้ไขข้อมูลไม่สำเร็จ', '', 'error');
+      }
+    } else {
+      Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+    }
+  };
+  public deleteAdvice = async (advice_id: any) => {
+    let formData = new FormData();
+    formData.append('code', advice_id);
+
+    this.http.confirmAlert('ลบรายการนี้หรือไม่?').then(async (value: any) => {
+      if (value) {
+        let getData: any = await this.http.post('student/delAdvice', formData);
+        if (getData.connect) {
+          if (getData.response.rowCount > 0) {
+            Swal.fire({
+              position: 'top',
+              icon: 'success',
+              title: 'ลบข้อมูลสำเร็จ',
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            this.getAdvice();
+          } else {
+            Swal.fire('ไม่สามารถลบข้อมูลได้!', '', 'error');
+          }
+        }
+      }
+    });
   };
 }

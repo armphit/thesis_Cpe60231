@@ -221,20 +221,23 @@ export class GroupComponent implements OnInit {
     formData.append('ID', this.inGroup.value.advisorID);
     formData.append('branch', this.codeBranch);
     formData.append('upload', this.uploadCurriculumFile);
-
-    // formData.append('ID', this.inGroup.value.getTC);
-    let getData: any = await this.http.post('admin/addGroup', formData);
-    if (getData.connect) {
-      if (getData.response.result) {
-        Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
-        let win: any = window;
-        win.$('#addGroup').modal('hide');
-        this.getGroup();
-      } else {
-        Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
-      }
+    if (this.uploadCurriculumFile == null) {
+      Swal.fire('เพิ่มข้อมูลไม่ได้', 'โปรดเลือกไฟล์', 'error');
     } else {
-      Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+      // formData.append('ID', this.inGroup.value.getTC);
+      let getData: any = await this.http.post('admin/addGroup', formData);
+      if (getData.connect) {
+        if (getData.response.result) {
+          Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
+          let win: any = window;
+          win.$('#addGroup').modal('hide');
+          this.getGroup();
+        } else {
+          Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
+        }
+      } else {
+        Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+      }
     }
   };
 
@@ -283,9 +286,11 @@ export class GroupComponent implements OnInit {
   public getIDgroup = async (advisorID: any, group_id: any, group_name) => {
     this.curriculumFileupdate = null;
     this.filesName3 = null;
-    let a = group_name.substring(4);
+    let a = group_name.split('.', 1);
+    let b = group_name.replace(a + '.', '');
+
     this.inGroup = this.formBuilder.group({
-      group: [a, Validators.required],
+      group: [b, Validators.required],
       advisorID: [advisorID, Validators.required],
     });
     this.groupID_edit = group_id;
