@@ -55,13 +55,17 @@ export class ManageDataComponent implements OnInit {
   public fileStudentName: any = 'โปรดเลือกไฟล์';
   public upload_curriculum: File = null;
   public upload_curriculum_name: any = 'โปรดเลือกไฟล์';
+  public pageStudent: number = 1;
+  public codeGroup_Branch: any = null;
+  public dataGroup_Branch: any = null;
 
   constructor(public http: HttpService, private formBuilder: FormBuilder) {
     this.getGroup();
     this.getAdvisor();
     this.getBranchhead();
     this.getCURDATE();
-    this.getGroup_branchHead();
+    // this.getGroup_branchHead();
+    this.getBranch();
   }
 
   ngOnInit(): void {
@@ -140,6 +144,26 @@ export class ManageDataComponent implements OnInit {
       alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
     }
   };
+
+  public async clickBranch_Branchhead(i) {
+    this.codeGroup_Branch = null;
+    let formData = new FormData();
+    formData.append('ID', i.code);
+    let getData: any = await this.http.post(
+      'teacher/getGroup_branch',
+      formData
+    );
+
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        this.dataGroup_Branch = getData.response.result;
+      } else {
+        this.dataGroup_Branch = null;
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+  }
 
   public deleteGroup = async (group_id: any) => {
     let formData = new FormData();
@@ -426,7 +450,6 @@ export class ManageDataComponent implements OnInit {
     formData.append('term', this.formYearTerm.value.term);
 
     let getData: any = await this.http.post('admin/getEducational', formData);
-    console.log(getData);
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
         this.dataEducational = getData.response.result;
@@ -446,26 +469,26 @@ export class ManageDataComponent implements OnInit {
     }
   };
 
-  public getGroup_branchHead = async () => {
-    let formData = new FormData();
-    formData.append(
-      'parent',
-      JSON.parse(localStorage.getItem('userLogin')).branch
-    );
-    let getData: any = await this.http.post(
-      'teacher/getGroup_branchHead',
-      formData
-    );
-    if (getData.connect) {
-      if (getData.response.rowCount > 0) {
-        this.dataGroup_branchHead = getData.response.result;
-      } else {
-        this.dataGroup_branchHead = null;
-      }
-    } else {
-      Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
-    }
-  };
+  // public getGroup_branchHead = async () => {
+  //   let formData = new FormData();
+  //   formData.append(
+  //     'parent',
+  //     JSON.parse(localStorage.getItem('userLogin')).branch
+  //   );
+  //   let getData: any = await this.http.post(
+  //     'teacher/getGroup_branchHead',
+  //     formData
+  //   );
+  //   if (getData.connect) {
+  //     if (getData.response.rowCount > 0) {
+  //       this.dataGroup_branchHead = getData.response.result;
+  //     } else {
+  //       this.dataGroup_branchHead = null;
+  //     }
+  //   } else {
+  //     Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+  //   }
+  // };
   public clickCalendar = () => {
     this.date_student.reset();
     this.getYearCalendar();
@@ -503,7 +526,7 @@ export class ManageDataComponent implements OnInit {
           Swal.fire('เพิ่มปีการศึกษาเสร็จสิ้น', '', 'success');
           let win: any = window;
           win.$('#addCalendar').modal('hide');
-          // this.getGroup();
+          this.getCalendar();
         } else if (getData.response.error) {
           Swal.fire(
             'ไม่สามารถเพิ่มปีการศึกษาได้',

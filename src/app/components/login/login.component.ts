@@ -49,8 +49,6 @@ export class LoginComponent implements OnInit {
   }
 
   public async submitlogin() {
-    console.log(this.formLogin.value.username);
-    console.log(this.formLogin.value.password);
     let formData = new FormData();
     formData.append('ID', this.formLogin.value.username);
     formData.append('pass', this.formLogin.value.password);
@@ -58,7 +56,6 @@ export class LoginComponent implements OnInit {
 
     if (httpRespon.connect) {
       if (httpRespon.response.success) {
-        console.log(httpRespon.response.data.status);
         if (httpRespon.response.data.status == 'Admin') {
           this.service.alertLog('success', 'เข้าสู่ระบบสำเร็จ');
           //this.router.navigate(["/home"]);

@@ -385,8 +385,21 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let i of dataEducational; let x = index">
-                <th scope="row" style="padding-top: 15px;">{{ x + 1 }}</th>
+              <tr
+                *ngFor="
+                  let i of dataEducational
+                    | paginate
+                      : {
+                          id: 'pageStudent',
+                          itemsPerPage: 10,
+                          currentPage: pageStudent
+                        };
+                  let x = index
+                "
+              >
+                <th scope="row" style="padding-top: 15px;">
+                  {{ pageStudent * 10 - 10 + (x + 1) }}
+                </th>
                 <td style="padding-top: 15px;">
                   {{ i.userID }}
                 </td>
@@ -429,17 +442,6 @@
                       ><font color="white">ผลการเรียน</font></a
                     >
                   </button>
-                  &nbsp;&nbsp;
-                  <span
-                    ><i
-                      class="fas fa-edit"
-                      style="font-size: 18px; cursor: pointer;"
-                      title="แก้ไขข้อมูล"
-                      data-toggle="modal"
-                      data-target="#updateGroup"
-                    ></i
-                  ></span>
-
                   &nbsp;&nbsp;&nbsp;
                   <span (click)="deleteStudent(i.userID)"
                     ><i
@@ -452,6 +454,14 @@
               </tr>
             </tbody>
           </table>
+          <pagination-controls
+            id="pageStudent"
+            *ngIf="dataEducational != null && dataEducational.length > 10"
+            responsive="true"
+            previousLabel="ย้อนกลับ"
+            nextLabel="ถัดไป"
+            (pageChange)="pageStudent = $event"
+          ></pagination-controls>
         </mat-tab>
         <mat-tab label="ข้อมูลปีการศึกษา">
           <div
@@ -741,28 +751,41 @@
   </mat-tab>
 
   <mat-tab label="สำหรับหัวหน้าสาขา" *ngIf="dataBranchhead != null">
+    <div class="panel-body" style="margin-left: 10px; margin-right: 10px;">
+      <div>
+        โปรแกรมวิชา:&nbsp;&nbsp;<mat-form-field style="width: 50%;">
+          <mat-label>โปรดเลือกโปรแกรมวิชา</mat-label>
+          <mat-select required>
+            <mat-option
+              style="width: auto;"
+              *ngFor="let i of dataBranch; let x = index"
+              [value]="i.name"
+              (click)="clickBranch_Branchhead(i)"
+            >
+              {{ i.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
     <div>
-      <table class="table" *ngIf="dataGroup_branchHead != null">
+      <table class="table" *ngIf="dataGroup_Branch != null">
         <thead class="thead-dark">
           <tr>
             <th scope="col">ลำดับ</th>
             <th scope="col">ชื่อกลุ่มเรียน</th>
             <th scope="col">ชื่ออาจารย์ที่ปรึกษา</th>
-            <th scope="col">ชื่อโปรแกมวิชา</th>
             <th scope="col">แผนการเรียน</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let i of dataGroup_branchHead; let x = index">
+          <tr *ngFor="let i of dataGroup_Branch; let x = index">
             <th scope="row" style="padding-top: 15px;">{{ x + 1 }}</th>
             <td style="padding-top: 15px;">
               {{ i.study_group_name }}
             </td>
             <td style="padding-top: 15px;">
               {{ i.titlename }}{{ i.fname }}&nbsp;&nbsp;{{ i.lname }}
-            </td>
-            <td style="padding-top: 15px;">
-              {{ i.name }}
             </td>
             <td>
               <button

@@ -275,7 +275,7 @@ export class AdviceDataComponent implements OnInit {
       'teacher/getAppointment_Student',
       formData
     );
-    console.log(getData);
+
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
         this.dataAppointment_Student = getData.response.result;

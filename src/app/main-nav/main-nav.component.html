@@ -33,6 +33,14 @@
           >การขอคำปรึกษา</strong
         ></a
       >
+      <a
+        mat-list-item
+        [routerLink]="['/admin/goodness-record']"
+        [routerLinkActive]="['link-active']"
+        ><i class="fas fa-clipboard"></i>&nbsp;&nbsp;<strong
+          >บันทึกรายงานพฤติกรรมดีเด่น</strong
+        ></a
+      >
       <a mat-list-item (click)="onLogout()"
         ><font color="red"
           ><i class="fas fa-sign-out-alt"></i> <strong>ออกระบบ</strong></font
@@ -57,6 +65,7 @@
           >การขอคำปรึกษา</strong
         ></a
       >
+
       <a mat-list-item (click)="onLogout()"
         ><font color="#CD5C5C"
           ><i class="fas fa-sign-out-alt"></i>&nbsp;&nbsp;

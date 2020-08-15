@@ -6,6 +6,7 @@ import { GroupComponent } from './manage-data/group/group.component';
 import { StudentDataComponent } from './manage-data/student-data/student-data.component';
 import { AdviceDataComponent } from './advice-data/advice-data.component';
 import { SemesterDataComponent } from './manage-data/semester-data/semester-data.component';
+import { GoodnessRecordComponent } from './goodness-record/goodness-record.component';
 
 const routes: Routes = [
   {
@@ -34,6 +35,14 @@ const routes: Routes = [
       {
         path: 'advice-data',
         component: AdviceDataComponent,
+      },
+      {
+        path: 'advice-data',
+        component: AdviceDataComponent,
+      },
+      {
+        path: 'goodness-record',
+        component: GoodnessRecordComponent,
       },
 
       {

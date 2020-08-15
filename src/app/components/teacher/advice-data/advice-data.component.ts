@@ -3,6 +3,8 @@ import { HttpService } from 'src/app/services/http.service';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2';
 import * as moment from 'moment';
+import * as jspdf from 'jspdf';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-advice-data',
@@ -657,4 +659,19 @@ export class AdviceDataComponent implements OnInit {
       }
     });
   };
+
+  public clickPDF() {
+    // let data = document.getElementById('divId');
+    // html2canvas(data).then((canvas) => {
+    //   const contentDataURL = canvas.toDataURL('image/png');
+    //   let pdf = new jspdf('l', 'cm', 'a4'); //Generates PDF in landscape mode
+    //   // let pdf = new jspdf('p', 'cm', 'a4'); Generates PDF in portrait mode
+    //   pdf.addImage(contentDataURL, 'PNG', 0, 0, 29.7, 21.0);
+    //   pdf.save('Filename.pdf');
+    // });
+    console.log('dada');
+    const doc = new jspdf();
+    doc.text('hello', 70, 70);
+    doc.save('this..pdf');
+  }
 }

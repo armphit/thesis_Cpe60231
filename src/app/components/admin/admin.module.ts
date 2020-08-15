@@ -9,15 +9,17 @@ import { SharedModules } from 'src/app/shared-modules';
 import { MatIconModule } from '@angular/material/icon';
 import { AdviceDataComponent } from './advice-data/advice-data.component';
 import { SemesterDataComponent } from './manage-data/semester-data/semester-data.component';
-
+import { GoodnessRecordComponent } from './goodness-record/goodness-record.component';
 
 @NgModule({
-  declarations: [ManageDataComponent, GroupComponent, StudentDataComponent, AdviceDataComponent, SemesterDataComponent],
-  imports: [
-    CommonModule,
-    AdminRoutingModule,
-    SharedModules,
-    MatIconModule,
-  ]
+  declarations: [
+    ManageDataComponent,
+    GroupComponent,
+    StudentDataComponent,
+    AdviceDataComponent,
+    SemesterDataComponent,
+    GoodnessRecordComponent,
+  ],
+  imports: [CommonModule, AdminRoutingModule, SharedModules, MatIconModule],
 })
-export class AdminModule { }
+export class AdminModule {}
