@@ -7,7 +7,7 @@
           style="width: auto;"
           *ngFor="let i of dataGroup; let x = index"
           [value]="i.study_group_id"
-          (click)="clickGroup(i.study_group_id)"
+          (click)="clickGroup(i.study_group_id, i.study_group_name)"
         >
           {{ i.study_group_name }}
         </mat-option>
@@ -328,7 +328,7 @@
     </table>
   </mat-tab>
   <mat-tab label="ข้อมูลการตอบคำปรึกษา">
-    <table class="table" *ngIf="dataAdvice_notNull != null">
+    <table class="table" *ngIf="dataGroup != null">
       <thead class="thead-dark">
         <tr>
           <th scope="col">ลำดับ</th>
@@ -432,7 +432,6 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr></tr>
                         <tr
                           *ngFor="
                             let i of dataAppointment_Student;
@@ -475,7 +474,7 @@
                     <button
                       type="button"
                       class="btn btn-primary"
-                      (click)="clickPDF()"
+                      (click)="clickPDF_st()"
                     >
                       Export to PDF
                     </button>
@@ -654,6 +653,15 @@
         </tr>
       </tbody>
     </table>
+    <div style="padding-left: 15px;" *ngIf="dataAdvice != null">
+      <button type="button" class="btn btn-primary" (click)="clickPDF_group()">
+        Export to PDF
+      </button>
+      &nbsp;&nbsp;&nbsp;
+      <button type="button" class="btn btn-primary">
+        Export to Word
+      </button>
+    </div>
   </mat-tab>
   <mat-tab label="ข้อมูลการนัดหมาย">
     <div style="padding-left: 15px;" *ngIf="codeGroup!">
