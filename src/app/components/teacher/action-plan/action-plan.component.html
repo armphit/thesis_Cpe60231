@@ -1,0 +1,302 @@
+<div class="panel-body" style="margin-left: 10px; margin-right: 10px">
+  <div>
+    กลุ่มเรียน : &nbsp;&nbsp;<mat-form-field style="width: 15%">
+      <mat-label>โปรดเลือกกลุ่มเรียน</mat-label>
+      <mat-select required>
+        <mat-option
+          style="width: auto"
+          *ngFor="let i of dataGroup; let x = index"
+          [value]="i.study_group_id"
+          (click)="clickGroup(i)"
+        >
+          {{ i.study_group_name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div *ngIf="codeGroup!">
+    <form [formGroup]="actionPlan_year">
+      ปีการศึกษา : &nbsp;&nbsp;
+      <mat-form-field style="width: 25%">
+        <mat-label>เลือกปีการศึกษา</mat-label>
+        <mat-select
+          formControlName="_year"
+          (selectionChange)="getYearactionPlan($event.value)"
+          required
+        >
+          <mat-option *ngFor="let i of range" [value]="i.value">
+            {{ i.value }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </div>
+  <div *ngIf="codeGroup!">
+    เลือกเดือนเริ่มต้นปีการศึกษา : &nbsp;&nbsp;
+    <mat-form-field style="width: 10%" *ngIf="dataActionPlan_month == null">
+      <mat-label>เลือกเดือน</mat-label>
+      <mat-select (selectionChange)="getMonthactionPlan($event.value)" required>
+        <mat-option *ngFor="let i of thmonth" [value]="i">
+          {{ i }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button
+      class="btn btn-default"
+      type="button"
+      (click)="reset()"
+      *ngIf="dataActionPlan_month != null"
+    >
+      RESET
+    </button>
+  </div>
+
+  <form
+    [formGroup]="actionPlan_list"
+    (ngSubmit)="actionPlan_list.valid ? addListPlan() : ''"
+  >
+    <div *ngIf="month.length != 0">
+      <div>
+        รายการ :
+        <mat-form-field>
+          <mat-label>ระบุรายการ</mat-label>
+          <input matInput formControlName="name" required />
+        </mat-form-field>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-primary">
+          <i class="glyphicon glyphicon-plus"></i>&nbsp;Add Row
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+<table class="table table-bordered" *ngIf="month.length != 0">
+  <thead>
+    <tr>
+      <th>ลำดับ</th>
+      <th>รายการ</th>
+      <th>ช่วงเวลา</th>
+      <th scope="col" *ngFor="let i of month">{{ i }}</th>
+      <th scope="col" *ngFor="let j of month2">{{ j }}</th>
+      <th>หมายเหตุ</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let i of dataListPlan; let x = index">
+      <td>{{ x + 1 }}</td>
+      <td>{{ i.action_plan_list }}</td>
+      <td>{{ distance }}</td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo1"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo2"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo3"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo4"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo5"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo6"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo7"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo8"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo9"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo10"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo11"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo12"></mat-checkbox>
+      </td>
+      <td></td>
+      <td>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="addListPlan_Action(i.action_plan_id)"
+        >
+          บันทึก
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- <table class="table table-striped table-bordered" *ngIf="month.length != 0">
+  <thead>
+    <tr>
+      <th scope="col">ลำดับ</th>
+      <th scope="col">รายการ</th>
+      <th scope="col" rowspan="2">ช่วงเวลา</th>
+      <th scope="col" *ngFor="let i of month">{{ i }}</th>
+      <th scope="col" *ngFor="let j of month2">{{ j }}</th>
+      <th scope="col">หมายเหตุ</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let field of fieldArray; let i = index; let x = index">
+      <td>
+        {{ x + 1 }}
+      </td>
+
+      <td>
+        <input
+          [(ngModel)]="field.name"
+          class="form-control"
+          type="text"
+          name="{{ field.name }}"
+        />
+      </td>
+      <td>
+        <input
+          [(ngModel)]="field.action"
+          class="form-control"
+          type="text"
+          name="{{ field.action }}"
+        />
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="field.mo1"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="field.mo2"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="field.mo3"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="field.mo4"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="field.mo5"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="field.mo6"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="field.mo7"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="field.mo8"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="field.mo9"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="field.mo10"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="field.mo11"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="field.mo12"></mat-checkbox>
+      </td>
+      <td>
+        <input
+          [(ngModel)]="field.detail"
+          class="form-control"
+          type="text"
+          name="{{ field.action }}"
+        />
+      </td>
+      <td>
+        <button
+          class="btn btn-default"
+          type="button"
+          (click)="deleteFieldValue(i)"
+        >
+          Delete
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <input
+          class="form-control"
+          type="text"
+          id="newAttributeName"
+          [(ngModel)]="newAttribute.name"
+          name="newAttributeName"
+          required
+        />
+      </td>
+      <td>
+        <input
+          class="form-control"
+          type="text"
+          id="newAttributePrice"
+          [(ngModel)]="newAttribute.action"
+          name="newAttributePrice"
+        />
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo1"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo2"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo3"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo4"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo5"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo6"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo7"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo8"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo9"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo10"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo11"></mat-checkbox>
+      </td>
+      <td td style="text-align: center; vertical-align: middle">
+        <mat-checkbox [(ngModel)]="newAttribute.mo12"></mat-checkbox>
+      </td>
+      <td>
+        <input
+          class="form-control"
+          type="text"
+          id="newAttributePrice"
+          [(ngModel)]="newAttribute.detail"
+          name="newAttributePrice"
+        />
+      </td>
+      <td>
+        <button class="btn btn-default" type="button" (click)="addFieldValue()">
+          Add
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table> -->

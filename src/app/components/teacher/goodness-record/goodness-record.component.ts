@@ -641,7 +641,7 @@ export class GoodnessRecordComponent implements OnInit {
             font: 'THSarabunNew',
           },
         };
-        pdfMake.createPdf(dd).open();
+        pdfMake.createPdf(dd).download();
       } else {
       }
     } else {

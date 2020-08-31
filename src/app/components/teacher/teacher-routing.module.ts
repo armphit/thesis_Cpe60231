@@ -1,3 +1,4 @@
+import { ActionPlanComponent } from './action-plan/action-plan.component';
 import { GoodnessRecordComponent } from './goodness-record/goodness-record.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -21,6 +22,10 @@ const routes: Routes = [
       {
         path: 'goodness-record',
         component: GoodnessRecordComponent,
+      },
+      {
+        path: 'action-plan',
+        component: ActionPlanComponent,
       },
       {
         path: '',

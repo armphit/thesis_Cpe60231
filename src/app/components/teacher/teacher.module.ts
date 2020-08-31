@@ -6,12 +6,14 @@ import { SharedModules } from 'src/app/shared-modules';
 import { AdviceDataComponent } from './advice-data/advice-data.component';
 import { GoodnessRecordComponent } from './goodness-record/goodness-record.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { ActionPlanComponent } from './action-plan/action-plan.component';
 
 @NgModule({
   declarations: [
     ManageDataComponent,
     AdviceDataComponent,
     GoodnessRecordComponent,
+    ActionPlanComponent,
   ],
   imports: [
     CommonModule,

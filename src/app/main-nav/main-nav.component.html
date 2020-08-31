@@ -11,7 +11,7 @@
       <img
         src="assets/rmuti.png"
         class="w3-round"
-        style="width: 40%; text-align: center;"
+        style="width: 40%; text-align: center"
       />
       <br />
       <strong>{{ dataProfile }}</strong>
@@ -97,6 +97,14 @@
         [routerLinkActive]="['link-active']"
         ><i class="fas fa-clipboard"></i>&nbsp;&nbsp;<strong
           >บันทึกรายงานพฤติกรรมดีเด่น</strong
+        ></a
+      >
+      <a
+        mat-list-item
+        [routerLink]="['/teacher/action-plan']"
+        [routerLinkActive]="['link-active']"
+        ><i class="fas fa-file-alt"></i>&nbsp;&nbsp;<strong
+          >แผนปฏิบัติงาน</strong
         ></a
       >
       <a mat-list-item (click)="onLogout()"
