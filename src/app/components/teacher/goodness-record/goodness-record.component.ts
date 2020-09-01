@@ -360,7 +360,6 @@ export class GoodnessRecordComponent implements OnInit {
     this.getGoodness_BranchHead();
   }
   public async getGoodness_BranchHead() {
-    console.log(this.goodness_year.value._year);
     let formData = new FormData();
 
     formData.append('group', this.codeGroup_Branch);
@@ -403,6 +402,7 @@ export class GoodnessRecordComponent implements OnInit {
           {
             width: 'auto',
             table: {
+              headerRows: 1,
               widths: [40, '*', 150, 80, 80],
               body: [
                 [
@@ -478,7 +478,7 @@ export class GoodnessRecordComponent implements OnInit {
           ];
           data_st[1]['table']['body'].push(dataaaa2);
         }
-        console.log(data_st[1]['table']['body']);
+        // console.log(data_st[1]['table']['body']);
         const dd = {
           header: {},
           footer(currentPage, pageCount) {
@@ -641,7 +641,7 @@ export class GoodnessRecordComponent implements OnInit {
             font: 'THSarabunNew',
           },
         };
-        pdfMake.createPdf(dd).download();
+        pdfMake.createPdf(dd).open();
       } else {
       }
     } else {

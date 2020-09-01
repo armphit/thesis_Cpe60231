@@ -186,7 +186,6 @@ export class AdviceDataComponent implements OnInit {
     this.filesName = null;
     this.getYear();
     this.formAdvice.reset();
-    console.log(this.dataReply.advice_Advisor);
   }
 
   public getAdvice_notNull = async () => {
@@ -654,7 +653,7 @@ export class AdviceDataComponent implements OnInit {
     //   console.log(key + ':' + value);
     // });
     let getData: any = await this.http.post('teacher/editAdvice', formData);
-    console.log(getData);
+
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
         let win: any = window;
@@ -704,6 +703,7 @@ export class AdviceDataComponent implements OnInit {
     let g = null;
     let h = null;
     let data_st = null;
+    let data_aap = null;
     let j = null;
     if (b.substring(4) == '1') {
       g = 'ปกติ';
@@ -721,6 +721,7 @@ export class AdviceDataComponent implements OnInit {
         {
           width: 'auto',
           table: {
+            headerRows: 1,
             widths: [120, 250, 100],
             body: [
               [
@@ -783,10 +784,12 @@ export class AdviceDataComponent implements OnInit {
         ];
         data_st[1]['table']['body'].push(dataaaa2);
       }
+      data_aap = { pageBreak: 'before', columns: data_st, fontSize: 16 };
     } else if (this.dataAppointment_Student == null) {
       h = 'ไม่มีนัดพบติดตามผล';
       j = '';
       data_st = [{ text: '' }];
+      data_aap = { columns: data_st, fontSize: 16 };
     }
 
     const dd = {
@@ -918,10 +921,7 @@ export class AdviceDataComponent implements OnInit {
           fontSize: 16,
           alignment: 'left',
         },
-        {
-          columns: data_st,
-          fontSize: 16,
-        },
+        data_aap,
         {
           text: j,
           fontSize: 16,
@@ -980,6 +980,7 @@ export class AdviceDataComponent implements OnInit {
           {
             width: 'auto',
             table: {
+              headerRows: 1,
               widths: [60, 90, 90, 90, 80, 60],
               body: [
                 [

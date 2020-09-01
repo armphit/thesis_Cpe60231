@@ -31,20 +31,21 @@ export class ActionPlanComponent implements OnInit {
     noteP: '',
   };
   public newAttribute2: any = {
-    moA1: false,
-    moA2: false,
-    moA3: false,
-    moA4: false,
-    moA5: false,
-    moA6: false,
-    moA7: false,
-    moA8: false,
-    moA9: false,
-    moA10: false,
-    moA11: false,
-    moA12: false,
-    noteA: '',
+    moP1: false,
+    moP2: false,
+    moP3: false,
+    moP4: false,
+    moP5: false,
+    moP6: false,
+    moP7: false,
+    moP8: false,
+    moP9: false,
+    moP10: false,
+    moP11: false,
+    moP12: false,
+    noteP: '',
   };
+  public newAttribute3: any = {};
   public dataListPlan: any = null;
   public distance: string = 'P';
   public distance2: string = 'A';
@@ -52,10 +53,21 @@ export class ActionPlanComponent implements OnInit {
   public Plan_month: any = null;
   public dataPlan_month: any = null;
   public dataActionPlan_Completed: any = null;
+  public dataBranchhead: any = null;
+  public dataBranch: any = null;
+  public dataGroup_Branchhead: any = null;
+  public dataActionPlan_Branchhead: any = null;
+  public group_Branchhead: any = null;
+  public dataPlan_month_Branchhead: any = null;
+  public month_Branchhead: Array<any> = [];
+  public month2_Branchhead: Array<any> = [];
+  public dataActionPlan_Status: any = null;
+  public dataActionPlan_Status_Branchhead: any = null;
 
   public actionPlan_year: FormGroup;
+  public actionPlan_year_Branchhead: FormGroup;
   public actionPlan_list: FormGroup;
-  public dataAction = { list: null, distance: null };
+  public dataAction = { list: null, distance: null, id: null };
   public thmonth = new Array(
     'ม.ค.',
     'ก.พ.',
@@ -75,11 +87,16 @@ export class ActionPlanComponent implements OnInit {
     this.getGroup();
     this.getCURDATE();
     this.getYear();
+    this.getBranchhead();
+    this.getBranch();
   }
 
   ngOnInit(): void {
     this.actionPlan_year = this.formBuilder.group({
       _year: [``, Validators.required],
+    });
+    this.actionPlan_year_Branchhead = this.formBuilder.group({
+      year: [``, Validators.required],
     });
     this.actionPlan_list = this.formBuilder.group({
       name: [``, Validators.required],
@@ -90,7 +107,6 @@ export class ActionPlanComponent implements OnInit {
     let formData = new FormData();
     formData.append('ID', JSON.parse(localStorage.getItem('userLogin')).userID);
     let getData: any = await this.http.post('teacher/getGroup', formData);
-
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
         this.dataGroup = getData.response.result;
@@ -108,6 +124,7 @@ export class ActionPlanComponent implements OnInit {
     this.month_plan();
     this.getListPlan();
     this.getActionPlan_Completed();
+    this.getActionPlan_Status();
     // this.getAdvice_notNull();
   }
   public getYearactionPlan(e) {
@@ -116,6 +133,7 @@ export class ActionPlanComponent implements OnInit {
     });
     this.month_plan();
     this.getListPlan();
+    this.getActionPlan_Status();
   }
   public getMonthactionPlan(e) {
     this.Plan_month = e;
@@ -154,6 +172,9 @@ export class ActionPlanComponent implements OnInit {
       if (getData.response.rowCount > 0) {
         this.actionPlan_year.patchValue({
           _year: getData.response.result[0].year,
+        });
+        this.actionPlan_year_Branchhead.patchValue({
+          year: getData.response.result[0].year,
         });
       } else {
         alert('ไม่มีปีการศึกษา');
@@ -254,31 +275,7 @@ export class ActionPlanComponent implements OnInit {
       noteP: '',
     };
   };
-  // public addActionPlan_month = async () => {
-  //   let formData = new FormData();
-  //   formData.append('group', this.codeGroup);
-  //   formData.append('year', this.actionPlan_year.value._year);
-  //   var ary3 = this.month.concat(this.month2);
 
-  //   for (var i = 0; i < ary3.length; i++) {
-  //     formData.append('month[]', ary3[i]);
-  //   }
-
-  //   let getData: any = await this.http.post(
-  //     'teacher/addActionPlan_month',
-  //     formData
-  //   );
-  //   console.log(getData);
-  //   if (getData.connect) {
-  //     if (getData.response.rowCount > 0) {
-  //       Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
-  //     } else {
-  //       Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
-  //     }
-  //   } else {
-  //     Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
-  //   }
-  // };
   public getActionPlan_month = async () => {
     let formData = new FormData();
     formData.append('group', this.codeGroup);
@@ -343,7 +340,7 @@ export class ActionPlanComponent implements OnInit {
       .then(async (value: any) => {
         if (value) {
           let getData: any = await this.http.post('teacher/delMonth', formData);
-          console.log(getData);
+
           if (getData.connect) {
             if (getData.response.rowCount > 0) {
               Swal.fire({
@@ -414,6 +411,25 @@ export class ActionPlanComponent implements OnInit {
       alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
     }
   };
+  public getActionPlan_Status = async () => {
+    let formData = new FormData();
+    formData.append('group', this.codeGroup);
+    formData.append('year', this.actionPlan_year.value._year);
+    let getData: any = await this.http.post(
+      'teacher/getActionPlan_Status',
+      formData
+    );
+
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        this.dataActionPlan_Status = getData.response.result;
+      } else {
+        this.dataActionPlan_Status = null;
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+  };
 
   public getValue(data: any) {
     if (data == 'true') {
@@ -453,7 +469,212 @@ export class ActionPlanComponent implements OnInit {
     }
   };
   public clickEdit_Action(i) {
+    this.dataAction.id = i.apa_id;
     this.dataAction.list = i.action_plan_list;
     this.dataAction.distance = i.apa_distance;
+    this.newAttribute3 = {
+      EDITEmoP1: JSON.parse(i.apa_m1),
+      EDITEmoP2: JSON.parse(i.apa_m2),
+      EDITEmoP3: JSON.parse(i.apa_m3),
+      EDITEmoP4: JSON.parse(i.apa_m4),
+      EDITEmoP5: JSON.parse(i.apa_m5),
+      EDITEmoP6: JSON.parse(i.apa_m6),
+      EDITEmoP7: JSON.parse(i.apa_m7),
+      EDITEmoP8: JSON.parse(i.apa_m8),
+      EDITEmoP9: JSON.parse(i.apa_m9),
+      EDITEmoP10: JSON.parse(i.apa_m10),
+      EDITEmoP11: JSON.parse(i.apa_m11),
+      EDITEmoP12: JSON.parse(i.apa_m12),
+      EDITEnoteP: i.note,
+    };
   }
+  public updateAction = async () => {
+    let formData = new FormData();
+    formData.append('id', this.dataAction.id);
+    for (var key in this.newAttribute3) {
+      formData.append(key, this.newAttribute3[key]);
+    }
+    let getData: any = await this.http.post(
+      'teacher/updateActionPlan_Action',
+      formData
+    );
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        let win: any = window;
+        win.$('#editAction').modal('hide');
+        Swal.fire('แก้ไขข้อมูลเสร็จสิ้น', '', 'success');
+        this.getActionPlan_Completed();
+      } else {
+        Swal.fire('แก้ไขข้อมูลไม่ได้', '', 'error');
+      }
+    } else {
+      Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+    }
+  };
+  public getBranchhead = async () => {
+    let formData = new FormData();
+    formData.append('ID', JSON.parse(localStorage.getItem('userLogin')).userID);
+    let getData: any = await this.http.post('teacher/getBranchhead', formData);
+
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        this.dataBranchhead = getData.response.result;
+      } else {
+        this.dataBranchhead = null;
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+  };
+  public getBranch = async () => {
+    let formData = new FormData();
+    formData.append(
+      'code',
+      JSON.parse(localStorage.getItem('userLogin')).branch
+    );
+    let getData: any = await this.http.post('admin/getBranch', formData);
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        this.dataBranch = getData.response.result;
+      } else {
+        this.dataBranch = null;
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+  };
+  public async clickBranch_Branchhead(i) {
+    let formData = new FormData();
+    formData.append('codeBranch', i.code);
+    let getData: any = await this.http.post('admin/getGroup', formData);
+
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        this.dataGroup_Branchhead = getData.response.result;
+      } else {
+        this.dataGroup_Branchhead = null;
+      }
+    } else {
+      Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+    }
+    this.group_Branchhead = null;
+    this.dataActionPlan_Branchhead = null;
+  }
+  public getYearactionPlan_Branchhead(e) {
+    this.actionPlan_year_Branchhead = this.formBuilder.group({
+      year: [e, Validators.required],
+    });
+    this.getActionPlan_Completed_Branchhead();
+    this.month_plan_Branchhead();
+    this.getActionPlan_Status_Branchhead();
+  }
+  public async clickgroup_Branchhead(i) {
+    this.group_Branchhead = i.study_group_id;
+    this.getActionPlan_Completed_Branchhead();
+    this.month_plan_Branchhead();
+    this.getActionPlan_Status_Branchhead();
+  }
+  public getActionPlan_Completed_Branchhead = async () => {
+    let formData = new FormData();
+    formData.append('group', this.group_Branchhead);
+    formData.append('year', this.actionPlan_year_Branchhead.value.year);
+    let getData: any = await this.http.post(
+      'teacher/getActionPlan_Completed',
+      formData
+    );
+
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        this.dataActionPlan_Branchhead = getData.response.result;
+      } else {
+        this.dataActionPlan_Branchhead = null;
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+  };
+  public month_plan_Branchhead = async () => {
+    let formData = new FormData();
+    formData.append('group', this.group_Branchhead);
+    formData.append('year', this.actionPlan_year_Branchhead.value.year);
+
+    let getData: any = await this.http.post('teacher/PlanMonth', formData);
+
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        this.dataPlan_month_Branchhead = getData.response.result[0].month;
+        if (this.dataPlan_month_Branchhead != null) {
+          var a = this.thmonth.indexOf(this.dataPlan_month_Branchhead);
+          const b = this.thmonth;
+          const c = this.thmonth;
+          var d = this.actionPlan_year_Branchhead.value.year;
+          var f = String(d.substring(2));
+          var g = String(Number(d.substring(2)) + 1);
+
+          for (var i = a; i < this.thmonth.length; i++) {
+            this.month_Branchhead[i - a] = b[i] + f;
+          }
+          for (var i = 0; i < a; i++) {
+            this.month2_Branchhead[i] = c[i] + g;
+          }
+        }
+      } else {
+        this.month_Branchhead = [];
+        this.month2_Branchhead = [];
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+  };
+  public addActionPlan_Status = async () => {
+    let formData = new FormData();
+    formData.append('group', this.group_Branchhead);
+    formData.append('year', this.actionPlan_year_Branchhead.value.year);
+    formData.append('check', 'true');
+
+    this.http
+      .confirmAlert('อนุมัติแผนปฏิบัติงานหรือไม่?')
+      .then(async (value: any) => {
+        if (value) {
+          let getData: any = await this.http.post(
+            'teacher/addActionPlan_Status',
+            formData
+          );
+          console.log(getData);
+          if (getData.connect) {
+            if (getData.response.rowCount > 0) {
+              Swal.fire({
+                position: 'top',
+                icon: 'success',
+                title: 'อนุมัติแผนปฏิบัติงานสำเร็จ',
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              this.getActionPlan_Status();
+              this.getActionPlan_Status_Branchhead();
+              Swal.fire('ไม่สามารถอนุมัติแผนปฏิบัติงาน!', '', 'error');
+            }
+          }
+        }
+      });
+  };
+  public getActionPlan_Status_Branchhead = async () => {
+    let formData = new FormData();
+    formData.append('group', this.group_Branchhead);
+    formData.append('year', this.actionPlan_year_Branchhead.value.year);
+    let getData: any = await this.http.post(
+      'teacher/getActionPlan_Status',
+      formData
+    );
+
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        this.dataActionPlan_Status_Branchhead = getData.response.result;
+      } else {
+        this.dataActionPlan_Status_Branchhead = null;
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+  };
 }

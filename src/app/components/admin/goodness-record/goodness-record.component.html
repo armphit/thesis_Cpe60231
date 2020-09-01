@@ -1,5 +1,5 @@
-<div class="panel-body" style="margin-left: 10px; margin-right: 10px;">
-  คณะ:&nbsp;&nbsp;<mat-form-field style="width: 30%;">
+<div class="panel-body" style="margin-left: 10px; margin-right: 10px">
+  คณะ:&nbsp;&nbsp;<mat-form-field style="width: 30%">
     <mat-label>โปรดเลือกคณะ</mat-label>
     <mat-select required>
       <mat-option
@@ -13,7 +13,7 @@
   </mat-form-field>
   <br />
   <span *ngIf="codeFaculty!"
-    >สาขา:&nbsp;&nbsp;<mat-form-field style="width: 30%;">
+    >สาขา:&nbsp;&nbsp;<mat-form-field style="width: 30%">
       <mat-label>โปรดเลือกสาขา</mat-label>
       <mat-select required>
         <mat-option
@@ -34,11 +34,11 @@
   <br />
 
   <span *ngIf="codeMajor!"
-    >โปรแกรมวิชา:&nbsp;&nbsp;<mat-form-field style="width: 50%;">
+    >โปรแกรมวิชา:&nbsp;&nbsp;<mat-form-field style="width: 50%">
       <mat-label>โปรดเลือกโปรแกรมวิชา</mat-label>
       <mat-select required>
         <mat-option
-          style="width: auto;"
+          style="width: auto"
           *ngFor="let i of dataBranch; let x = index"
           [value]="i.name"
           (click)="clickBranch(i.code, i.name, i.acronym)"
@@ -55,7 +55,7 @@
       <mat-label>โปรดเลือกกลุ่มเรียน</mat-label>
       <mat-select required>
         <mat-option
-          style="width: auto;"
+          style="width: auto"
           *ngFor="let i of dataGroup; let x = index"
           [value]="i.study_group_id"
           (click)="
@@ -80,7 +80,7 @@
   <div *ngIf="groupID!">
     <form [formGroup]="goodness_year">
       ปีการศึกษา : &nbsp;&nbsp;
-      <mat-form-field style="width: 25%;">
+      <mat-form-field style="width: 25%">
         <mat-label>เลือกปีการศึกษา</mat-label>
         <mat-select
           formControlName="_year"
@@ -109,7 +109,7 @@
   <tbody>
     <tr *ngFor="let i of dataGoodness; let x = index">
       <th scope="row">{{ x + 1 }}</th>
-      <td>{{ i.titlename }} {{ i.fname }}{{ " " }}{{ i.lname }}</td>
+      <td>{{ i.titlename }}{{ i.fname }}{{ " " }}{{ i.lname }}</td>
       <td>
         {{ i.osb_detail }}
       </td>
@@ -122,7 +122,7 @@
     </tr>
   </tbody>
 </table>
-<div *ngIf="dataGoodness != null" style="padding-left: 15px;">
+<div *ngIf="dataGoodness != null" style="padding-left: 15px">
   <button type="button" class="btn btn-primary">Export to PDF</button
   >&nbsp;&nbsp;<button type="button" class="btn btn-primary">
     Export to Word

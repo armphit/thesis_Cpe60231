@@ -34,6 +34,29 @@
         </form>
       </div>
       <div *ngIf="codeGroup!">
+        สถานะ : &nbsp;
+        <button
+          type="button"
+          class="btn btn-primary"
+          style="cursor: none"
+          *ngIf="
+            dataActionPlan_Status == null && dataActionPlan_Completed != null
+          "
+        >
+          รอการอนุมัติแผนการปฏิบัติงาน
+        </button>
+        <button
+          type="button"
+          class="btn btn-success"
+          style="cursor: none"
+          *ngIf="
+            dataActionPlan_Status != null && dataActionPlan_Completed != null
+          "
+        >
+          อนุมัติแผนการปฏิบัติงานแล้ว
+        </button>
+      </div>
+      <div *ngIf="codeGroup!" style="padding-top: 20px">
         เลือกเดือนเริ่มต้นปีการศึกษา : &nbsp;&nbsp;
         <mat-form-field style="width: 10%" *ngIf="dataPlan_month == null">
           <mat-label>เลือกเดือน</mat-label>
@@ -48,7 +71,7 @@
         </mat-form-field>
         &nbsp;&nbsp;
         <button
-          class="btn btn-default"
+          class="btn btn-primary"
           type="button"
           (click)="addPlan_month()"
           *ngIf="dataPlan_month == null"
@@ -56,7 +79,7 @@
           ตกลง
         </button>
         <button
-          class="btn btn-default"
+          class="btn btn-primary"
           type="button"
           (click)="delMonth()"
           *ngIf="dataPlan_month != null"
@@ -79,7 +102,7 @@
           </div>
           <div>
             <button type="submit" class="btn btn-primary">
-              <i class="glyphicon glyphicon-plus"></i>&nbsp;เพิ่มรายการ
+              <i class="fas fa-plus"></i>&nbsp;เพิ่มรายการ
             </button>
           </div>
         </div>
@@ -142,7 +165,10 @@
               <mat-checkbox [(ngModel)]="newAttribute.moP12"></mat-checkbox>
             </td>
             <td>
-              <mat-form-field style="width: 100px">
+              <mat-form-field
+                style="width: 100px"
+                style="text-align: left; vertical-align: middle"
+              >
                 <input matInput [(ngModel)]="newAttribute.noteP" />
               </mat-form-field>
             </td>
@@ -164,52 +190,6 @@
               ></span>
             </td>
           </tr>
-          <!-- <tr>
-        <td style="vertical-align: middle; text-align: center">
-          {{ distance2 }}
-        </td>
-        <td td style="text-align: center; vertical-align: middle">
-          <mat-checkbox [(ngModel)]="newAttribute2.moA1"></mat-checkbox>
-        </td>
-        <td td style="text-align: center; vertical-align: middle">
-          <mat-checkbox [(ngModel)]="newAttribute2.moA2"></mat-checkbox>
-        </td>
-        <td td style="text-align: center; vertical-align: middle">
-          <mat-checkbox [(ngModel)]="newAttribute2.moA3"></mat-checkbox>
-        </td>
-        <td td style="text-align: center; vertical-align: middle">
-          <mat-checkbox [(ngModel)]="newAttribute2.moA4"></mat-checkbox>
-        </td>
-        <td td style="text-align: center; vertical-align: middle">
-          <mat-checkbox [(ngModel)]="newAttribute2.moA5"></mat-checkbox>
-        </td>
-        <td td style="text-align: center; vertical-align: middle">
-          <mat-checkbox [(ngModel)]="newAttribute2.moA6"></mat-checkbox>
-        </td>
-        <td td style="text-align: center; vertical-align: middle">
-          <mat-checkbox [(ngModel)]="newAttribute2.moA7"></mat-checkbox>
-        </td>
-        <td td style="text-align: center; vertical-align: middle">
-          <mat-checkbox [(ngModel)]="newAttribute2.moA8"></mat-checkbox>
-        </td>
-        <td td style="text-align: center; vertical-align: middle">
-          <mat-checkbox [(ngModel)]="newAttribute2.moA9"></mat-checkbox>
-        </td>
-        <td td style="text-align: center; vertical-align: middle">
-          <mat-checkbox [(ngModel)]="newAttribute2.moA10"></mat-checkbox>
-        </td>
-        <td td style="text-align: center; vertical-align: middle">
-          <mat-checkbox [(ngModel)]="newAttribute2.moA11"></mat-checkbox>
-        </td>
-        <td td style="text-align: center; vertical-align: middle">
-          <mat-checkbox [(ngModel)]="newAttribute2.moA12"></mat-checkbox>
-        </td>
-        <td>
-          <mat-form-field style="width: 100px">
-            <input matInput [(ngModel)]="newAttribute2.noteA" />
-          </mat-form-field>
-        </td>
-      </tr> -->
         </tbody>
       </table>
     </div>
@@ -248,7 +228,7 @@
             <td
               *ngIf="x % 2 == 0 ? true : false"
               rowspan="2"
-              style="vertical-align: middle; text-align: center"
+              style="vertical-align: middle; text-align: left"
             >
               {{ i.action_plan_list }}
             </td>
@@ -291,7 +271,7 @@
             <td style="vertical-align: middle; text-align: center">
               {{ getValue(i.apa_m12) }}
             </td>
-            <td style="vertical-align: middle; text-align: center">
+            <td style="vertical-align: middle; text-align: left">
               {{ i.note }}
             </td>
             <td style="vertical-align: middle; text-align: center">
@@ -374,7 +354,7 @@
                               style="text-align: center; vertical-align: middle"
                             >
                               <mat-checkbox
-                                [(ngModel)]="newAttribute.moP1"
+                                [(ngModel)]="newAttribute3.EDITEmoP1"
                               ></mat-checkbox>
                             </td>
                             <td
@@ -382,7 +362,7 @@
                               style="text-align: center; vertical-align: middle"
                             >
                               <mat-checkbox
-                                [(ngModel)]="newAttribute.moP2"
+                                [(ngModel)]="newAttribute3.EDITEmoP2"
                               ></mat-checkbox>
                             </td>
                             <td
@@ -390,7 +370,7 @@
                               style="text-align: center; vertical-align: middle"
                             >
                               <mat-checkbox
-                                [(ngModel)]="newAttribute.moP3"
+                                [(ngModel)]="newAttribute3.EDITEmoP3"
                               ></mat-checkbox>
                             </td>
                             <td
@@ -398,7 +378,7 @@
                               style="text-align: center; vertical-align: middle"
                             >
                               <mat-checkbox
-                                [(ngModel)]="newAttribute.moP4"
+                                [(ngModel)]="newAttribute3.EDITEmoP4"
                               ></mat-checkbox>
                             </td>
                             <td
@@ -406,7 +386,7 @@
                               style="text-align: center; vertical-align: middle"
                             >
                               <mat-checkbox
-                                [(ngModel)]="newAttribute.moP5"
+                                [(ngModel)]="newAttribute3.EDITEmoP5"
                               ></mat-checkbox>
                             </td>
                             <td
@@ -414,7 +394,7 @@
                               style="text-align: center; vertical-align: middle"
                             >
                               <mat-checkbox
-                                [(ngModel)]="newAttribute.moP6"
+                                [(ngModel)]="newAttribute3.EDITEmoP6"
                               ></mat-checkbox>
                             </td>
                             <td
@@ -422,7 +402,7 @@
                               style="text-align: center; vertical-align: middle"
                             >
                               <mat-checkbox
-                                [(ngModel)]="newAttribute.moP7"
+                                [(ngModel)]="newAttribute3.EDITEmoP7"
                               ></mat-checkbox>
                             </td>
                             <td
@@ -430,7 +410,7 @@
                               style="text-align: center; vertical-align: middle"
                             >
                               <mat-checkbox
-                                [(ngModel)]="newAttribute.moP8"
+                                [(ngModel)]="newAttribute3.EDITEmoP8"
                               ></mat-checkbox>
                             </td>
                             <td
@@ -438,7 +418,7 @@
                               style="text-align: center; vertical-align: middle"
                             >
                               <mat-checkbox
-                                [(ngModel)]="newAttribute.moP9"
+                                [(ngModel)]="newAttribute3.EDITEmoP9"
                               ></mat-checkbox>
                             </td>
                             <td
@@ -446,7 +426,7 @@
                               style="text-align: center; vertical-align: middle"
                             >
                               <mat-checkbox
-                                [(ngModel)]="newAttribute.moP10"
+                                [(ngModel)]="newAttribute3.EDITEmoP10"
                               ></mat-checkbox>
                             </td>
                             <td
@@ -454,7 +434,7 @@
                               style="text-align: center; vertical-align: middle"
                             >
                               <mat-checkbox
-                                [(ngModel)]="newAttribute.moP11"
+                                [(ngModel)]="newAttribute3.EDITEmoP11"
                               ></mat-checkbox>
                             </td>
                             <td
@@ -462,14 +442,17 @@
                               style="text-align: center; vertical-align: middle"
                             >
                               <mat-checkbox
-                                [(ngModel)]="newAttribute.moP12"
+                                [(ngModel)]="newAttribute3.EDITEmoP12"
                               ></mat-checkbox>
                             </td>
                             <td>
-                              <mat-form-field style="width: 100px">
+                              <mat-form-field
+                                style="width: 100px"
+                                style="text-align: left; vertical-align: middle"
+                              >
                                 <input
                                   matInput
-                                  [(ngModel)]="newAttribute.noteP"
+                                  [(ngModel)]="newAttribute3.EDITEnoteP"
                                 />
                               </mat-form-field>
                             </td>
@@ -487,7 +470,14 @@
                     class="btn btn-danger"
                     data-dismiss="modal"
                   >
-                    Close
+                    ยกเลิก
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-success"
+                    (click)="updateAction()"
+                  >
+                    บันทึก
                   </button>
                 </div>
               </div>
@@ -539,5 +529,161 @@
       </table>
     </div>
   </mat-tab>
-  <mat-tab label="สำหรับหัวหน้าสาขา"> Content 2 </mat-tab>
+  <mat-tab label="สำหรับหัวหน้าสาขา" *ngIf="dataBranchhead != null">
+    <div class="panel-body" style="margin-left: 10px; margin-right: 10px">
+      <div>
+        โปรแกรมวิชา:&nbsp;&nbsp;<mat-form-field style="width: 50%">
+          <mat-label>โปรดเลือกโปรแกรมวิชา</mat-label>
+          <mat-select required>
+            <mat-option
+              style="width: auto"
+              *ngFor="let i of dataBranch; let x = index"
+              [value]="i.name"
+              (click)="clickBranch_Branchhead(i)"
+            >
+              {{ i.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div *ngIf="dataGroup_Branchhead!">
+        กลุ่มเรียน:&nbsp;&nbsp;<mat-form-field>
+          <mat-label>โปรดเลือกกลุ่มเรียน</mat-label>
+          <mat-select required>
+            <mat-option
+              style="width: auto"
+              *ngFor="let i of dataGroup_Branchhead; let x = index"
+              [value]="i.study_group_id"
+              (click)="clickgroup_Branchhead(i)"
+            >
+              {{ i.study_group_name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div *ngIf="group_Branchhead!">
+        <form [formGroup]="actionPlan_year_Branchhead">
+          ปีการศึกษา : &nbsp;&nbsp;
+          <mat-form-field style="width: 25%">
+            <mat-label>เลือกปีการศึกษา</mat-label>
+            <mat-select
+              formControlName="year"
+              (selectionChange)="getYearactionPlan_Branchhead($event.value)"
+              required
+            >
+              <mat-option *ngFor="let i of range" [value]="i.value">
+                {{ i.value }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </form>
+      </div>
+      <div *ngIf="group_Branchhead!">
+        สถานะ : &nbsp;
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="addActionPlan_Status()"
+          *ngIf="
+            dataActionPlan_Status_Branchhead == null &&
+            dataActionPlan_Branchhead != null
+          "
+        >
+          คลิกอนุมัติแผนการปฏิบัติงาน
+        </button>
+        <button
+          type="button"
+          class="btn btn-success"
+          style="cursor: none"
+          *ngIf="
+            dataActionPlan_Status_Branchhead != null &&
+            dataActionPlan_Branchhead != null
+          "
+        >
+          อนุมัติแผนการปฏิบัติงานแล้ว
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <table class="table table-bordered" *ngIf="dataActionPlan_Branchhead!">
+        <thead>
+          <tr>
+            <th>ลำดับ</th>
+            <th>รายการ</th>
+            <th>ช่วงเวลา</th>
+            <th scope="col" *ngFor="let i of month_Branchhead">{{ i }}</th>
+            <th scope="col" *ngFor="let j of month2_Branchhead">{{ j }}</th>
+            <th>หมายเหตุ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let i of dataActionPlan_Branchhead;
+              let x = index;
+              let j = index
+            "
+          >
+            <th
+              *ngIf="x % 2 == 0 ? true : false"
+              rowspan="2"
+              style="vertical-align: middle; text-align: center"
+            >
+              {{ (j + 1) / 2 + 0.5 }}
+            </th>
+            <td
+              *ngIf="x % 2 == 0 ? true : false"
+              rowspan="2"
+              style="vertical-align: middle; text-align: left"
+            >
+              {{ i.action_plan_list }}
+            </td>
+            <td style="vertical-align: middle; text-align: center">
+              {{ i.apa_distance }}
+            </td>
+            <td style="vertical-align: middle; text-align: center">
+              {{ getValue(i.apa_m1) }}
+            </td>
+            <td style="vertical-align: middle; text-align: center">
+              {{ getValue(i.apa_m2) }}
+            </td>
+            <td style="vertical-align: middle; text-align: center">
+              {{ getValue(i.apa_m3) }}
+            </td>
+            <td style="vertical-align: middle; text-align: center">
+              {{ getValue(i.apa_m4) }}
+            </td>
+            <td style="vertical-align: middle; text-align: center">
+              {{ getValue(i.apa_m5) }}
+            </td>
+            <td style="vertical-align: middle; text-align: center">
+              {{ getValue(i.apa_m6) }}
+            </td>
+            <td style="vertical-align: middle; text-align: center">
+              {{ getValue(i.apa_m7) }}
+            </td>
+            <td style="vertical-align: middle; text-align: center">
+              {{ getValue(i.apa_m8) }}
+            </td>
+            <td style="vertical-align: middle; text-align: center">
+              {{ getValue(i.apa_m9) }}
+            </td>
+            <td style="vertical-align: middle; text-align: center">
+              {{ getValue(i.apa_m10) }}
+            </td>
+            <td style="vertical-align: middle; text-align: center">
+              {{ getValue(i.apa_m11) }}
+            </td>
+            <td style="vertical-align: middle; text-align: center">
+              {{ getValue(i.apa_m12) }}
+            </td>
+            <td style="vertical-align: middle; text-align: left">
+              {{ i.note }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </mat-tab>
 </mat-tab-group>
