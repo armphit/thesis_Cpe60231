@@ -2,6 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { HttpService } from 'src/app/services/http.service';
 import Swal from 'sweetalert2';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+pdfMake.fonts = {
+  THSarabunNew: {
+    normal: 'THSarabunNew.ttf',
+    bold: 'THSarabunNew Bold.ttf',
+    italics: 'THSarabunNew Italic.ttf',
+    bolditalics: 'THSarabunNew BoldItalic.ttf',
+  },
+};
 
 @Component({
   selector: 'app-action-plan',
@@ -31,18 +43,18 @@ export class ActionPlanComponent implements OnInit {
     noteP: '',
   };
   public newAttribute2: any = {
-    moP1: false,
-    moP2: false,
-    moP3: false,
-    moP4: false,
-    moP5: false,
-    moP6: false,
-    moP7: false,
-    moP8: false,
-    moP9: false,
-    moP10: false,
-    moP11: false,
-    moP12: false,
+    moA1: false,
+    moA2: false,
+    moA3: false,
+    moA4: false,
+    moA5: false,
+    moA6: false,
+    moA7: false,
+    moA8: false,
+    moA9: false,
+    moA10: false,
+    moA11: false,
+    moA12: false,
     noteP: '',
   };
   public newAttribute3: any = {};
@@ -125,6 +137,7 @@ export class ActionPlanComponent implements OnInit {
     this.getListPlan();
     this.getActionPlan_Completed();
     this.getActionPlan_Status();
+    console.log(this.dataBranchhead);
     // this.getAdvice_notNull();
   }
   public getYearactionPlan(e) {
@@ -232,6 +245,7 @@ export class ActionPlanComponent implements OnInit {
     for (var key in this.newAttribute2) {
       formData.append(key, this.newAttribute2[key]);
     }
+    console.log(this.newAttribute2);
 
     // formData.forEach((value,key) => {
     //   console.log(key+":"+value)
@@ -652,6 +666,7 @@ export class ActionPlanComponent implements OnInit {
               });
               this.getActionPlan_Status();
               this.getActionPlan_Status_Branchhead();
+            } else {
               Swal.fire('ไม่สามารถอนุมัติแผนปฏิบัติงาน!', '', 'error');
             }
           }
@@ -676,5 +691,413 @@ export class ActionPlanComponent implements OnInit {
     } else {
       alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
     }
+  };
+  getBase64ImageFromURL(url) {
+    return new Promise((resolve, reject) => {
+      var img = new Image();
+      img.setAttribute('crossOrigin', 'anonymous');
+      img.onload = () => {
+        var canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        var dataURL = canvas.toDataURL('image/png');
+        resolve(dataURL);
+      };
+      img.onerror = (error) => {
+        reject(error);
+      };
+      img.src = url;
+    });
+  }
+  public exportPDF = async () => {
+    var month = this.month.concat(this.month2);
+
+    let data_plan = [
+      { width: '*', text: '' },
+      {
+        width: 'auto',
+        table: {
+          headerRows: 1,
+          widths: [
+            20,
+            90,
+            20,
+            20,
+            20,
+            20,
+            20,
+            20,
+            20,
+            20,
+            20,
+            20,
+            20,
+            20,
+            20,
+            25,
+          ],
+          body: [
+            [
+              {
+                text: 'ลำ\nดับ',
+                style: 'tableHeader',
+                alignment: 'center',
+                bold: true,
+              },
+              {
+                text: 'รายการ',
+                style: 'tableHeader',
+                alignment: 'center',
+                bold: true,
+              },
+
+              {
+                text: 'ช่วงเวลา',
+                style: 'tableHeader',
+                alignment: 'center',
+                bold: true,
+              },
+              {
+                text: month[0],
+                style: 'tableHeader',
+                alignment: 'center',
+                bold: true,
+              },
+              {
+                text: month[1],
+                style: 'tableHeader',
+                alignment: 'center',
+                bold: true,
+              },
+              {
+                text: month[2],
+                style: 'tableHeader',
+                alignment: 'center',
+                bold: true,
+              },
+              {
+                text: month[3],
+                style: 'tableHeader',
+                alignment: 'center',
+                bold: true,
+              },
+              {
+                text: month[4],
+                style: 'tableHeader',
+                alignment: 'center',
+                bold: true,
+              },
+              {
+                text: month[5],
+                style: 'tableHeader',
+                alignment: 'center',
+                bold: true,
+              },
+              {
+                text: month[6],
+                style: 'tableHeader',
+                alignment: 'center',
+                bold: true,
+              },
+              {
+                text: month[7],
+                style: 'tableHeader',
+                alignment: 'center',
+                bold: true,
+              },
+              {
+                text: month[8],
+                style: 'tableHeader',
+                alignment: 'center',
+                bold: true,
+              },
+              {
+                text: month[9],
+                style: 'tableHeader',
+                alignment: 'center',
+                bold: true,
+              },
+              {
+                text: month[10],
+                style: 'tableHeader',
+                alignment: 'center',
+                bold: true,
+              },
+              {
+                text: month[11],
+                style: 'tableHeader',
+                alignment: 'center',
+                bold: true,
+              },
+
+              {
+                text: 'หมาย\nเหตุ',
+                style: 'tableHeader',
+                alignment: 'center',
+                bold: true,
+              },
+            ],
+          ],
+          alignment: 'left',
+        },
+      },
+      { width: '*', text: '' },
+    ];
+    var action = {
+      m1: null,
+      m2: null,
+      m3: null,
+      m4: null,
+      m5: null,
+      m6: null,
+      m7: null,
+      m8: null,
+      m9: null,
+      m10: null,
+      m11: null,
+      m12: null,
+    };
+
+    for (var i = 0; i < this.dataActionPlan_Completed.length; i++) {
+      if (this.dataActionPlan_Completed[i].apa_m1 == 'true') {
+        action.m1 = '/';
+      } else {
+        action.m1 = '';
+      }
+      if (this.dataActionPlan_Completed[i].apa_m2 == 'true') {
+        action.m2 = '/';
+      } else {
+        action.m2 = '';
+      }
+      if (this.dataActionPlan_Completed[i].apa_m3 == 'true') {
+        action.m3 = '/';
+      } else {
+        action.m3 = '';
+      }
+      if (this.dataActionPlan_Completed[i].apa_m4 == 'true') {
+        action.m4 = '/';
+      } else {
+        action.m4 = '';
+      }
+      if (this.dataActionPlan_Completed[i].apa_m5 == 'true') {
+        action.m5 = '/';
+      } else {
+        action.m5 = '';
+      }
+      if (this.dataActionPlan_Completed[i].apa_m6 == 'true') {
+        action.m6 = '/';
+      } else {
+        action.m6 = '';
+      }
+      if (this.dataActionPlan_Completed[i].apa_m7 == 'true') {
+        action.m7 = '/';
+      } else {
+        action.m7 = '';
+      }
+      if (this.dataActionPlan_Completed[i].apa_m8 == 'true') {
+        action.m8 = '/';
+      } else {
+        action.m8 = '';
+      }
+      if (this.dataActionPlan_Completed[i].apa_m9 == 'true') {
+        action.m9 = '/';
+      } else {
+        action.m9 = '';
+      }
+      if (this.dataActionPlan_Completed[i].apa_m10 == 'true') {
+        action.m10 = '/';
+      } else {
+        action.m10 = '';
+      }
+      if (this.dataActionPlan_Completed[i].apa_m11 == 'true') {
+        action.m11 = '/';
+      } else {
+        action.m11 = '';
+      }
+      if (this.dataActionPlan_Completed[i].apa_m12 == 'true') {
+        action.m12 = '/';
+      } else {
+        action.m12 = '';
+      }
+
+      let data_plan2 = [
+        {
+          rowSpan: 2,
+          text: String((i + 1) / 2 + 0.5),
+          style: '',
+          alignment: 'center',
+          bold: false,
+        },
+        {
+          rowSpan: 2,
+          text: this.dataActionPlan_Completed[i].action_plan_list,
+          style: '',
+          alignment: '',
+          bold: false,
+        },
+        {
+          text: this.dataActionPlan_Completed[i].apa_distance,
+          style: '',
+          alignment: 'center',
+          bold: false,
+        },
+        {
+          text: action.m1,
+          style: '',
+          alignment: 'center',
+          bold: false,
+        },
+        {
+          text: action.m2,
+          style: '',
+          alignment: 'center',
+          bold: false,
+        },
+        {
+          text: action.m3,
+          style: '',
+          alignment: 'center',
+          bold: false,
+        },
+        {
+          text: action.m4,
+          style: '',
+          alignment: 'center',
+          bold: false,
+        },
+        {
+          text: action.m5,
+          style: '',
+          alignment: 'center',
+          bold: false,
+        },
+        {
+          text: action.m6,
+          style: '',
+          alignment: 'center',
+          bold: false,
+        },
+        {
+          text: action.m7,
+          style: '',
+          alignment: 'center',
+          bold: false,
+        },
+        {
+          text: action.m8,
+          style: '',
+          alignment: 'center',
+          bold: false,
+        },
+        {
+          text: action.m9,
+          style: '',
+          alignment: 'center',
+          bold: false,
+        },
+        {
+          text: action.m10,
+          style: '',
+          alignment: 'center',
+          bold: false,
+        },
+        {
+          text: action.m11,
+          style: '',
+          alignment: 'center',
+          bold: false,
+        },
+        {
+          text: action.m12,
+          style: '',
+          alignment: 'center',
+          bold: false,
+        },
+        {
+          text: this.dataActionPlan_Completed[i].note,
+          style: '',
+          alignment: '',
+          bold: false,
+        },
+      ];
+      data_plan[1]['table']['body'].push(data_plan2);
+    }
+
+    const dd = {
+      header: {},
+      content: [
+        {
+          image: await this.getBase64ImageFromURL('assets/rmuti.png'),
+          width: 30,
+          height: 50,
+        },
+        {
+          text: ' มหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน  นครราชสีมา',
+          fontSize: 12,
+          margin: [35, 0, 0, 20],
+          bold: true,
+        },
+        {
+          text:
+            'แผนปฏิบัติงานการบริการให้คำปรึกษาและแนะแนว ของอาจารย์ที่ปรึกษา' +
+            ' ' +
+            'ปีการศึกษา' +
+            ' ' +
+            this.actionPlan_year.value._year,
+          fontSize: 16,
+          alignment: 'center',
+          bold: true,
+        },
+        {
+          columns: data_plan,
+          fontSize: 14,
+        },
+        {
+          text:
+            '\nลงชื่อ.................................................................\n( ' +
+            JSON.parse(localStorage.getItem('userLogin')).titlename +
+            JSON.parse(localStorage.getItem('userLogin')).fname +
+            ' ' +
+            JSON.parse(localStorage.getItem('userLogin')).lname +
+            ' )',
+          fontSize: 16,
+          alignment: 'right',
+        },
+        {
+          text: 'ผู้จัดทำแผนปฏิบัติงาน',
+          fontSize: 16,
+          alignment: 'right',
+        },
+        {
+          text:
+            '\nลงชื่อ.................................................................\n( ' +
+            this.dataBranchhead[0].titlename +
+            this.dataBranchhead[0].fname +
+            ' ' +
+            this.dataBranchhead[0].lname +
+            ' )',
+          fontSize: 16,
+          alignment: 'right',
+        },
+        {
+          text: 'หัวหน้าโปรแกรมวิชา/สาขาวิชา ผู้อนุมัติ',
+          fontSize: 16,
+          alignment: 'right',
+        },
+        // {
+        //   text: 'วันที่................................................',
+        //   fontSize: 16,
+        //   alignment: 'right',
+        // },
+      ],
+
+      defaultStyle: {
+        font: 'THSarabunNew',
+      },
+    };
+
+    pdfMake.createPdf(dd).open();
   };
 }

@@ -35,6 +35,7 @@ export class LoginComponent implements OnInit {
         this.service
           .get(`/loginsso?perid=${value.perid}`)
           .then((value: any) => {
+            // console.log(value);
             if (value.response.success) {
               let a = value.response.data.userID;
 
@@ -105,6 +106,14 @@ export class LoginComponent implements OnInit {
             JSON.stringify(httpRespon.response.data)
           );
         }
+      } else if (httpRespon.response.data.status == '3000') {
+        this.service.alertLog('success', 'เข้าสู่ระบบสำเร็จ');
+        this.service.navRouter(this.adminPath);
+
+        localStorage.setItem(
+          'userLogin',
+          JSON.stringify(httpRespon.response.data)
+        );
       } else {
         this.service.alertLog('error', 'ชื่อหรือรหัสผ่านไม่ถูกต้อง');
       }

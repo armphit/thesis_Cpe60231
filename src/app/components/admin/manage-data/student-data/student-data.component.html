@@ -1,5 +1,5 @@
-<div class="panel-body" style="margin-left: 10px; margin-right: 10px;">
-  คณะ:&nbsp;&nbsp;<mat-form-field style="width: 30%;">
+<div class="panel-body" style="margin-left: 10px; margin-right: 10px">
+  คณะ:&nbsp;&nbsp;<mat-form-field style="width: 30%">
     <mat-label>โปรดเลือกคณะ</mat-label>
     <mat-select required>
       <mat-option
@@ -13,7 +13,7 @@
   </mat-form-field>
   <br />
   <span *ngIf="codeFaculty!"
-    >สาขา:&nbsp;&nbsp;<mat-form-field style="width: 30%;">
+    >สาขา:&nbsp;&nbsp;<mat-form-field style="width: 30%">
       <mat-label>โปรดเลือกสาขา</mat-label>
       <mat-select required>
         <mat-option
@@ -33,11 +33,11 @@
   >
   <br />
   <span *ngIf="codeMajor!"
-    >โปรแกรมวิชา:&nbsp;&nbsp;<mat-form-field style="width: 40%;">
+    >โปรแกรมวิชา:&nbsp;&nbsp;<mat-form-field style="width: 40%">
       <mat-label>โปรดเลือกโปรแกรมวิชา</mat-label>
       <mat-select required>
         <mat-option
-          style="width: auto;"
+          style="width: auto"
           *ngFor="let i of dataBranch; let x = index"
           [value]="i.name"
           (click)="clickBranch(i.code, i.name, i.acronym)"
@@ -53,7 +53,7 @@
       <mat-label>โปรดเลือกกลุ่มเรียน</mat-label>
       <mat-select required>
         <mat-option
-          style="width: auto;"
+          style="width: auto"
           *ngFor="let i of dataGroup; let x = index"
           [value]="i.study_group_id"
           (click)="
@@ -80,7 +80,7 @@
   <form [formGroup]="formYearTerm" #formChange="ngForm">
     <span *ngIf="groupID!"
       >ภาคการศึกษา : &nbsp;&nbsp;
-      <mat-form-field style="width: 13%;">
+      <mat-form-field style="width: 13%">
         <mat-label>เลือกปีการศึกษา</mat-label>
         <mat-select
           (selectionChange)="getYearTerm($event.value)"
@@ -93,7 +93,7 @@
         </mat-select>
       </mat-form-field>
       /
-      <mat-form-field style="width: 25;">
+      <mat-form-field style="width: 25">
         <mat-label>เลือกภาคการเรียน</mat-label>
         <mat-select
           formControlName="term"
@@ -110,7 +110,7 @@
   <br />
 
   <div class="row" *ngIf="groupID!">
-    <div class="col-sm-2.9" style="padding-top: 5px;">เพิ่มนักศึกษา :</div>
+    <div class="col-sm-2.9" style="padding-top: 5px">เพิ่มนักศึกษา :</div>
 
     <div class="col-md-3">
       <input
@@ -146,11 +146,11 @@
   </thead>
   <tbody>
     <tr *ngFor="let i of dataEducational; let x = index">
-      <th scope="row" style="padding-top: 15px;">{{ x + 1 }}</th>
-      <td style="padding-top: 15px;">
+      <th scope="row" style="padding-top: 15px">{{ x + 1 }}</th>
+      <td style="padding-top: 15px">
         {{ i.userID }}
       </td>
-      <td style="padding-top: 15px;">
+      <td style="padding-top: 15px">
         {{ i.titlename }}{{ i.fname }}&nbsp;&nbsp;{{ i.lname }}
       </td>
       <td>
@@ -166,7 +166,7 @@
         &nbsp;&nbsp;
         <button
           type="button"
-          class="btn btn-secondary btn-sm"
+          class="btn btn-primary btn-sm"
           [disabled]="i.file_class_schedule == null"
         >
           <a
@@ -178,7 +178,7 @@
         &nbsp;&nbsp;
         <button
           type="button"
-          class="btn btn-success btn-sm"
+          class="btn btn-primary btn-sm"
           [disabled]="i.file_course == null"
         >
           <a href="{{ http.PathPDF }}{{ i.file_course }}" target="_blank"
@@ -189,7 +189,7 @@
         <span (click)="deleteStudent(i.userID)"
           ><i
             class="fas fa-trash-alt"
-            style="font-size: 18px; color: red; cursor: pointer;"
+            style="font-size: 18px; color: red; cursor: pointer"
             title="ลบข้อมูล"
           ></i
         ></span>

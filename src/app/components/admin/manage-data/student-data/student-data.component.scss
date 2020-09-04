@@ -1,18 +1,14 @@
-.nav-link.active{
-  color:#683ab7;
-  font-weight: bold;
-
-}
-::ng-deep.mat-tab-label.mat-tab-label-active:not(.mat-tab-disabled),
- ::ng-deep.mat-tab-label.mat-tab-label-active.cdk-keyboard-focused:not(.mat-tab-disabled) {
+.nav-link.active {
   color: #683ab7;
   font-weight: bold;
+}
+::ng-deep.mat-tab-label.mat-tab-label-active:not(.mat-tab-disabled),
+::ng-deep.mat-tab-label.mat-tab-label-active.cdk-keyboard-focused:not(.mat-tab-disabled) {
+  color: #683ab7;
+  font-weight: bold;
+}
 
-
- }
-
-
-
- button[disabled]{
+button[disabled] {
+  background-color: #828283;
   pointer-events: none;
- }
+}
