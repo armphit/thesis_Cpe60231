@@ -523,10 +523,19 @@ export class ManageDataComponent implements OnInit {
       console.log(getData);
       if (getData.connect) {
         if (getData.response.result) {
-          Swal.fire('เพิ่มปีการศึกษาเสร็จสิ้น', '', 'success');
+          Swal.fire({
+            position: 'top',
+            icon: 'success',
+            title: 'เพิ่มข้อมูลสำเร็จ',
+            showConfirmButton: false,
+            timer: 1500,
+          });
           let win: any = window;
           win.$('#addCalendar').modal('hide');
           this.getCalendar();
+          setTimeout(function () {
+            window.location.reload(true);
+          }, 1500);
         } else if (getData.response.error) {
           Swal.fire(
             'ไม่สามารถเพิ่มปีการศึกษาได้',
@@ -613,6 +622,10 @@ export class ManageDataComponent implements OnInit {
               timer: 1500,
             });
             this.getCalendar();
+            setTimeout(function () {
+              window.location.reload(true);
+            }, 1500);
+            // window.location.reload();
           } else {
             Swal.fire('ไม่สามารถลบข้อมูลได้!', '', 'error');
           }

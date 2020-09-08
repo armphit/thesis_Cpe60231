@@ -1,5 +1,9 @@
-<div class="panel-body" style="margin-left: 10px; margin-right: 10px">
-  คณะ:&nbsp;&nbsp;<mat-form-field style="width: 30%">
+<div
+  class="panel-body"
+  style="margin-left: 10px; margin-right: 10px"
+  *ngIf="advice_year.value._year"
+>
+  <!-- คณะ:&nbsp;&nbsp;<mat-form-field style="width: 30%">
     <mat-label>โปรดเลือกคณะ</mat-label>
     <mat-select required>
       <mat-option
@@ -70,32 +74,110 @@
         >
           {{ i.study_group_name }}
         </mat-option>
-      </mat-select> </mat-form-field
-    ><span *ngIf="groupID!" style="padding-left: 15px"
-      >นักศึกษา : &nbsp;&nbsp;<mat-form-field style="width: 20%">
-        <mat-label>โปรดเลือกนักศึกษา</mat-label>
+      </mat-select>
+    </mat-form-field>
+  </div> -->
+  <div class="row">
+    <div class="col-sm-6">
+      คณะ:&nbsp;&nbsp;<mat-form-field style="width: 80%">
+        <mat-label>โปรดเลือกคณะ</mat-label>
+        <mat-select required>
+          <mat-option
+            *ngFor="let i of dataFaculty; let x = index"
+            [value]="i.name"
+            (click)="clickFaculty(i.code, i.name)"
+          >
+            {{ i.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-6" *ngIf="codeFaculty!">
+      สาขา:&nbsp;&nbsp;<mat-form-field style="width: 80%">
+        <mat-label>โปรดเลือกสาขา</mat-label>
+        <mat-select required>
+          <mat-option
+            *ngFor="let i of dataMajor; let x = index"
+            [value]="i.name"
+            (click)="clickMajor(i.code, i.name, i.acronym)"
+          >
+            {{ i.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6" *ngIf="codeMajor!">
+      โปรแกรมวิชา:&nbsp;&nbsp;<mat-form-field style="width: 80%">
+        <mat-label>โปรดเลือกโปรแกรมวิชา</mat-label>
         <mat-select required>
           <mat-option
             style="width: auto"
-            *ngFor="let i of dataStudent; let x = index"
-            [value]="i.userID"
-            (click)="clickStudent(i)"
+            *ngFor="let i of dataBranch; let x = index"
+            [value]="i.name"
+            (click)="clickBranch(i.code, i.name, i.acronym)"
           >
-            {{ i.titlename }}{{ i.fname }}&nbsp;&nbsp;{{ i.lname }}
+            {{ i.name }}
           </mat-option>
         </mat-select>
-      </mat-form-field></span
-    >
+      </mat-form-field>
+    </div>
+    <div class="col-sm-6" *ngIf="codeBranch!">
+      กลุ่มเรียน:&nbsp;&nbsp;<mat-form-field>
+        <mat-label>โปรดเลือกกลุ่มเรียน</mat-label>
+        <mat-select required>
+          <mat-option
+            style="width: auto"
+            *ngFor="let i of dataGroup; let x = index"
+            [value]="i.study_group_id"
+            (click)="
+              clickGroup(
+                i.study_group_id,
+                i.study_group_name,
+                i.titlename,
+                i.fname,
+                i.lname
+              )
+            "
+          >
+            {{ i.study_group_name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </div>
-  <br />
-  <span *ngIf="groupID!"
-    >อาจารย์ที่ปรึกษา : &nbsp;&nbsp;{{ groupUser_name }}</span
-  >
+  <div class="row" *ngIf="groupID!" style="padding-bottom: 15px">
+    <div class="col-sm-6">
+      หัวหน้าสาขาวิชา :&nbsp;&nbsp;{{ nameBranchhead }}
+    </div>
+    <div class="col-sm-6">
+      <span></span>อาจารย์ที่ปรึกษา : &nbsp;&nbsp;{{ groupUser_name }}
+    </div>
+  </div>
+  <div *ngIf="groupID!">
+    <form [formGroup]="advice_year">
+      ปีการศึกษา : &nbsp;&nbsp;
+      <mat-form-field style="width: 25%">
+        <mat-label>เลือกปีการศึกษา</mat-label>
+        <mat-select
+          formControlName="_year"
+          (selectionChange)="getYearAdvice($event.value)"
+          required
+        >
+          <mat-option *ngFor="let i of range" [value]="i.value">
+            {{ i.value }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </div>
 </div>
-<table class="table" *ngIf="dataStudent_id!">
+<table class="table" *ngIf="groupID!">
   <thead class="thead-dark">
     <tr>
       <th scope="col">ลำดับ</th>
+      <th scope="col">ชื่อผู้ขอคำปรึกษา</th>
       <th scope="col">เรื่อง</th>
       <th scope="col">วันที่ขอคำปรึกษา</th>
       <th scope="col"></th>
@@ -106,6 +188,9 @@
       <th scope="row" style="padding-top: 15px">{{ x + 1 }}</th>
       <td style="padding-top: 15px">
         {{ i.subject_advice }}
+      </td>
+      <td style="padding-top: 15px">
+        {{ i.titlename }}{{ i.fname }}{{ " " }}{{ i.lname }}
       </td>
       <td style="padding-top: 15px">
         {{ getDate(i.advice_date) }}
@@ -202,11 +287,15 @@
                   </button>
                 </div>
                 <div *ngIf="dataReply_id.advice_advisor == null">
-                  <button type="button" class="btn btn-primary btn-sm">
-                    Export to Excel
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="clickPDF_st()"
+                  >
+                    Export to PDF
                   </button>
                   &nbsp;&nbsp;&nbsp;
-                  <button type="button" class="btn btn-primary btn-sm">
+                  <button type="button" class="btn btn-primary">
                     Export to Word
                   </button>
                 </div>
@@ -226,3 +315,14 @@
     </tr>
   </tbody>
 </table>
+
+<div
+  *ngIf="groupID! && dataAdvice!"
+  style="padding-left: 20px; padding-bottom: 20px"
+>
+  <button type="button" class="btn btn-primary" (click)="clickPDF_group()">
+    Export to PDF
+  </button>
+  &nbsp;&nbsp;&nbsp;
+  <button type="button" class="btn btn-primary">Export to Word</button>
+</div>

@@ -1,12 +1,12 @@
-<mat-tab-group>
+<mat-tab-group *ngIf="yearNow!">
   <mat-tab label="สำหรับอาจารย์ที่ปรึกษา"
-    ><div class="panel-body" style="margin-left: 10px; margin-right: 10px;">
+    ><div class="panel-body" style="margin-left: 10px; margin-right: 10px">
       <div>
-        กลุ่มเรียน : &nbsp;&nbsp;<mat-form-field style="width: 15%;">
+        กลุ่มเรียน : &nbsp;&nbsp;<mat-form-field style="width: 15%">
           <mat-label>โปรดเลือกกลุ่มเรียน</mat-label>
           <mat-select required>
             <mat-option
-              style="width: auto;"
+              style="width: auto"
               *ngFor="let i of dataGroup; let x = index"
               [value]="i.study_group_id"
               (click)="clickGroup(i)"
@@ -19,7 +19,7 @@
       <div *ngIf="codeGroup!">
         <form [formGroup]="advice_year">
           ปีการศึกษา : &nbsp;&nbsp;
-          <mat-form-field style="width: 25%;">
+          <mat-form-field style="width: 25%">
             <mat-label>เลือกปีการศึกษา</mat-label>
             <mat-select
               formControlName="_year"
@@ -65,7 +65,7 @@
               <div class="modal-body">
                 <div>
                   <strong>ประเภทพฤติกรรมดีเด่น :</strong>&nbsp;&nbsp;
-                  <mat-form-field style="width: 25;">
+                  <mat-form-field style="width: 25">
                     <mat-label>เลือกประเภท</mat-label>
                     <mat-select formControlName="type" required>
                       <mat-option value="ด้านการเรียนดีเด่น"
@@ -84,17 +84,18 @@
                   </mat-form-field>
                 </div>
                 <div>
-                  <mat-form-field style="width: 100%;" appearance="fill">
+                  <mat-form-field style="width: 100%" appearance="fill">
                     <mat-label>รายละเอียด</mat-label>
                     <textarea
                       matInput
                       formControlName="detail"
                       rows="3"
+                      required
                     ></textarea>
                   </mat-form-field>
                 </div>
                 <div>
-                  <mat-form-field style="width: 100%;" appearance="fill">
+                  <mat-form-field style="width: 100%" appearance="fill">
                     <mat-label>รางวัลที่ได้รับ</mat-label>
                     <textarea
                       matInput
@@ -104,7 +105,7 @@
                   </mat-form-field>
                 </div>
                 <div>
-                  <mat-form-field style="width: 100%;" appearance="fill">
+                  <mat-form-field style="width: 100%" appearance="fill">
                     <mat-label>หมายเหตุ</mat-label>
                     <textarea
                       matInput
@@ -115,11 +116,11 @@
                 </div>
 
                 <div>
-                  นักศึกษา : &nbsp;&nbsp;<mat-form-field style="width: 50%;">
+                  นักศึกษา : &nbsp;&nbsp;<mat-form-field style="width: 50%">
                     <mat-label>โปรดเลือกนักศึกษา</mat-label>
                     <mat-select formControlName="student" required>
                       <mat-option
-                        style="width: auto;"
+                        style="width: auto"
                         *ngFor="let i of dataStudent; let x = index"
                         [value]="i.userID"
                       >
@@ -138,9 +139,7 @@
                   >
                     ยกเลิก
                   </button>
-                  <button type="submit" class="btn btn-success">
-                    บันทึก
-                  </button>
+                  <button type="submit" class="btn btn-success">บันทึก</button>
                 </div>
               </div>
             </form>
@@ -176,7 +175,7 @@
             <span (click)="clickUpdateGoodness(i)"
               ><i
                 class="fas fa-edit"
-                style="font-size: 18px; cursor: pointer;"
+                style="font-size: 18px; cursor: pointer"
                 title="แก้ไขข้อมูล"
                 data-toggle="modal"
                 data-target="#updateGoodness"
@@ -186,7 +185,7 @@
             <span (click)="deleteGoodness(i.osb_id)"
               ><i
                 class="fas fa-trash-alt"
-                style="font-size: 18px; color: red; cursor: pointer;"
+                style="font-size: 18px; color: red; cursor: pointer"
                 title="ลบข้อมูล"
               ></i
             ></span>
@@ -212,7 +211,7 @@
                 <div class="modal-body">
                   <div>
                     <strong>ประเภทพฤติกรรมดีเด่น :</strong>&nbsp;&nbsp;
-                    <mat-form-field style="width: 25;">
+                    <mat-form-field style="width: 25">
                       <mat-label>เลือกประเภท</mat-label>
                       <mat-select formControlName="type" required>
                         <mat-option value="ด้านการเรียนดีเด่น"
@@ -231,17 +230,18 @@
                     </mat-form-field>
                   </div>
                   <div>
-                    <mat-form-field style="width: 100%;" appearance="fill">
+                    <mat-form-field style="width: 100%" appearance="fill">
                       <mat-label>รายละเอียด</mat-label>
                       <textarea
                         matInput
                         formControlName="detail"
                         rows="3"
+                        required
                       ></textarea>
                     </mat-form-field>
                   </div>
                   <div>
-                    <mat-form-field style="width: 100%;" appearance="fill">
+                    <mat-form-field style="width: 100%" appearance="fill">
                       <mat-label>รางวัลที่ได้รับ</mat-label>
                       <textarea
                         matInput
@@ -251,7 +251,7 @@
                     </mat-form-field>
                   </div>
                   <div>
-                    <mat-form-field style="width: 100%;" appearance="fill">
+                    <mat-form-field style="width: 100%" appearance="fill">
                       <mat-label>หมายเหตุ</mat-label>
                       <textarea
                         matInput
@@ -262,11 +262,11 @@
                   </div>
 
                   <div>
-                    นักศึกษา : &nbsp;&nbsp;<mat-form-field style="width: 50%;">
+                    นักศึกษา : &nbsp;&nbsp;<mat-form-field style="width: 50%">
                       <mat-label>โปรดเลือกนักศึกษา</mat-label>
                       <mat-select formControlName="student" required>
                         <mat-option
-                          style="width: auto;"
+                          style="width: auto"
                           *ngFor="let i of dataStudent; let x = index"
                           [value]="i.userID"
                         >
@@ -288,9 +288,7 @@
                     ยกเลิก
                   </button>
 
-                  <button type="submit" class="btn btn-success">
-                    ตกลง
-                  </button>
+                  <button type="submit" class="btn btn-success">ตกลง</button>
                 </div>
               </form>
             </div>
@@ -298,7 +296,7 @@
         </div>
       </tbody>
     </table>
-    <div *ngIf="dataGoodness != null" style="padding-left: 15px;">
+    <div *ngIf="dataGoodness != null" style="padding-left: 15px">
       <button type="button" class="btn btn-primary" (click)="makePdf()">
         Export to PDF</button
       >&nbsp;&nbsp;<button
@@ -311,13 +309,13 @@
     </div>
   </mat-tab>
   <mat-tab label="สำหรับหัวหน้าสาขา" *ngIf="dataBranchhead!">
-    <div class="panel-body" style="margin-left: 10px; margin-right: 10px;">
+    <div class="panel-body" style="margin-left: 10px; margin-right: 10px">
       <div>
-        โปรแกรมวิชา:&nbsp;&nbsp;<mat-form-field style="width: 50%;">
+        โปรแกรมวิชา:&nbsp;&nbsp;<mat-form-field style="width: 50%">
           <mat-label>โปรดเลือกโปรแกรมวิชา</mat-label>
           <mat-select required>
             <mat-option
-              style="width: auto;"
+              style="width: auto"
               *ngFor="let i of dataBranch; let x = index"
               [value]="i.name"
               (click)="clickBranch(i)"
@@ -328,11 +326,11 @@
         </mat-form-field>
       </div>
       <div *ngIf="dataGroup_Branch!">
-        กลุ่มเรียน : &nbsp;&nbsp;<mat-form-field style="width: 15%;">
+        กลุ่มเรียน : &nbsp;&nbsp;<mat-form-field style="width: 15%">
           <mat-label>โปรดเลือกกลุ่มเรียน</mat-label>
           <mat-select required>
             <mat-option
-              style="width: auto;"
+              style="width: auto"
               *ngFor="let i of dataGroup_Branch; let x = index"
               [value]="i.study_group_id"
               (click)="clickGroup_Branch(i.study_group_id)"
@@ -345,7 +343,7 @@
       <div *ngIf="codeGroup_Branch!">
         <form [formGroup]="goodness_year">
           ปีการศึกษา : &nbsp;&nbsp;
-          <mat-form-field style="width: 25%;">
+          <mat-form-field style="width: 25%">
             <mat-label>เลือกปีการศึกษา</mat-label>
             <mat-select
               formControlName="_year"

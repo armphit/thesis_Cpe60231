@@ -10,6 +10,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { AdviceDataComponent } from './advice-data/advice-data.component';
 import { SemesterDataComponent } from './manage-data/semester-data/semester-data.component';
 import { GoodnessRecordComponent } from './goodness-record/goodness-record.component';
+import { ActionPlanComponent } from './action-plan/action-plan.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,14 @@ import { GoodnessRecordComponent } from './goodness-record/goodness-record.compo
     AdviceDataComponent,
     SemesterDataComponent,
     GoodnessRecordComponent,
+    ActionPlanComponent,
   ],
-  imports: [CommonModule, AdminRoutingModule, SharedModules, MatIconModule],
+  imports: [
+    CommonModule,
+    AdminRoutingModule,
+    SharedModules,
+    MatIconModule,
+    NgxPaginationModule,
+  ],
 })
 export class AdminModule {}

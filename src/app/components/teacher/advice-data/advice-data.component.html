@@ -1,4 +1,8 @@
-<div class="panel-body" style="margin-left: 10px; margin-right: 10px">
+<div
+  class="panel-body"
+  style="margin-left: 10px; margin-right: 10px"
+  *ngIf="year_now!"
+>
   <div>
     กลุ่มเรียน : &nbsp;&nbsp;<mat-form-field style="width: 15%">
       <mat-label>โปรดเลือกกลุ่มเรียน</mat-label>
@@ -32,7 +36,7 @@
     </form>
   </div>
 </div>
-<mat-tab-group>
+<mat-tab-group *ngIf="codeGroup!">
   <mat-tab label="ข้อมูลการขอคำปรึกษา">
     <div *ngIf="codeGroup!" style="padding: 15px">
       <button
@@ -202,6 +206,7 @@
                           matInput
                           formControlName="replyAdvice"
                           rows="3"
+                          required
                         ></textarea>
                       </mat-form-field>
                     </div>
@@ -324,7 +329,7 @@
     </table>
   </mat-tab>
   <mat-tab label="ข้อมูลการตอบคำปรึกษา">
-    <table class="table" *ngIf="dataGroup != null">
+    <table class="table" *ngIf="dataAdvice_notNull != null">
       <thead class="thead-dark">
         <tr>
           <th scope="col">ลำดับ</th>
@@ -517,6 +522,7 @@
                         matInput
                         formControlName="suggestion"
                         rows="3"
+                        required
                       ></textarea>
                     </mat-form-field>
                     <br />
@@ -536,6 +542,7 @@
                         matInput
                         [matDatepicker]="picker"
                         formControlName="to"
+                        required
                       />
                       <mat-datepicker-toggle
                         matSuffix
@@ -746,6 +753,7 @@
                         matInput
                         formControlName="suggestion"
                         rows="3"
+                        required
                       ></textarea>
                     </mat-form-field>
                     <br />
@@ -765,6 +773,7 @@
                         matInput
                         [matDatepicker]="picker"
                         formControlName="to"
+                        required
                       />
                       <mat-datepicker-toggle
                         matSuffix

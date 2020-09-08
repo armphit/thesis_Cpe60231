@@ -10,7 +10,7 @@
       "
     >
       <div class="panel-heading">
-        <h2 style="margin-bottom: 2px;">ข้อมูลส่วนตัว</h2>
+        <h2 style="margin-bottom: 2px">ข้อมูลส่วนตัว</h2>
       </div>
       <div class="panel-body" *ngFor="let i of dataStudent">
         <p><strong>รหัสนักศึกษา :</strong> &nbsp;&nbsp;{{ i.userID }}</p>
@@ -32,7 +32,7 @@
       </div>
     </div>
   </mat-tab>
-  <mat-tab label="ข้อมูลการศึกษา">
+  <mat-tab label="ข้อมูลการศึกษา" *ngIf="fileUpload.value.year">
     <div
       class="panel panel-default"
       style="
@@ -43,11 +43,11 @@
       "
     >
       <div class="panel-heading">
-        <h2 style="margin-bottom: 2px;">ข้อมูลการศึกษา</h2>
+        <h2 style="margin-bottom: 2px">ข้อมูลการศึกษา</h2>
       </div>
       <div class="panel-body">
         <div class="row">
-          <div class="col-sm-3" style="padding-left: 15px;">
+          <div class="col-sm-3" style="padding-left: 15px">
             ประวัติส่วนตัว :&nbsp;&nbsp;
             <button
               type="button"
@@ -91,7 +91,7 @@
           (ngSubmit)="fileUpload.valid ? onClickupload() : ''"
         >
           ภาคการศึกษา :
-          <mat-form-field style="width: 13%;">
+          <mat-form-field style="width: 13%">
             <mat-label>เลือกปีการศึกษา</mat-label>
             <mat-select
               formControlName="year"
@@ -105,7 +105,7 @@
             </mat-select>
           </mat-form-field>
           /
-          <mat-form-field style="width: 25;">
+          <mat-form-field style="width: 25">
             <mat-label>เลือกภาคการเรียน</mat-label>
             <mat-select
               formControlName="term"
@@ -120,7 +120,7 @@
           </mat-form-field>
 
           <div class="row">
-            <div class="col-sm-2.5" style="padding-left: 20px;">
+            <div class="col-sm-2.5" style="padding-left: 20px">
               <mat-form-field>
                 <mat-label>โปรดเลือกไฟล์ที่ต้องการ</mat-label>
                 <mat-select
@@ -133,7 +133,7 @@
               </mat-form-field>
             </div>
             <div class="col">
-              <div style="padding-top: 15px;">
+              <div style="padding-top: 15px">
                 <div class="col-md-4">
                   <input
                     type="file"
@@ -167,7 +167,7 @@
             </button>
           </div>
 
-          <div style="padding-top: 20px;">
+          <div style="padding-top: 20px">
             ผลการเรียน :&nbsp; &nbsp;<button
               *ngIf="results!"
               type="button"
@@ -178,7 +178,7 @@
               >
             </button>
           </div>
-          <div style="padding-top: 20px;">
+          <div style="padding-top: 20px">
             แผนการเรียน : &nbsp;&nbsp;
             <button type="button" class="btn btn-success btn-sm">
               <a href="{{ http.PathPDF }}{{ dataCurriculum }}" target="_blank"

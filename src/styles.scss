@@ -32,10 +32,6 @@ mat-form-field {
   z-index: 9999; /* Sit on top - higher than any other z-index in your site*/
 }
 
-button[disabled] {
-  pointer-events: none;
-}
-
 ::ng-deep.mat-tab-label.mat-tab-label-active:not(.mat-tab-disabled),
 ::ng-deep.mat-tab-label.mat-tab-label-active.cdk-keyboard-focused:not(.mat-tab-disabled) {
   color: #683ab7;

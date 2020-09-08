@@ -6,17 +6,18 @@
     margin-top: 10px;
     margin-bottom: 10px;
   "
+  *ngIf="year_now!"
 >
   <div class="panel-heading">
     <h2 style="margin-bottom: 2px">การขอคำปรึกษา</h2>
   </div>
   <div class="panel-body" *ngFor="let i of dataStudent">
-    <p>รหัสนักศึกษา : {{ i.userID }}</p>
+    <!-- <p>รหัสนักศึกษา : {{ i.userID }}</p>
     <p>
       ชื่อ - นามสกุล :{{ i.titlename }}{{ i.fname }}&nbsp;&nbsp;{{ i.lname }}
     </p>
     <p>กลุ่มเรียน :{{ i.nameG }}</p>
-    <p>อาจารย์ที่ปรึกษา:{{ i.t }}{{ i.f }}&nbsp;&nbsp;{{ i.l }}</p>
+    <p>อาจารย์ที่ปรึกษา:{{ i.t }}{{ i.f }}&nbsp;&nbsp;{{ i.l }}</p> -->
     <div id="calender_yearr">
       <form [formGroup]="advice_year">
         ปีการศึกษา : &nbsp;&nbsp;
@@ -354,40 +355,3 @@
     </div>
   </div>
 </form>
-
-<!-- Button to Open the Modal -->
-<button
-  type="button"
-  class="btn btn-primary"
-  data-toggle="modal"
-  data-target="#myModal"
->
-  Open modal
-</button>
-
-<!-- The Modal -->
-<div class="modal" id="myModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">Modal Heading</h4>
-        <button type="button" class="close" data-dismiss="modal">
-          &times;
-        </button>
-      </div>
-
-      <!-- Modal body -->
-      <div class="modal-body" style="word-wrap: break-word">
-        ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffhmhgvhmghmghmhgmhgm
-      </div>
-
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
-</div>

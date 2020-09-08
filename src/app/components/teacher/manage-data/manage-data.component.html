@@ -3,10 +3,7 @@
     <div *ngIf="dataAdvisor != null">
       <mat-tab-group>
         <mat-tab label="ข้อมูลกลุ่มเรียน">
-          <div
-            class="panel-body"
-            style="margin-left: 10px; margin-right: 10px;"
-          >
+          <div class="panel-body" style="margin-left: 10px; margin-right: 10px">
             <form
               [formGroup]="formGroup"
               #formChange="ngForm"
@@ -37,11 +34,11 @@
                     <!-- Modal body -->
                     <div class="modal-body">
                       โปรแกรมวิชา : &nbsp;&nbsp;
-                      <mat-form-field style="width: 80%;">
+                      <mat-form-field style="width: 80%">
                         <mat-label>โปรดเลือกโปรแกรมวิชา</mat-label>
                         <mat-select formControlName="brunch" required>
                           <mat-option
-                            style="width: auto;"
+                            style="width: auto"
                             *ngFor="let i of dataBranch; let x = index"
                             [value]="i.code"
                             (click)="clickBranch(i.code, i.name, i.acronym)"
@@ -67,7 +64,7 @@
                       <div class="row">
                         <div
                           class="col-sm-3"
-                          style="padding-top: 5px; padding-left: 15px;"
+                          style="padding-top: 5px; padding-left: 15px"
                         >
                           แผนการเรียน :
                         </div>
@@ -130,11 +127,11 @@
             </thead>
             <tbody>
               <tr *ngFor="let i of dataGroup; let x = index">
-                <th scope="row" style="padding-top: 15px;">{{ x + 1 }}</th>
-                <td style="padding-top: 15px;">
+                <th scope="row" style="padding-top: 15px">{{ x + 1 }}</th>
+                <td style="padding-top: 15px">
                   {{ i.study_group_name }}
                 </td>
-                <td style="padding-top: 15px;">
+                <td style="padding-top: 15px">
                   {{ i.name }}
                 </td>
                 <td>
@@ -160,7 +157,7 @@
                     "
                     ><i
                       class="fas fa-edit"
-                      style="font-size: 18px; cursor: pointer;"
+                      style="font-size: 18px; cursor: pointer"
                       title="แก้ไขข้อมูล"
                       data-toggle="modal"
                       data-target="#updateGroup"
@@ -170,7 +167,7 @@
                   <span (click)="deleteGroup(i.study_group_id)"
                     ><i
                       class="fas fa-trash-alt"
-                      style="font-size: 18px; color: red; cursor: pointer;"
+                      style="font-size: 18px; color: red; cursor: pointer"
                       title="ลบข้อมูล"
                     ></i
                   ></span>
@@ -201,11 +198,11 @@
 
                       <div class="modal-body">
                         โปรแกรมวิชา : &nbsp;&nbsp;
-                        <mat-form-field style="width: 80%;">
+                        <mat-form-field style="width: 80%">
                           <mat-label>โปรดเลือกโปรแกรมวิชา</mat-label>
                           <mat-select formControlName="brunchEdit" required>
                             <mat-option
-                              style="width: auto;"
+                              style="width: auto"
                               *ngFor="let i of dataBranchEdit; let x = index"
                               [value]="i.code"
                               (click)="clickBranchEdit(i.code)"
@@ -231,7 +228,7 @@
                         <div class="row">
                           <div
                             class="col-sm-1.9"
-                            style="padding-top: 5px; padding-left: 15px;"
+                            style="padding-top: 5px; padding-left: 15px"
                           >
                             แผนการเรียน :
                           </div>
@@ -291,16 +288,13 @@
             </tbody>
           </table>
         </mat-tab>
-        <mat-tab label="ข้อมูลนักศึกษา">
-          <div
-            class="panel-body"
-            style="margin-left: 10px; margin-right: 10px;"
-          >
-            กลุ่มเรียน : &nbsp;&nbsp;<mat-form-field style="width: 15%;">
+        <mat-tab label="ข้อมูลนักศึกษา" *ngIf="formYearTerm.value.year!">
+          <div class="panel-body" style="margin-left: 10px; margin-right: 10px">
+            กลุ่มเรียน : &nbsp;&nbsp;<mat-form-field style="width: 15%">
               <mat-label>โปรดเลือกกลุ่มเรียน</mat-label>
               <mat-select required>
                 <mat-option
-                  style="width: auto;"
+                  style="width: auto"
                   *ngFor="let i of dataGroup; let x = index"
                   [value]="i.study_group_id"
                   (click)="clickGroup(i.study_group_id)"
@@ -313,7 +307,7 @@
             <form [formGroup]="formYearTerm" #formChange="ngForm">
               <span *ngIf="codeGroup!"
                 >ภาคการศึกษา : &nbsp;&nbsp;
-                <mat-form-field style="width: 13%;">
+                <mat-form-field style="width: 13%">
                   <mat-label>เลือกปีการศึกษา</mat-label>
                   <mat-select
                     formControlName="year"
@@ -327,7 +321,7 @@
                   </mat-select>
                 </mat-form-field>
                 /
-                <mat-form-field style="width: 25;">
+                <mat-form-field style="width: 25">
                   <mat-label>เลือกภาคการเรียน</mat-label>
                   <mat-select
                     formControlName="term"
@@ -345,7 +339,7 @@
             <div class="row" *ngIf="codeGroup!">
               <div
                 class="col-md-2.9"
-                style="padding-top: 5px; padding-left: 15px;"
+                style="padding-top: 5px; padding-left: 15px"
               >
                 เพิ่มนักศึกษา :
               </div>
@@ -397,13 +391,13 @@
                   let x = index
                 "
               >
-                <th scope="row" style="padding-top: 15px;">
+                <th scope="row" style="padding-top: 15px">
                   {{ pageStudent * 10 - 10 + (x + 1) }}
                 </th>
-                <td style="padding-top: 15px;">
+                <td style="padding-top: 15px">
                   {{ i.userID }}
                 </td>
-                <td style="padding-top: 15px;">
+                <td style="padding-top: 15px">
                   {{ i.titlename }}{{ i.fname }}&nbsp;&nbsp;{{ i.lname }}
                 </td>
                 <td>
@@ -446,7 +440,7 @@
                   <span (click)="deleteStudent(i.userID)"
                     ><i
                       class="fas fa-trash-alt"
-                      style="font-size: 18px; color: red; cursor: pointer;"
+                      style="font-size: 18px; color: red; cursor: pointer"
                       title="ลบข้อมูล"
                     ></i
                   ></span>
@@ -454,24 +448,24 @@
               </tr>
             </tbody>
           </table>
-          <pagination-controls
-            id="pageStudent"
-            *ngIf="dataEducational != null && dataEducational.length > 10"
-            responsive="true"
-            previousLabel="ย้อนกลับ"
-            nextLabel="ถัดไป"
-            (pageChange)="pageStudent = $event"
-          ></pagination-controls>
+          <div class="text-center">
+            <pagination-controls
+              id="pageStudent"
+              *ngIf="dataEducational != null && dataEducational.length > 10"
+              responsive="true"
+              previousLabel="ย้อนกลับ"
+              nextLabel="ถัดไป"
+              (pageChange)="pageStudent = $event"
+            ></pagination-controls>
+          </div>
         </mat-tab>
+
         <mat-tab label="ข้อมูลปีการศึกษา">
-          <div
-            class="panel-body"
-            style="margin-left: 10px; margin-right: 10px;"
-          >
+          <div class="panel-body" style="margin-left: 10px; margin-right: 10px">
             <div id="calender_yearr">
               <form [formGroup]="date_year">
                 ภาคการศึกษา : &nbsp;&nbsp;
-                <mat-form-field style="width: 15%;">
+                <mat-form-field style="width: 15%">
                   <mat-label>เลือกปีการศึกษา</mat-label>
                   <mat-select
                     formControlName="_year"
@@ -492,7 +486,7 @@
               data-target="#addCalendar"
               (click)="clickCalendar()"
             >
-              จัดการข้อมูลปีการศึกษา
+              <i class="fas fa-cog"></i>&nbsp;จัดการข้อมูลปีการศึกษา
             </button>
             <br /><br />
             <table class="table">
@@ -517,7 +511,7 @@
                     <span (click)="clickEditCalendar(i)"
                       ><i
                         class="fas fa-edit"
-                        style="font-size: 18px; cursor: pointer;"
+                        style="font-size: 18px; cursor: pointer"
                         title="แก้ไขข้อมูล"
                         data-toggle="modal"
                         data-target="#editCalendar"
@@ -527,7 +521,7 @@
                     <span (click)="deleteCalendar(i.year, i.term)"
                       ><i
                         class="fas fa-trash-alt"
-                        style="font-size: 18px; color: red; cursor: pointer;"
+                        style="font-size: 18px; color: red; cursor: pointer"
                         title="ลบข้อมูล"
                       ></i
                     ></span>
@@ -561,7 +555,7 @@
                             <div class="modal-body">
                               <div>
                                 ภาคการศึกษา : &nbsp;&nbsp;
-                                <mat-form-field style="width: 25%;">
+                                <mat-form-field style="width: 25%">
                                   <mat-label>เลือกปีการศึกษา</mat-label>
                                   <mat-select
                                     required
@@ -576,7 +570,7 @@
                                   </mat-select>
                                 </mat-form-field>
                                 /
-                                <mat-form-field style="width: 30;">
+                                <mat-form-field style="width: 30">
                                   <mat-label>เลือกภาคการเรียน</mat-label>
                                   <mat-select
                                     formControlName="selected_term"
@@ -597,7 +591,7 @@
 
                               <div>
                                 วันเปิดเทอม - วันปิดเทอม : &nbsp;&nbsp;
-                                <mat-form-field style="width: 120px;">
+                                <mat-form-field style="width: 120px">
                                   <mat-label>โปรดเลือกวันเปิดเทอม</mat-label>
                                   <input
                                     matInput
@@ -611,7 +605,7 @@
                                   <mat-datepicker #picker></mat-datepicker>
                                 </mat-form-field>
                                 &nbsp;&nbsp;-&nbsp;&nbsp;<mat-form-field
-                                  style="width: 120px;"
+                                  style="width: 120px"
                                 >
                                   <mat-label>โปรดเลือกวันปิดเทอม</mat-label>
                                   <input
@@ -670,7 +664,7 @@
                   <div class="modal-body">
                     <div>
                       ภาคการศึกษา : &nbsp;&nbsp;
-                      <mat-form-field style="width: 25%;">
+                      <mat-form-field style="width: 25%">
                         <mat-label>เลือกปีการศึกษา</mat-label>
                         <mat-select required formControlName="selected_year">
                           <mat-option
@@ -683,7 +677,7 @@
                       </mat-form-field>
                       /
                       <mat-form-field
-                        style="width: 30;"
+                        style="width: 30"
                         *ngIf="date_student.value.selected_year"
                       >
                         <mat-label>เลือกภาคการเรียน</mat-label>
@@ -697,7 +691,7 @@
 
                     <div *ngIf="date_student.value.selected_term">
                       วันเปิดเทอม - วันปิดเทอม : &nbsp;&nbsp;
-                      <mat-form-field style="width: 130px;">
+                      <mat-form-field style="width: 130px">
                         <mat-label>โปรดเลือกวันเปิดเทอม</mat-label>
                         <input
                           matInput
@@ -711,7 +705,7 @@
                         <mat-datepicker #picker></mat-datepicker>
                       </mat-form-field>
                       &nbsp;&nbsp;-&nbsp;&nbsp;<mat-form-field
-                        style="width: 130px;"
+                        style="width: 130px"
                       >
                         <mat-label>โปรดเลือกวันปิดเทอม</mat-label>
                         <input
@@ -751,13 +745,13 @@
   </mat-tab>
 
   <mat-tab label="สำหรับหัวหน้าสาขา" *ngIf="dataBranchhead != null">
-    <div class="panel-body" style="margin-left: 10px; margin-right: 10px;">
+    <div class="panel-body" style="margin-left: 10px; margin-right: 10px">
       <div>
-        โปรแกรมวิชา:&nbsp;&nbsp;<mat-form-field style="width: 50%;">
+        โปรแกรมวิชา:&nbsp;&nbsp;<mat-form-field style="width: 50%">
           <mat-label>โปรดเลือกโปรแกรมวิชา</mat-label>
           <mat-select required>
             <mat-option
-              style="width: auto;"
+              style="width: auto"
               *ngFor="let i of dataBranch; let x = index"
               [value]="i.name"
               (click)="clickBranch_Branchhead(i)"
@@ -780,11 +774,11 @@
         </thead>
         <tbody>
           <tr *ngFor="let i of dataGroup_Branch; let x = index">
-            <th scope="row" style="padding-top: 15px;">{{ x + 1 }}</th>
-            <td style="padding-top: 15px;">
+            <th scope="row" style="padding-top: 15px">{{ x + 1 }}</th>
+            <td style="padding-top: 15px">
               {{ i.study_group_name }}
             </td>
-            <td style="padding-top: 15px;">
+            <td style="padding-top: 15px">
               {{ i.titlename }}{{ i.fname }}&nbsp;&nbsp;{{ i.lname }}
             </td>
             <td>

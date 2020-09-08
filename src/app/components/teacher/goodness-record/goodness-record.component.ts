@@ -37,7 +37,7 @@ export class GoodnessRecordComponent implements OnInit {
   public range: Array<any> = [];
   public dataStudent: any = null;
   public formGoodness: FormGroup;
-  private yearNow: any = null;
+  public yearNow: any = null;
   public dataGoodness: any = null;
   public dataBranch: any = null;
   public dataGroup_Branch: any = null;
@@ -445,40 +445,40 @@ export class GoodnessRecordComponent implements OnInit {
           { width: '*', text: '' },
         ];
         console.log(data_st);
-        // for (var i = 0; i < this.dataGoodness.length; i++) {
-        //   let dataaaa2 = [
-        //     { text: String(i + 1), style: '', alignment: '', bold: false },
-        //     {
-        //       text:
-        //         this.dataGoodness[i].titlename +
-        //         this.dataGoodness[i].fname +
-        //         ' ' +
-        //         this.dataGoodness[i].lname,
-        //       style: '',
-        //       alignment: '',
-        //       bold: false,
-        //     },
-        //     {
-        //       text: this.dataGoodness[i].osb_detail,
-        //       style: '',
-        //       alignment: '',
-        //       bold: false,
-        //     },
-        //     {
-        //       text: this.dataGoodness[i].osb_award,
-        //       style: '',
-        //       alignment: '',
-        //       bold: false,
-        //     },
-        //     {
-        //       text: this.dataGoodness[i].osb_note,
-        //       style: '',
-        //       alignment: '',
-        //       bold: false,
-        //     },
-        //   ];
-        //   data_st[1]['table']['body'].push(dataaaa2);
-        // }
+        for (var i = 0; i < this.dataGoodness.length; i++) {
+          let dataaaa2 = [
+            { text: String(i + 1), style: '', alignment: '', bold: false },
+            {
+              text:
+                this.dataGoodness[i].titlename +
+                this.dataGoodness[i].fname +
+                ' ' +
+                this.dataGoodness[i].lname,
+              style: '',
+              alignment: '',
+              bold: false,
+            },
+            {
+              text: this.dataGoodness[i].osb_detail,
+              style: '',
+              alignment: '',
+              bold: false,
+            },
+            {
+              text: this.dataGoodness[i].osb_award,
+              style: '',
+              alignment: '',
+              bold: false,
+            },
+            {
+              text: this.dataGoodness[i].osb_note,
+              style: '',
+              alignment: '',
+              bold: false,
+            },
+          ];
+          data_st[1]['table']['body'].push(dataaaa2);
+        }
         // console.log(data_st[1]['table']['body']);
         const dd = {
           header: {},

@@ -1,8 +1,8 @@
-<div class="panel-body" style="margin-left: 10px; margin-right: 10px;">
+<div class="panel-body" style="margin-left: 10px; margin-right: 10px">
   <div id="calender_yearr">
     <form [formGroup]="date_year">
       ภาคการศึกษา : &nbsp;&nbsp;
-      <mat-form-field style="width: 15%;">
+      <mat-form-field style="width: 15%">
         <mat-label>เลือกปีการศึกษา</mat-label>
         <mat-select
           formControlName="_year"
@@ -23,7 +23,7 @@
     data-target="#addCalendar"
     (click)="clickCalendar()"
   >
-    จัดการข้อมูลปีการศึกษา
+    <i class="fas fa-cog"></i>&nbsp; จัดการข้อมูลปีการศึกษา
   </button>
   <br /><br />
   <table class="table">
@@ -48,7 +48,7 @@
           <span (click)="clickEditCalendar(i)"
             ><i
               class="fas fa-edit"
-              style="font-size: 18px; cursor: pointer;"
+              style="font-size: 18px; cursor: pointer"
               title="แก้ไขข้อมูล"
               data-toggle="modal"
               data-target="#editCalendar"
@@ -58,7 +58,7 @@
           <span (click)="deleteCalendar(i.year, i.term)"
             ><i
               class="fas fa-trash-alt"
-              style="font-size: 18px; color: red; cursor: pointer;"
+              style="font-size: 18px; color: red; cursor: pointer"
               title="ลบข้อมูล"
             ></i
           ></span>
@@ -86,7 +86,7 @@
                   <div class="modal-body">
                     <div>
                       ภาคการศึกษา : &nbsp;&nbsp;
-                      <mat-form-field style="width: 25%;">
+                      <mat-form-field style="width: 25%">
                         <mat-label>เลือกปีการศึกษา</mat-label>
                         <mat-select required formControlName="selected_year">
                           <mat-option
@@ -98,7 +98,7 @@
                         </mat-select>
                       </mat-form-field>
                       /
-                      <mat-form-field style="width: 30;">
+                      <mat-form-field style="width: 30">
                         <mat-label>เลือกภาคการเรียน</mat-label>
                         <mat-select formControlName="selected_term" required>
                           <mat-option value="1">ภาคเรียนที่ 1</mat-option>
@@ -110,7 +110,7 @@
 
                     <div>
                       วันเปิดเทอม - วันปิดเทอม : &nbsp;&nbsp;
-                      <mat-form-field style="width: 120px;">
+                      <mat-form-field style="width: 120px">
                         <mat-label>โปรดเลือกวันเปิดเทอม</mat-label>
                         <input
                           matInput
@@ -124,7 +124,7 @@
                         <mat-datepicker #picker></mat-datepicker>
                       </mat-form-field>
                       &nbsp;&nbsp;-&nbsp;&nbsp;<mat-form-field
-                        style="width: 120px;"
+                        style="width: 120px"
                       >
                         <mat-label>โปรดเลือกวันปิดเทอม</mat-label>
                         <input
@@ -183,7 +183,7 @@
         <div class="modal-body">
           <div>
             ภาคการศึกษา : &nbsp;&nbsp;
-            <mat-form-field style="width: 25%;">
+            <mat-form-field style="width: 25%">
               <mat-label>เลือกปีการศึกษา</mat-label>
               <mat-select required formControlName="selected_year">
                 <mat-option *ngFor="let i of year_study" [value]="i.value">
@@ -193,7 +193,7 @@
             </mat-form-field>
             /
             <mat-form-field
-              style="width: 30;"
+              style="width: 30"
               *ngIf="date_student.value.selected_year"
             >
               <mat-label>เลือกภาคการเรียน</mat-label>
@@ -207,7 +207,7 @@
 
           <div *ngIf="date_student.value.selected_term">
             วันเปิดเทอม - วันปิดเทอม : &nbsp;&nbsp;
-            <mat-form-field style="width: 130px;">
+            <mat-form-field style="width: 130px">
               <mat-label>โปรดเลือกวันเปิดเทอม</mat-label>
               <input
                 matInput
@@ -220,7 +220,7 @@
               ></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
-            &nbsp;&nbsp;-&nbsp;&nbsp;<mat-form-field style="width: 130px;">
+            &nbsp;&nbsp;-&nbsp;&nbsp;<mat-form-field style="width: 130px">
               <mat-label>โปรดเลือกวันปิดเทอม</mat-label>
               <input matInput [matDatepicker]="picker3" formControlName="end" />
               <mat-datepicker-toggle
@@ -236,9 +236,7 @@
             <button type="button" class="btn btn-danger" data-dismiss="modal">
               ยกเลิก
             </button>
-            <button type="sumit" class="btn btn-success">
-              บันทึก
-            </button>
+            <button type="sumit" class="btn btn-success">บันทึก</button>
           </div>
         </div>
       </form>

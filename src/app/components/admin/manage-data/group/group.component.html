@@ -1,5 +1,5 @@
-<div class="panel-body" style="margin-left: 10px; margin-right: 10px;">
-  คณะ:&nbsp;&nbsp;<mat-form-field style="width: 30%;">
+<div class="panel-body" style="margin-left: 10px; margin-right: 10px">
+  <!-- คณะ:&nbsp;&nbsp;<mat-form-field style="width: 30%;">
     <mat-label>โปรดเลือกคณะ</mat-label>
     <mat-select required>
       <mat-option
@@ -48,7 +48,7 @@
     <div class="modal" id="addHead">
       <div class="modal-dialog">
         <div class="modal-content">
-          <!-- Modal Header -->
+
           <div class="modal-header">
             <h2 class="modal-title">แก้ไขหัวหน้าสาขา</h2>
             <button type="button" class="close" data-dismiss="modal">
@@ -56,7 +56,7 @@
             </button>
           </div>
 
-          <!-- Modal body -->
+
           <div class="modal-body">
             เลือกหัวหน้าสาขา : &nbsp;&nbsp;
             <mat-form-field style="width: 30%;">
@@ -72,7 +72,7 @@
             </mat-form-field>
           </div>
 
-          <!-- Modal footer -->
+
           <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">
               ยกเลิก
@@ -98,8 +98,113 @@
         </mat-option>
       </mat-select>
     </mat-form-field></span
-  >
-  <br />
+  > -->
+  <div class="row">
+    <div class="col-sm-6">
+      คณะ:&nbsp;&nbsp;<mat-form-field style="width: 80%">
+        <mat-label>โปรดเลือกคณะ</mat-label>
+        <mat-select required>
+          <mat-option
+            *ngFor="let i of dataFaculty; let x = index"
+            [value]="i.name"
+            (click)="clickFaculty(i.code, i.name)"
+          >
+            {{ i.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-6" *ngIf="codeFaculty!">
+      สาขา:&nbsp;&nbsp;<mat-form-field style="width: 80%">
+        <mat-label>โปรดเลือกสาขา</mat-label>
+        <mat-select required>
+          <mat-option
+            *ngFor="let i of dataMajor; let x = index"
+            [value]="i.name"
+            (click)="clickMajor(i.code, i.name, i.acronym)"
+          >
+            {{ i.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6" *ngIf="codeMajor!">
+      โปรแกรมวิชา:&nbsp;&nbsp;<mat-form-field style="width: 80%">
+        <mat-label>โปรดเลือกโปรแกรมวิชา</mat-label>
+        <mat-select required>
+          <mat-option
+            style="width: auto"
+            *ngFor="let i of dataBranch; let x = index"
+            [value]="i.name"
+            (click)="clickBranch(i.code, i.name, i.acronym)"
+          >
+            {{ i.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-6" *ngIf="codeBranch!" style="padding-top: 15px">
+      <form
+        [formGroup]="inBranchhead"
+        #formChange="ngForm"
+        (ngSubmit)="inBranchhead.valid ? updateBranchhead() : ''"
+      >
+        <span *ngIf="codeMajor!"
+          >หัวหน้าสาขาวิชา :&nbsp;&nbsp;{{ nameBranchhead }}&nbsp;&nbsp;
+          <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            data-toggle="modal"
+            data-target="#addHead"
+            (click)="getIDBranchhead(IDBranchhead)"
+          >
+            แก้ไขหัวหน้าสาขา
+          </button></span
+        >
+
+        <div class="modal" id="addHead">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2 class="modal-title">แก้ไขหัวหน้าสาขา</h2>
+                <button type="button" class="close" data-dismiss="modal">
+                  &times;
+                </button>
+              </div>
+
+              <div class="modal-body">
+                เลือกหัวหน้าสาขา : &nbsp;&nbsp;
+                <mat-form-field style="width: 30%">
+                  <mat-label>เลือกหัวหน้าสาขา</mat-label>
+                  <mat-select formControlName="Branchhead" required>
+                    <mat-option
+                      *ngFor="let i of dataTeacher; let x = index"
+                      [value]="i.userID"
+                    >
+                      {{ i.titlename }}{{ i.fname }}&nbsp;{{ i.lname }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  data-dismiss="modal"
+                >
+                  ยกเลิก
+                </button>
+                <button type="submit" class="btn btn-success">ตกลง</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <form
     [formGroup]="inGroup"
@@ -115,7 +220,7 @@
       (click)="clearFrom()"
       *ngIf="codeBranch!"
     >
-      เพิ่มกลุ่มเรียน
+      <i class="fas fa-plus"></i>&nbsp; เพิ่มกลุ่มเรียน
     </button>
 
     <!-- The Modal -->
@@ -149,7 +254,7 @@
             <div class="row">
               <div
                 class="col-sm-2.9"
-                style="padding-left: 15px; padding-top: 5px;"
+                style="padding-left: 15px; padding-top: 5px"
               >
                 แผนการเรียน :
               </div>
@@ -179,7 +284,7 @@
               </div> -->
             </div>
 
-            อาจารย์ที่ปรึกษา : &nbsp;&nbsp;<mat-form-field style="width: 30%;">
+            อาจารย์ที่ปรึกษา : &nbsp;&nbsp;<mat-form-field style="width: 30%">
               <mat-label>เลือกอาจารย์ที่ปรึกษา</mat-label>
               <mat-select formControlName="advisorID" required>
                 <mat-option
@@ -199,9 +304,7 @@
               ยกเลิก
             </button>
 
-            <button type="submit" class="btn btn-success">
-              บันทึก
-            </button>
+            <button type="submit" class="btn btn-success">บันทึก</button>
           </div>
         </div>
       </div>
@@ -242,7 +345,7 @@
           "
           ><i
             class="fas fa-edit"
-            style="font-size: 18px; cursor: pointer;"
+            style="font-size: 18px; cursor: pointer"
             title="แก้ไขข้อมูล"
             data-toggle="modal"
             data-target="#updateGroup"
@@ -252,7 +355,7 @@
         <span (click)="deleteGroup(i.study_group_id)"
           ><i
             class="fas fa-trash-alt"
-            style="font-size: 18px; color: red; cursor: pointer;"
+            style="font-size: 18px; color: red; cursor: pointer"
             title="ลบข้อมูล"
           ></i
         ></span>
@@ -297,7 +400,7 @@
           <div class="row">
             <div
               class="col-sm-2.9"
-              style="padding-left: 15px; padding-top: 5px;"
+              style="padding-left: 15px; padding-top: 5px"
             >
               แผนการเรียน :
             </div>
@@ -327,7 +430,7 @@
             </div> -->
           </div>
           <br />
-          อาจารย์ที่ปรึกษา : &nbsp;&nbsp;<mat-form-field style="width: 30%;">
+          อาจารย์ที่ปรึกษา : &nbsp;&nbsp;<mat-form-field style="width: 30%">
             <mat-label>โปรดเลือกอาจารย์ที่ปรึกษา</mat-label>
             <mat-select formControlName="advisorID" required>
               <mat-option

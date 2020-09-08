@@ -216,7 +216,7 @@ export class SemesterDataComponent implements OnInit {
           Swal.fire('เพิ่มปีการศึกษาเสร็จสิ้น', '', 'success');
           let win: any = window;
           win.$('#addCalendar').modal('hide');
-          // this.getGroup();
+          this.getCalendar();
         } else if (getData.response.error) {
           Swal.fire(
             'ไม่สามารถเพิ่มปีการศึกษาได้',

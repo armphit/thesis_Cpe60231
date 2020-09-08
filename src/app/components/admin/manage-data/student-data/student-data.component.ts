@@ -36,6 +36,7 @@ export class StudentDataComponent implements OnInit {
   public range: Array<any> = [];
   public formYearTerm: FormGroup;
   public dataEducational: any = null;
+  public pageStudent: number = 1;
 
   constructor(public http: HttpService, private formBuilder: FormBuilder) {
     this.getFaculty();

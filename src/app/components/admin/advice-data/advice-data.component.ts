@@ -1,7 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+pdfMake.fonts = {
+  THSarabunNew: {
+    normal: 'THSarabunNew.ttf',
+    bold: 'THSarabunNew Bold.ttf',
+    italics: 'THSarabunNew Italic.ttf',
+    bolditalics: 'THSarabunNew BoldItalic.ttf',
+  },
+  Roboto: {
+    normal: 'Roboto-Regular.ttf',
+    bold: 'Roboto-Medium.ttf',
+    italics: 'Roboto-Italic.ttf',
+    bolditalics: 'Roboto-MediumItalic.ttf',
+  },
+};
 
 @Component({
   selector: 'app-advice-data',
@@ -45,8 +63,7 @@ export class AdviceDataComponent implements OnInit {
     'พฤศจิกายน',
     'ธันวาคม'
   );
-  public dataStudent: any = null;
-  public dataStudent_id: any = null;
+
   public dataAppointment_Student: any = null;
 
   public dataReply_id = {
@@ -56,13 +73,26 @@ export class AdviceDataComponent implements OnInit {
     reply_id: null,
     advice_advisor: null,
     reply_advice_file: null,
+    nameStudent: null,
+    faculty: null,
+    brunch: null,
   };
+
+  public range: Array<any> = [];
+  public advice_year: FormGroup;
+  public nameGroup: any = null;
 
   constructor(public http: HttpService, private formBuilder: FormBuilder) {
     this.getFaculty();
+    this.getCURDATE();
+    this.getYear();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.advice_year = this.formBuilder.group({
+      _year: [``, Validators.required],
+    });
+  }
 
   public getFaculty = async () => {
     let getData: any = await this.http.post('admin/getFaculty');
@@ -80,8 +110,9 @@ export class AdviceDataComponent implements OnInit {
   public async clickFaculty(codeFaculty, nameFaculty) {
     this.codeMajor = null;
     this.codeBranch = null;
-    this.dataStudent_id = null;
+
     this.groupID = null;
+    this.dataReply_id.faculty = nameFaculty;
     this.codeFaculty = codeFaculty.substr(0, 2);
     let formData = new FormData();
     formData.append('code', this.codeFaculty);
@@ -100,7 +131,7 @@ export class AdviceDataComponent implements OnInit {
 
   public async clickMajor(codeMajor, nameMajor, acronym) {
     this.codeBranch = null;
-    this.dataStudent_id = null;
+
     this.groupID = null;
     this.nameMajor = nameMajor;
     this.codeMajor = codeMajor;
@@ -134,10 +165,10 @@ export class AdviceDataComponent implements OnInit {
   }
 
   public clickBranch(codeBranch, name, acronym) {
-    this.dataStudent_id = null;
     this.groupID = null;
     this.acronym = acronym;
     this.codeBranch = codeBranch;
+    this.dataReply_id.brunch = name;
     this.getGroup();
   }
 
@@ -163,11 +194,10 @@ export class AdviceDataComponent implements OnInit {
     fname: any,
     lname: any
   ) {
-    this.dataStudent_id = null;
     this.groupID = codeGroup;
-    // this.groupName = namegroup;
+    this.nameGroup = namegroup;
     this.groupUser_name = titlename + fname + ' ' + lname;
-    this.getStudent();
+    this.getAdvice();
   }
 
   public getBranchhead = async () => {
@@ -199,7 +229,8 @@ export class AdviceDataComponent implements OnInit {
 
   public getAdvice = async () => {
     let formData = new FormData();
-    formData.append('ID', this.dataStudent_id);
+    formData.append('group', this.groupID);
+    formData.append('year', this.advice_year.value._year);
     let getData: any = await this.http.post('admin/getAdvice', formData);
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
@@ -226,25 +257,21 @@ export class AdviceDataComponent implements OnInit {
     );
   }
 
-  public getStudent = async () => {
-    let formData = new FormData();
-    formData.append('group', this.groupID);
-    let getData: any = await this.http.post('admin/getStudent', formData);
-    if (getData.connect) {
-      if (getData.response.rowCount > 0) {
-        this.dataStudent = getData.response.result;
-      } else {
-        this.dataStudent = null;
-      }
-    } else {
-      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
-    }
-  };
+  // public getStudent = async () => {
+  //   let formData = new FormData();
+  //   formData.append('group', this.groupID);
+  //   let getData: any = await this.http.post('admin/getStudent', formData);
+  //   if (getData.connect) {
+  //     if (getData.response.rowCount > 0) {
+  //       this.dataStudent = getData.response.result;
+  //     } else {
+  //       this.dataStudent = null;
+  //     }
+  //   } else {
+  //     alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+  //   }
+  // };
 
-  async clickStudent(data: any) {
-    this.dataStudent_id = data.userID;
-    this.getAdvice();
-  }
   clickReply_data(dataReply: any) {
     this.dataReply_id.subject_advice = dataReply.subject_advice;
     this.dataReply_id.detail = dataReply.detail;
@@ -252,6 +279,8 @@ export class AdviceDataComponent implements OnInit {
     this.dataReply_id.reply_id = dataReply.reply_advice_id;
     this.dataReply_id.advice_advisor = dataReply.advice_advisor;
     this.dataReply_id.reply_advice_file = dataReply.reply_advice_file;
+    this.dataReply_id.nameStudent =
+      dataReply.titlename + dataReply.fname + ' ' + dataReply.lname;
     this.getReply_Student();
   }
   async getReply_Student() {
@@ -270,6 +299,547 @@ export class AdviceDataComponent implements OnInit {
       }
     } else {
       alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+  }
+  public getYear = () => {
+    var now = new Date();
+    var year = 0 + now.getFullYear() + 543;
+    for (var i = 0; i < 10; i++) {
+      this.range[i] = { value: `${year - i}` };
+    }
+  };
+  public getYearAdvice(e) {
+    this.advice_year = this.formBuilder.group({
+      _year: [e, Validators.required],
+    });
+    this.getAdvice();
+  }
+  public getCURDATE = async () => {
+    let getData: any = await this.http.post('teacher/getCURDATE');
+
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        this.advice_year.patchValue({
+          _year: getData.response.result[0].year,
+        });
+      } else {
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+  };
+  public async clickPDF_st() {
+    var date = new Date();
+    let a = this.nameGroup.split('.', 1);
+    let b = this.nameGroup.replace(a + '.', '');
+    let c = String(date.getFullYear() + 543);
+    let d = c.substring(2);
+    let e = b.substring(0, 2);
+    let f = Number(d) - Number(e) + 1;
+    let g = null;
+    let h = null;
+    let data_st = null;
+    let data_aap = null;
+    let j = null;
+    if (b.substring(4) == '1') {
+      g = 'ปกติ';
+    } else if (b.substring(4) == '2') {
+      g = 'บ่าย';
+    } else if (b.substring(4) == '3') {
+      g = 'สมทบ';
+    }
+    if (this.dataAppointment_Student != null) {
+      h = 'มีนัดพบติดตามผลดังตาราง';
+      j =
+        '\n*** เก็บไว้ที่งานแนะแนวการศึกษาและอาชีพ กองพัฒนานักศึกษา/อาจารย์ที่ปรึกษา/แผนกงานพัฒนานักศึกษา คณะฯ';
+      data_st = [
+        { width: '*', text: '' },
+        {
+          width: 'auto',
+          table: {
+            headerRows: 1,
+            widths: [120, 250, 100],
+            body: [
+              [
+                {
+                  text: 'ว/ด/ป',
+                  style: 'tableHeader',
+                  alignment: 'center',
+                  bold: true,
+                },
+                {
+                  text: 'ผลที่เกิด/คำแนะนำเพิ่มเติม',
+                  style: 'tableHeader',
+                  alignment: 'center',
+                  bold: true,
+                },
+
+                {
+                  text: 'หมายเหตุ',
+                  style: 'tableHeader',
+                  alignment: 'center',
+                  bold: true,
+                },
+              ],
+            ],
+            alignment: 'center',
+          },
+        },
+        { width: '*', text: '' },
+      ];
+      for (var i = 0; i < this.dataAppointment_Student.length; i++) {
+        var formattedDate = new Date(this.dataAppointment_Student[i].app_date);
+        const date =
+          'วันที่' +
+          '  ' +
+          formattedDate.getDate() +
+          '  ' +
+          this.thmonth[formattedDate.getMonth()] +
+          '  ' +
+          (formattedDate.getFullYear() + 543);
+
+        let dataaaa2 = [
+          {
+            text: date,
+            style: '',
+            alignment: '',
+            bold: false,
+          },
+          {
+            text: this.dataAppointment_Student[i].app_suggestion,
+            style: '',
+            alignment: '',
+            bold: false,
+          },
+          {
+            text: this.dataAppointment_Student[i].app_detail,
+            style: '',
+            alignment: '',
+            bold: false,
+          },
+        ];
+        data_st[1]['table']['body'].push(dataaaa2);
+      }
+      data_aap = { pageBreak: 'before', columns: data_st, fontSize: 16 };
+    } else if (this.dataAppointment_Student == null) {
+      h = 'ไม่มีนัดพบติดตามผล';
+      j = '';
+      data_st = [{ text: '' }];
+      data_aap = { columns: data_st, fontSize: 16 };
+    }
+
+    const dd = {
+      header: {},
+      footer(currentPage, pageCount) {
+        return {
+          columns: [
+            { text: '', fontSize: 15, alignment: 'center' },
+            // {
+            //   text:
+            //     'หน้าที่ ' +
+            //     currentPage.toString() +
+            //     ' จาก ' +
+            //     pageCount +
+            //     ' หน้า',
+            //   margin: [5, 5, 15, 5],
+            //   alignment: 'right',
+            // },
+          ],
+        };
+      },
+      content: [
+        {
+          image: await this.getBase64ImageFromURL('assets/rmuti.png'),
+          width: 30,
+          height: 50,
+        },
+        {
+          text: ' มหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน  นครราชสีมา',
+          fontSize: 12,
+          margin: [35, 0, 0, 20],
+          bold: true,
+        },
+        {
+          text:
+            'แบบบันทึกการบริการให้คำปรึกษาและแนะแนวมหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน',
+          fontSize: 16,
+          alignment: 'center',
+          bold: true,
+        },
+        {
+          text: 'ประจำปีการศึกษา ' + this.advice_year.value._year,
+          fontSize: 16,
+          alignment: 'center',
+          bold: true,
+        },
+        {
+          text: 'ที่ มทร. อีสาน',
+          fontSize: 16,
+          alignment: 'right',
+          bold: true,
+        },
+        {
+          text:
+            '.........................................................................................................................................................',
+          fontSize: 16,
+          alignment: 'center',
+          bold: true,
+        },
+        {
+          text: 'ข้อมูลนักศึกษา',
+          fontSize: 16,
+          alignment: 'left',
+          bold: true,
+        },
+        {
+          text: 'ชื่อ – สกุล' + '  ' + this.dataReply_id.nameStudent,
+          fontSize: 16,
+          alignment: 'left',
+        },
+        {
+          text:
+            'นักศึกษา' +
+            this.dataReply_id.faculty +
+            '  ' +
+            this.dataReply_id.brunch,
+          fontSize: 16,
+          alignment: 'left',
+        },
+        {
+          text: 'ชั้นปีที่' + ' ' + f + '  ' + 'รอบ' + ' ' + g,
+          fontSize: 16,
+          alignment: 'left',
+        },
+        {
+          text:
+            'ขอรับการให้คำปรึกษาแนะแนวในเรื่อง (สรุปปัญหาโดยย่อ)' +
+            ' ' +
+            this.dataReply_id.detail,
+          fontSize: 16,
+          alignment: 'left',
+        },
+        {
+          text:
+            '\nลงชื่อ.................................................................\n( ' +
+            this.dataReply_id.nameStudent +
+            ' )',
+          fontSize: 16,
+          alignment: 'right',
+        },
+        {
+          text: 'บันทึกของอาจารย์ที่ปรึกษา/ผู้ให้คำปรึกษา',
+          fontSize: 16,
+          alignment: 'left',
+          bold: true,
+        },
+
+        {
+          text: this.dataReply_id.reply,
+          fontSize: 16,
+          alignment: 'left',
+        },
+        {
+          text:
+            '\nลงชื่อ.................................................................\n( ' +
+            this.groupUser_name +
+            ' )',
+          fontSize: 16,
+          alignment: 'right',
+        },
+        {
+          text: 'ติดตามผล',
+          fontSize: 16,
+          alignment: 'left',
+          decoration: 'underline',
+        },
+        {
+          text: h,
+          fontSize: 16,
+          alignment: 'left',
+        },
+        data_aap,
+        {
+          text: j,
+          fontSize: 16,
+          alignment: 'center',
+        },
+      ],
+
+      defaultStyle: {
+        font: 'THSarabunNew',
+      },
+    };
+
+    pdfMake.createPdf(dd).open();
+  }
+  getBase64ImageFromURL(url) {
+    return new Promise((resolve, reject) => {
+      var img = new Image();
+      img.setAttribute('crossOrigin', 'anonymous');
+      img.onload = () => {
+        var canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        var dataURL = canvas.toDataURL('image/png');
+        resolve(dataURL);
+      };
+      img.onerror = (error) => {
+        reject(error);
+      };
+      img.src = url;
+    });
+  }
+  public async clickPDF_group() {
+    let formData = new FormData();
+    formData.append('ID', this.groupID);
+    let getData: any = await this.http.post(
+      'teacher/getBranch_Faculty',
+      formData
+    );
+
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        let branch = getData.response.result[0].NAME;
+        let faculty = getData.response.result[0].n;
+        var date = new Date();
+        let a = this.nameGroup.split('.', 1);
+        let b = this.nameGroup.replace(a + '.', '');
+        let c = String(date.getFullYear() + 543);
+        let d = c.substring(2);
+        let e = b.substring(0, 2);
+        let f = Number(d) - Number(e) + 1;
+        let g = String(branch.split(' ', 1));
+        let data_st = [
+          { width: '*', text: '' },
+          {
+            width: 'auto',
+            table: {
+              headerRows: 1,
+              widths: [60, 90, 90, 90, 80, 60],
+              body: [
+                [
+                  {
+                    text: 'วัน เดือน ปี',
+                    style: 'tableHeader',
+                    alignment: 'center',
+                    bold: true,
+                  },
+                  {
+                    text: 'ชื่อ-สกุล นักศึกษา',
+                    style: 'tableHeader',
+                    alignment: 'center',
+                    bold: true,
+                  },
+
+                  {
+                    text: 'เรื่องที่นักศึกษา\nขอรับคำปรึกษาและแนะแนว',
+                    style: 'tableHeader',
+                    alignment: 'center',
+                    bold: true,
+                  },
+                  {
+                    text: 'บันทึกการบริการ\nให้คำปรึกษาและแนะแนวอ.ที่ปรึกษา',
+                    style: 'tableHeader',
+                    alignment: 'center',
+                    bold: true,
+                  },
+                  {
+                    text: 'กรณีให้คำปรึกษาและแนะแนวไม่ได้',
+                    style: 'tableHeader',
+                    alignment: 'center',
+                    bold: true,
+                  },
+                  {
+                    text: 'สรุปผล/วันที่รับเรื่อง\nกลับคืน',
+                    style: 'tableHeader',
+                    alignment: 'center',
+                    bold: true,
+                  },
+                ],
+              ],
+              alignment: 'center',
+            },
+          },
+          { width: '*', text: '' },
+        ];
+        for (var i = 0; i < this.dataAdvice.length; i++) {
+          let a = this.dataAdvice[i].advice_date.split('-');
+          let b = Number(a[0]) + 543;
+          let dataaaa2 = [
+            {
+              text: a[2] + '/' + a[1] + '/' + b,
+              style: '',
+              alignment: '',
+              bold: false,
+            },
+            {
+              text:
+                this.dataAdvice[i].titlename +
+                this.dataAdvice[i].fname +
+                ' ' +
+                this.dataAdvice[i].lname,
+              style: '',
+              alignment: '',
+              bold: false,
+            },
+            {
+              text: this.dataAdvice[i].subject_advice,
+              style: '',
+              alignment: '',
+              bold: false,
+            },
+            {
+              text: this.dataAdvice[i].reply,
+              style: '',
+              alignment: '',
+              bold: false,
+            },
+            {
+              text: '',
+              style: '',
+              alignment: '',
+              bold: false,
+            },
+            {
+              text: '',
+              style: '',
+              alignment: '',
+              bold: false,
+            },
+          ];
+          data_st[1]['table']['body'].push(dataaaa2);
+        }
+        const dd = {
+          header: {},
+          footer(currentPage, pageCount) {
+            return {
+              columns: [
+                { text: '', fontSize: 15, alignment: 'center' },
+                // {
+                //   text:
+                //     'หน้าที่ ' +
+                //     currentPage.toString() +
+                //     ' จาก ' +
+                //     pageCount +
+                //     ' หน้า',
+                //   margin: [5, 5, 15, 5],
+                //   alignment: 'right',
+                // },
+              ],
+            };
+          },
+          content: [
+            {
+              image: await this.getBase64ImageFromURL('assets/rmuti.png'),
+              width: 30,
+              height: 50,
+            },
+            {
+              text: ' มหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน  นครราชสีมา',
+              fontSize: 12,
+              margin: [35, 0, 0, 20],
+              bold: true,
+            },
+            {
+              text:
+                'แบบบันทึกการให้คำปรึกษาและแนะแนวโดยอาจารย์ที่ปรึกษา' +
+                ' ' +
+                'ปีการศึกษา' +
+                ' ' +
+                this.advice_year.value._year,
+              fontSize: 16,
+              alignment: 'center',
+              bold: true,
+            },
+            {
+              text:
+                'นักศึกษาชั้นปี' +
+                ' ' +
+                f +
+                '  ' +
+                'ห้อง' +
+                ' ' +
+                this.nameGroup +
+                '  ' +
+                'ระดับ ปริญญาตรี',
+              fontSize: 16,
+              alignment: 'center',
+              bold: true,
+            },
+            {
+              text: g + '  ' + faculty,
+              fontSize: 16,
+              alignment: 'center',
+              bold: true,
+            },
+            {
+              columns: data_st,
+              fontSize: 16,
+            },
+            {
+              text: 'หมายเหตุ',
+              bold: true,
+              alignment: 'left',
+              decoration: 'underline',
+              fontSize: 14,
+            },
+            {
+              columns: [
+                {
+                  width: 'auto',
+                  text: '1.',
+                  bold: true,
+                  margin: [10, 0, 10, 0],
+                },
+                {
+                  bold: true,
+                  width: 'auto',
+                  text: [
+                    'เรื่องที่นักศึกษาขอรับคำปรึกษาและแนะแนว',
+                    {
+                      text:
+                        ' ' +
+                        'เช่น การให้คำปรึกษาในเรื่องทางวิชาการ  การใช้ชีวิต เช่น การปรับตัว บุคลิกภาพ สุขภาพจิต ด้านอาชีพ การศึกษาต่อ ทุนการศึกษา ฯลฯ อื่นๆ (ระบุ)……………………',
+                      bold: false,
+                    },
+                  ],
+                },
+              ],
+              fontSize: 14,
+            },
+            {
+              columns: [
+                {
+                  width: 'auto',
+                  text: '2.',
+                  bold: true,
+                  margin: [10, 0, 10, 0],
+                },
+                {
+                  bold: true,
+                  width: 'auto',
+                  text: [
+                    'กรณีให้คำปรึกษาและแนะแนวไม่ได้',
+                    {
+                      text:
+                        ' ' +
+                        'เช่น ปัญหาชีวิต ครอบครัว สังคม ที่ต้องใช้จิตวิทยาสูง ให้ระบุหน่วยงานที่ส่งต่อ วัน/เดือน/ปีที่ส่ง',
+                      bold: false,
+                    },
+                  ],
+                },
+              ],
+              fontSize: 14,
+            },
+          ],
+          defaultStyle: {
+            font: 'THSarabunNew',
+          },
+        };
+        pdfMake.createPdf(dd).open();
+      }
     }
   }
 }

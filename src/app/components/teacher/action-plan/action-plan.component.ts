@@ -61,7 +61,6 @@ export class ActionPlanComponent implements OnInit {
   public dataListPlan: any = null;
   public distance: string = 'P';
   public distance2: string = 'A';
-  public dataActionPlan_month: any = null;
   public Plan_month: any = null;
   public dataPlan_month: any = null;
   public dataActionPlan_Completed: any = null;
@@ -137,7 +136,6 @@ export class ActionPlanComponent implements OnInit {
     this.getListPlan();
     this.getActionPlan_Completed();
     this.getActionPlan_Status();
-    console.log(this.dataBranchhead);
     // this.getAdvice_notNull();
   }
   public getYearactionPlan(e) {
@@ -290,29 +288,28 @@ export class ActionPlanComponent implements OnInit {
     };
   };
 
-  public getActionPlan_month = async () => {
-    let formData = new FormData();
-    formData.append('group', this.codeGroup);
-    formData.append('year', this.actionPlan_year.value._year);
-    let getData: any = await this.http.post(
-      'teacher/getActionPlanMonth',
-      formData
-    );
+  // public getActionPlan_month = async () => {
+  //   let formData = new FormData();
+  //   formData.append('group', this.codeGroup);
+  //   formData.append('year', this.actionPlan_year.value._year);
+  //   let getData: any = await this.http.post(
+  //     'teacher/getActionPlanMonth',
+  //     formData
+  //   );
 
-    if (getData.connect) {
-      if (getData.response.rowCount > 0) {
-        this.dataActionPlan_month = getData.response.result;
-      } else {
-        this.dataActionPlan_month = null;
-      }
-    } else {
-      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
-    }
-  };
+  //   if (getData.connect) {
+  //     if (getData.response.rowCount > 0) {
+  //       this.dataActionPlan_month = getData.response.result;
+  //     } else {
+  //       this.dataActionPlan_month = null;
+  //     }
+  //   } else {
+  //     alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+  //   }
+  // };
 
   public month_plan = async () => {
     let formData = new FormData();
-    formData.append('group', this.codeGroup);
     formData.append('year', this.actionPlan_year.value._year);
 
     let getData: any = await this.http.post('teacher/PlanMonth', formData);
@@ -1071,6 +1068,11 @@ export class ActionPlanComponent implements OnInit {
           alignment: 'right',
         },
         {
+          text: 'วันที่................................................',
+          fontSize: 16,
+          alignment: 'right',
+        },
+        {
           text:
             '\nลงชื่อ.................................................................\n( ' +
             this.dataBranchhead[0].titlename +
@@ -1081,16 +1083,17 @@ export class ActionPlanComponent implements OnInit {
           fontSize: 16,
           alignment: 'right',
         },
+
         {
           text: 'หัวหน้าโปรแกรมวิชา/สาขาวิชา ผู้อนุมัติ',
           fontSize: 16,
           alignment: 'right',
         },
-        // {
-        //   text: 'วันที่................................................',
-        //   fontSize: 16,
-        //   alignment: 'right',
-        // },
+        {
+          text: 'วันที่................................................',
+          fontSize: 16,
+          alignment: 'right',
+        },
       ],
 
       defaultStyle: {

@@ -1,3 +1,4 @@
+import { ActionPlanComponent } from './action-plan/action-plan.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AdminComponent } from './admin.component';
@@ -37,14 +38,13 @@ const routes: Routes = [
         component: AdviceDataComponent,
       },
       {
-        path: 'advice-data',
-        component: AdviceDataComponent,
-      },
-      {
         path: 'goodness-record',
         component: GoodnessRecordComponent,
       },
-
+      {
+        path: 'action-plan',
+        component: ActionPlanComponent,
+      },
       {
         path: '',
         redirectTo: '/admin/manage-data/group',
