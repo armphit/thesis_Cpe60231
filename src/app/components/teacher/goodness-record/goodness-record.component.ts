@@ -47,11 +47,6 @@ export class GoodnessRecordComponent implements OnInit {
   public dataBranchhead: any = null;
   public nameGroup: any = null;
 
-  public dataBranch_Faculty = {
-    branch: null,
-    faculty: null,
-  };
-
   constructor(public http: HttpService, private formBuilder: FormBuilder) {
     this.getGroup();
     this.getCURDATE();

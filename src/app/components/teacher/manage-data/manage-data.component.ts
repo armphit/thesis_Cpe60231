@@ -328,6 +328,7 @@ export class ManageDataComponent implements OnInit {
     this.codeGroup = codeGroup;
     // this.getStudent();
     this.getEducational();
+    this.fileStudentName = 'โปรดเลือกไฟล์';
   }
 
   async uploadFileStudent(evt: any) {
@@ -360,20 +361,22 @@ export class ManageDataComponent implements OnInit {
           Form.append(key, this.data[i][key]);
         });
         Form.append('group', this.codeGroup);
-        let getData: any = await this.http.post('admin/uploadStudent', Form);
+        var getData: any = await this.http.post('admin/uploadStudent', Form);
+      }
+      if (getData.connect) {
+        if (getData.response.rowCount > 0) {
+          Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
+          this.getEducational();
+          this.fileStudentName = 'โปรดเลือกไฟล์';
+          this.data = null;
+        } else {
+          Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
+        }
+      } else {
+        Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
       }
 
       // this.getStudent();
-      this.getEducational();
-      this.fileStudentName = 'โปรดเลือกไฟล์';
-      this.data = null;
-      Swal.fire({
-        position: 'top',
-        icon: 'success',
-        title: 'เพิ่มข้อมูลสำเร็จ',
-        showConfirmButton: false,
-        timer: 1500,
-      });
     }
   }
   // public async getStudent() {
@@ -430,6 +433,7 @@ export class ManageDataComponent implements OnInit {
       term: [e, Validators.required],
     });
     this.getEducational();
+    this.fileStudentName = 'โปรดเลือกไฟล์';
   }
 
   public getYearStudy(e) {
@@ -437,6 +441,7 @@ export class ManageDataComponent implements OnInit {
       _year: [e, Validators.required],
     });
     this.getCalendar();
+    this.fileStudentName = 'โปรดเลือกไฟล์';
   }
   public getEducational = async () => {
     let formData = new FormData();
