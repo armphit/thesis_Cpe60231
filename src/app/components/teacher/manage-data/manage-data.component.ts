@@ -222,10 +222,8 @@ export class ManageDataComponent implements OnInit {
 
   public insertGroup = async () => {
     let formData = new FormData();
-    formData.append(
-      'group_name',
-      this.acronym + '.' + this.formGroup.value.group.toUpperCase()
-    );
+    var input = this.formGroup.value.group.trim();
+    formData.append('group_name', this.acronym + '.' + input.toUpperCase());
     formData.append('upload', this.upload_curriculum);
     formData.append('branch', this.formGroup.value.brunch);
     formData.append('ID', JSON.parse(localStorage.getItem('userLogin')).userID);
@@ -302,13 +300,10 @@ export class ManageDataComponent implements OnInit {
 
   async clickUploadCurriculum() {
     let formData = new FormData();
-
+    var input = this.formCurriculum.value.groupEdit.trim();
     formData.append('group', this.groupID);
     formData.append('upload', this.updateFile);
-    formData.append(
-      'group_name',
-      this.acronymEdit + '.' + this.formCurriculum.value.groupEdit
-    );
+    formData.append('group_name', this.acronymEdit + '.' + input.toUpperCase());
     formData.append('branch_id', this.formCurriculum.value.brunchEdit);
     let getData: any = await this.http.post(
       'teacher/addUploadCurriculum',

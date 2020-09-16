@@ -1,3 +1,4 @@
+import { AssessmentDataComponent } from './assessment-data/assessment-data.component';
 import { ActionPlanComponent } from './action-plan/action-plan.component';
 import { GoodnessRecordComponent } from './goodness-record/goodness-record.component';
 import { NgModule } from '@angular/core';
@@ -26,6 +27,10 @@ const routes: Routes = [
       {
         path: 'action-plan',
         component: ActionPlanComponent,
+      },
+      {
+        path: 'assessment-data',
+        component: AssessmentDataComponent,
       },
       {
         path: '',

@@ -16,7 +16,7 @@
       <br />
       <strong>{{ dataProfile }}</strong>
     </div>
-    <mat-nav-list *ngIf="status == 'Admin'">
+    <mat-nav-list *ngIf="status == '3000'">
       <a
         mat-list-item
         [routerLink]="['/admin/manage-data']"
@@ -49,6 +49,7 @@
           >แผนปฏิบัติงาน</strong
         ></a
       >
+
       <a mat-list-item (click)="onLogout()"
         ><font color="red"
           ><i class="fas fa-sign-out-alt"></i> <strong>ออกระบบ</strong></font
@@ -75,7 +76,7 @@
       >
 
       <a mat-list-item (click)="onLogout()"
-        ><font color="#CD5C5C"
+        ><font color="red"
           ><i class="fas fa-sign-out-alt"></i>&nbsp;&nbsp;
           <strong>ออกระบบ</strong></font
         ></a
@@ -115,8 +116,16 @@
           >แผนปฏิบัติงาน</strong
         ></a
       >
+      <a
+        mat-list-item
+        [routerLink]="['/teacher/assessment-data']"
+        [routerLinkActive]="['link-active']"
+        ><i class="fas fa-tasks"></i>&nbsp;&nbsp;<strong
+          >แบบประเมินความพึงพอใจ</strong
+        ></a
+      >
       <a mat-list-item (click)="onLogout()"
-        ><font color="#CD5C5C"
+        ><font color="red"
           ><i class="fas fa-sign-out-alt"></i>&nbsp;&nbsp;
           <strong>ออกระบบ</strong></font
         ></a

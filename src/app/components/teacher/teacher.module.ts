@@ -7,6 +7,7 @@ import { AdviceDataComponent } from './advice-data/advice-data.component';
 import { GoodnessRecordComponent } from './goodness-record/goodness-record.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ActionPlanComponent } from './action-plan/action-plan.component';
+import { AssessmentDataComponent } from './assessment-data/assessment-data.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { ActionPlanComponent } from './action-plan/action-plan.component';
     AdviceDataComponent,
     GoodnessRecordComponent,
     ActionPlanComponent,
+    AssessmentDataComponent,
   ],
   imports: [
     CommonModule,

@@ -40,6 +40,7 @@ export class LoginComponent implements OnInit {
               let a = value.response.data.userID;
 
               this.onlogin(a);
+              // console.log(a);
             } else {
               window.location.replace(environment.ssoLogout);
               this.service.alertLog('error', 'ไม่พบข้อมูลผู้ใช้งาน');
@@ -57,7 +58,7 @@ export class LoginComponent implements OnInit {
 
     if (httpRespon.connect) {
       if (httpRespon.response.success) {
-        if (httpRespon.response.data.status == 'Admin') {
+        if (httpRespon.response.data.status == '3000') {
           this.service.alertLog('success', 'เข้าสู่ระบบสำเร็จ');
           //this.router.navigate(["/home"]);
           this.service.navRouter(this.adminPath);
@@ -105,15 +106,15 @@ export class LoginComponent implements OnInit {
             'userLogin',
             JSON.stringify(httpRespon.response.data)
           );
-        }
-      } else if (httpRespon.response.data.status == '3000') {
-        this.service.alertLog('success', 'เข้าสู่ระบบสำเร็จ');
-        this.service.navRouter(this.adminPath);
+        } else if (httpRespon.response.data.status == '3000') {
+          this.service.alertLog('success', 'เข้าสู่ระบบสำเร็จ');
+          this.service.navRouter(this.adminPath);
 
-        localStorage.setItem(
-          'userLogin',
-          JSON.stringify(httpRespon.response.data)
-        );
+          localStorage.setItem(
+            'userLogin',
+            JSON.stringify(httpRespon.response.data)
+          );
+        }
       } else {
         this.service.alertLog('error', 'ชื่อหรือรหัสผ่านไม่ถูกต้อง');
       }

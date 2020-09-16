@@ -55,7 +55,7 @@ export class ActionPlanComponent implements OnInit {
     moA10: false,
     moA11: false,
     moA12: false,
-    noteP: '',
+    noteA: '',
   };
   public newAttribute3: any = {};
   public dataListPlan: any = null;
@@ -74,6 +74,7 @@ export class ActionPlanComponent implements OnInit {
   public month2_Branchhead: Array<any> = [];
   public dataActionPlan_Status: any = null;
   public dataActionPlan_Status_Branchhead: any = null;
+  public dataBranchhead_action_plan: any = null;
 
   public actionPlan_year: FormGroup;
   public actionPlan_year_Branchhead: FormGroup;
@@ -100,6 +101,7 @@ export class ActionPlanComponent implements OnInit {
     this.getYear();
     this.getBranchhead();
     this.getBranch();
+    this.getBranchhead_action_plan();
   }
 
   ngOnInit(): void {
@@ -136,6 +138,7 @@ export class ActionPlanComponent implements OnInit {
     this.getListPlan();
     this.getActionPlan_Completed();
     this.getActionPlan_Status();
+    // this.getBranchhead_action_plan();
     // this.getAdvice_notNull();
   }
   public getYearactionPlan(e) {
@@ -243,10 +246,9 @@ export class ActionPlanComponent implements OnInit {
     for (var key in this.newAttribute2) {
       formData.append(key, this.newAttribute2[key]);
     }
-    console.log(this.newAttribute2);
 
-    // formData.forEach((value,key) => {
-    //   console.log(key+":"+value)
+    // formData.forEach((value, key) => {
+    //   console.log(key + ':' + value);
     // });
 
     let getData: any = await this.http.post(
@@ -258,7 +260,7 @@ export class ActionPlanComponent implements OnInit {
       'teacher/addActionPlan_Action2',
       formData
     );
-    console.log(getData2);
+
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
         Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
@@ -532,6 +534,27 @@ export class ActionPlanComponent implements OnInit {
         this.dataBranchhead = getData.response.result;
       } else {
         this.dataBranchhead = null;
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+  };
+  public getBranchhead_action_plan = async () => {
+    let formData = new FormData();
+    formData.append(
+      'branch',
+      JSON.parse(localStorage.getItem('userLogin')).branch
+    );
+    let getData: any = await this.http.post(
+      'teacher/getBranchhead_action_plan',
+      formData
+    );
+
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        this.dataBranchhead_action_plan = getData.response.result;
+      } else {
+        this.dataBranchhead_action_plan = null;
       }
     } else {
       alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
@@ -1075,10 +1098,10 @@ export class ActionPlanComponent implements OnInit {
         {
           text:
             '\nลงชื่อ.................................................................\n( ' +
-            this.dataBranchhead[0].titlename +
-            this.dataBranchhead[0].fname +
+            this.dataBranchhead_action_plan[0].titlename +
+            this.dataBranchhead_action_plan[0].fname +
             ' ' +
-            this.dataBranchhead[0].lname +
+            this.dataBranchhead_action_plan[0].lname +
             ' )',
           fontSize: 16,
           alignment: 'right',

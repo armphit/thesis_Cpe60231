@@ -19,7 +19,7 @@ export class AdminGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    if (JSON.parse(localStorage.getItem('userLogin')).status == 'Admin') {
+    if (JSON.parse(localStorage.getItem('userLogin')).status == '3000') {
       return true;
     } else {
       return false;

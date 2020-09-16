@@ -213,11 +213,8 @@ export class GroupComponent implements OnInit {
 
   public insertGroup = async () => {
     let formData = new FormData();
-
-    formData.append(
-      'group_name',
-      this.acronym + '.' + this.inGroup.value.group.toUpperCase()
-    );
+    var input = this.inGroup.value.group.trim();
+    formData.append('group_name', this.acronym + '.' + input.toUpperCase());
     formData.append('ID', this.inGroup.value.advisorID);
     formData.append('branch', this.codeBranch);
     formData.append('upload', this.uploadCurriculumFile);
@@ -306,11 +303,9 @@ export class GroupComponent implements OnInit {
 
   public updateGroup = async () => {
     let formData = new FormData();
+    var input = this.inGroup.value.group.trim();
     formData.append('ID', this.inGroup.value.advisorID);
-    formData.append(
-      'group_name',
-      this.acronym + '.' + this.inGroup.value.group
-    );
+    formData.append('group_name', this.acronym + '.' + input.toUpperCase());
     formData.append('group_id', this.groupID_edit);
     formData.append('upload', this.curriculumFileupdate);
 
