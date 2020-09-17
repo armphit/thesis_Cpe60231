@@ -36,6 +36,137 @@ export class AssessmentDataComponent implements OnInit {
     service_other: null,
   };
 
+  public Episode2 = {
+    subtopic1_1: null,
+    subtopic1_2: null,
+    subtopic1_3: null,
+    subtopic1_4: null,
+    subtopic1_5: null,
+
+    subtopic2_1: null,
+    subtopic2_2: null,
+    subtopic2_3: null,
+    subtopic2_4: null,
+    subtopic2_5: null,
+
+    subtopic3_1: null,
+    subtopic3_2: null,
+    subtopic3_3: null,
+    subtopic3_4: null,
+    subtopic3_5: null,
+
+    subtopic4_1: null,
+    subtopic4_2: null,
+    subtopic4_3: null,
+    subtopic4_4: null,
+
+    subtopic5_1: null,
+    subtopic5_2: null,
+    subtopic5_3: null,
+
+    subtopic6_1: null,
+    subtopic6_2: null,
+    subtopic6_3: null,
+  };
+  public SD = {
+    subtopic1_1: null,
+    subtopic1_2: null,
+    subtopic1_3: null,
+    subtopic1_4: null,
+    subtopic1_5: null,
+
+    subtopic2_1: null,
+    subtopic2_2: null,
+    subtopic2_3: null,
+    subtopic2_4: null,
+    subtopic2_5: null,
+
+    subtopic3_1: null,
+    subtopic3_2: null,
+    subtopic3_3: null,
+    subtopic3_4: null,
+    subtopic3_5: null,
+
+    subtopic4_1: null,
+    subtopic4_2: null,
+    subtopic4_3: null,
+    subtopic4_4: null,
+
+    subtopic5_1: null,
+    subtopic5_2: null,
+    subtopic5_3: null,
+
+    subtopic6_1: null,
+    subtopic6_2: null,
+    subtopic6_3: null,
+  };
+  public totalSD = {
+    subtopic1_1: null,
+    subtopic1_2: null,
+    subtopic1_3: null,
+    subtopic1_4: null,
+    subtopic1_5: null,
+    subtopic2_1: null,
+    subtopic2_2: null,
+    subtopic2_3: null,
+    subtopic2_4: null,
+    subtopic2_5: null,
+    subtopic3_1: null,
+    subtopic3_2: null,
+    subtopic3_3: null,
+    subtopic3_4: null,
+    subtopic3_5: null,
+    subtopic4_1: null,
+    subtopic4_2: null,
+    subtopic4_3: null,
+    subtopic4_4: null,
+    subtopic5_1: null,
+    subtopic5_2: null,
+    subtopic5_3: null,
+    subtopic6_1: null,
+    subtopic6_2: null,
+    subtopic6_3: null,
+    Total6: null,
+    Total5: null,
+    Total4: null,
+    Total3: null,
+    Total2: null,
+    Total1: null,
+  };
+  public rating = {
+    subtopic1_1: null,
+    subtopic1_2: null,
+    subtopic1_3: null,
+    subtopic1_4: null,
+    subtopic1_5: null,
+    subtopic2_1: null,
+    subtopic2_2: null,
+    subtopic2_3: null,
+    subtopic2_4: null,
+    subtopic2_5: null,
+    subtopic3_1: null,
+    subtopic3_2: null,
+    subtopic3_3: null,
+    subtopic3_4: null,
+    subtopic3_5: null,
+    subtopic4_1: null,
+    subtopic4_2: null,
+    subtopic4_3: null,
+    subtopic4_4: null,
+    subtopic5_1: null,
+    subtopic5_2: null,
+    subtopic5_3: null,
+    subtopic6_1: null,
+    subtopic6_2: null,
+    subtopic6_3: null,
+    Total6: null,
+    Total5: null,
+    Total4: null,
+    Total3: null,
+    Total2: null,
+    Total1: null,
+  };
+
   public dataBranch_Faculty = {
     branch: null,
     faculty: null,
@@ -72,22 +203,114 @@ export class AssessmentDataComponent implements OnInit {
     this.nameGroup = group_name;
     this.getAssessment();
     this.Episode1 = {
-      count_men: 0,
-      count_women: 0,
-      level1: 0,
-      level2: 0,
-      frequency_over: 0,
-      frequency_less: 0,
-      frequency_never: 0,
-      service_career: 0,
-      service_study: 0,
-      service_bursary: 0,
-      service_personality: 0,
-      service_alumni: 0,
-      service_other: 0,
+      count_men: null,
+      count_women: null,
+      level1: null,
+      level2: null,
+      frequency_over: null,
+      frequency_less: null,
+      frequency_never: null,
+      service_career: null,
+      service_study: null,
+      service_bursary: null,
+      service_personality: null,
+      service_alumni: null,
+      service_other: null,
     };
     this.dataAssessment = null;
     this.filesName = 'โปรดเลือกไฟล์';
+    this.Episode2 = {
+      subtopic1_1: null,
+      subtopic1_2: null,
+      subtopic1_3: null,
+      subtopic1_4: null,
+      subtopic1_5: null,
+      subtopic2_1: null,
+      subtopic2_2: null,
+      subtopic2_3: null,
+      subtopic2_4: null,
+      subtopic2_5: null,
+      subtopic3_1: null,
+      subtopic3_2: null,
+      subtopic3_3: null,
+      subtopic3_4: null,
+      subtopic3_5: null,
+      subtopic4_1: null,
+      subtopic4_2: null,
+      subtopic4_3: null,
+      subtopic4_4: null,
+      subtopic5_1: null,
+      subtopic5_2: null,
+      subtopic5_3: null,
+      subtopic6_1: null,
+      subtopic6_2: null,
+      subtopic6_3: null,
+    };
+    this.SD = {
+      subtopic1_1: null,
+      subtopic1_2: null,
+      subtopic1_3: null,
+      subtopic1_4: null,
+      subtopic1_5: null,
+
+      subtopic2_1: null,
+      subtopic2_2: null,
+      subtopic2_3: null,
+      subtopic2_4: null,
+      subtopic2_5: null,
+
+      subtopic3_1: null,
+      subtopic3_2: null,
+      subtopic3_3: null,
+      subtopic3_4: null,
+      subtopic3_5: null,
+
+      subtopic4_1: null,
+      subtopic4_2: null,
+      subtopic4_3: null,
+      subtopic4_4: null,
+
+      subtopic5_1: null,
+      subtopic5_2: null,
+      subtopic5_3: null,
+
+      subtopic6_1: null,
+      subtopic6_2: null,
+      subtopic6_3: null,
+    };
+    this.totalSD = {
+      subtopic1_1: null,
+      subtopic1_2: null,
+      subtopic1_3: null,
+      subtopic1_4: null,
+      subtopic1_5: null,
+      subtopic2_1: null,
+      subtopic2_2: null,
+      subtopic2_3: null,
+      subtopic2_4: null,
+      subtopic2_5: null,
+      subtopic3_1: null,
+      subtopic3_2: null,
+      subtopic3_3: null,
+      subtopic3_4: null,
+      subtopic3_5: null,
+      subtopic4_1: null,
+      subtopic4_2: null,
+      subtopic4_3: null,
+      subtopic4_4: null,
+      subtopic5_1: null,
+      subtopic5_2: null,
+      subtopic5_3: null,
+      subtopic6_1: null,
+      subtopic6_2: null,
+      subtopic6_3: null,
+      Total6: null,
+      Total5: null,
+      Total4: null,
+      Total3: null,
+      Total2: null,
+      Total1: null,
+    };
   }
   public getYearAssessment(e) {
     this.assessment_year = this.formBuilder.group({
@@ -96,21 +319,113 @@ export class AssessmentDataComponent implements OnInit {
     this.filesName = 'โปรดเลือกไฟล์';
     this.getAssessment();
     this.Episode1 = {
-      count_men: 0,
-      count_women: 0,
-      level1: 0,
-      level2: 0,
-      frequency_over: 0,
-      frequency_less: 0,
-      frequency_never: 0,
-      service_career: 0,
-      service_study: 0,
-      service_bursary: 0,
-      service_personality: 0,
-      service_alumni: 0,
-      service_other: 0,
+      count_men: null,
+      count_women: null,
+      level1: null,
+      level2: null,
+      frequency_over: null,
+      frequency_less: null,
+      frequency_never: null,
+      service_career: null,
+      service_study: null,
+      service_bursary: null,
+      service_personality: null,
+      service_alumni: null,
+      service_other: null,
     };
     this.dataAssessment = null;
+    this.Episode2 = {
+      subtopic1_1: null,
+      subtopic1_2: null,
+      subtopic1_3: null,
+      subtopic1_4: null,
+      subtopic1_5: null,
+      subtopic2_1: null,
+      subtopic2_2: null,
+      subtopic2_3: null,
+      subtopic2_4: null,
+      subtopic2_5: null,
+      subtopic3_1: null,
+      subtopic3_2: null,
+      subtopic3_3: null,
+      subtopic3_4: null,
+      subtopic3_5: null,
+      subtopic4_1: null,
+      subtopic4_2: null,
+      subtopic4_3: null,
+      subtopic4_4: null,
+      subtopic5_1: null,
+      subtopic5_2: null,
+      subtopic5_3: null,
+      subtopic6_1: null,
+      subtopic6_2: null,
+      subtopic6_3: null,
+    };
+    this.SD = {
+      subtopic1_1: null,
+      subtopic1_2: null,
+      subtopic1_3: null,
+      subtopic1_4: null,
+      subtopic1_5: null,
+
+      subtopic2_1: null,
+      subtopic2_2: null,
+      subtopic2_3: null,
+      subtopic2_4: null,
+      subtopic2_5: null,
+
+      subtopic3_1: null,
+      subtopic3_2: null,
+      subtopic3_3: null,
+      subtopic3_4: null,
+      subtopic3_5: null,
+
+      subtopic4_1: null,
+      subtopic4_2: null,
+      subtopic4_3: null,
+      subtopic4_4: null,
+
+      subtopic5_1: null,
+      subtopic5_2: null,
+      subtopic5_3: null,
+
+      subtopic6_1: null,
+      subtopic6_2: null,
+      subtopic6_3: null,
+    };
+    this.totalSD = {
+      subtopic1_1: null,
+      subtopic1_2: null,
+      subtopic1_3: null,
+      subtopic1_4: null,
+      subtopic1_5: null,
+      subtopic2_1: null,
+      subtopic2_2: null,
+      subtopic2_3: null,
+      subtopic2_4: null,
+      subtopic2_5: null,
+      subtopic3_1: null,
+      subtopic3_2: null,
+      subtopic3_3: null,
+      subtopic3_4: null,
+      subtopic3_5: null,
+      subtopic4_1: null,
+      subtopic4_2: null,
+      subtopic4_3: null,
+      subtopic4_4: null,
+      subtopic5_1: null,
+      subtopic5_2: null,
+      subtopic5_3: null,
+      subtopic6_1: null,
+      subtopic6_2: null,
+      subtopic6_3: null,
+      Total6: null,
+      Total5: null,
+      Total4: null,
+      Total3: null,
+      Total2: null,
+      Total1: null,
+    };
   }
   public getYear = () => {
     var now = new Date();
@@ -164,7 +479,7 @@ export class AssessmentDataComponent implements OnInit {
         Form.append('year', this.assessment_year.value._year);
 
         var getData: any = await this.http.post('teacher/addAssessment', Form);
-
+        console.log(getData);
         // Form.forEach((value, key) => {
         //   console.log(key + ':' + value);
         // });
@@ -193,9 +508,11 @@ export class AssessmentDataComponent implements OnInit {
     let getData: any = await this.http.post('teacher/getAssessment', formData);
     var men = 0;
     // var women = null;
+
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
         this.getBranch_Faculty();
+
         this.dataAssessment = getData.response.result;
         for (var i = 0; i < getData.response.result.length; i++) {
           if (getData.response.result[i].sex == 'ชาย') {
@@ -239,11 +556,1195 @@ export class AssessmentDataComponent implements OnInit {
           } else if (getData.response.result[i].service == 'อื่นๆ') {
             this.Episode1.service_other = this.Episode1.service_other + 1;
           }
+          this.Episode2.subtopic1_1 =
+            this.Episode2.subtopic1_1 +
+            Number(getData.response.result[i].subtopic1_1);
+          this.Episode2.subtopic1_2 =
+            this.Episode2.subtopic1_2 +
+            Number(getData.response.result[i].subtopic1_2);
+          this.Episode2.subtopic1_3 =
+            this.Episode2.subtopic1_3 +
+            Number(getData.response.result[i].subtopic1_3);
+          this.Episode2.subtopic1_4 =
+            this.Episode2.subtopic1_4 +
+            Number(getData.response.result[i].subtopic1_4);
+          this.Episode2.subtopic1_5 =
+            this.Episode2.subtopic1_5 +
+            Number(getData.response.result[i].subtopic1_5);
+          this.Episode2.subtopic2_1 =
+            this.Episode2.subtopic2_1 +
+            Number(getData.response.result[i].subtopic2_1);
+          this.Episode2.subtopic2_2 =
+            this.Episode2.subtopic2_2 +
+            Number(getData.response.result[i].subtopic2_2);
+          this.Episode2.subtopic2_3 =
+            this.Episode2.subtopic2_3 +
+            Number(getData.response.result[i].subtopic2_3);
+          this.Episode2.subtopic2_4 =
+            this.Episode2.subtopic2_4 +
+            Number(getData.response.result[i].subtopic2_4);
+          this.Episode2.subtopic2_5 =
+            this.Episode2.subtopic2_5 +
+            Number(getData.response.result[i].subtopic2_5);
+          this.Episode2.subtopic3_1 =
+            this.Episode2.subtopic3_1 +
+            Number(getData.response.result[i].subtopic3_1);
+          this.Episode2.subtopic3_2 =
+            this.Episode2.subtopic3_2 +
+            Number(getData.response.result[i].subtopic3_2);
+          this.Episode2.subtopic3_3 =
+            this.Episode2.subtopic3_3 +
+            Number(getData.response.result[i].subtopic3_3);
+          this.Episode2.subtopic3_4 =
+            this.Episode2.subtopic3_4 +
+            Number(getData.response.result[i].subtopic3_4);
+          this.Episode2.subtopic3_5 =
+            this.Episode2.subtopic3_5 +
+            Number(getData.response.result[i].subtopic3_5);
+          this.Episode2.subtopic4_1 =
+            this.Episode2.subtopic4_1 +
+            Number(getData.response.result[i].subtopic4_1);
+          this.Episode2.subtopic4_2 =
+            this.Episode2.subtopic4_2 +
+            Number(getData.response.result[i].subtopic4_2);
+          this.Episode2.subtopic4_3 =
+            this.Episode2.subtopic4_3 +
+            Number(getData.response.result[i].subtopic4_3);
+          this.Episode2.subtopic4_4 =
+            this.Episode2.subtopic4_4 +
+            Number(getData.response.result[i].subtopic4_4);
+          this.Episode2.subtopic5_1 =
+            this.Episode2.subtopic5_1 +
+            Number(getData.response.result[i].subtopic5_1);
+          this.Episode2.subtopic5_2 =
+            this.Episode2.subtopic5_2 +
+            Number(getData.response.result[i].subtopic5_2);
+          this.Episode2.subtopic5_3 =
+            this.Episode2.subtopic5_3 +
+            Number(getData.response.result[i].subtopic5_3);
+          this.Episode2.subtopic6_1 =
+            this.Episode2.subtopic6_1 +
+            Number(getData.response.result[i].subtopic6_1);
+          this.Episode2.subtopic6_2 =
+            this.Episode2.subtopic6_2 +
+            Number(getData.response.result[i].subtopic6_2);
+          this.Episode2.subtopic6_3 =
+            this.Episode2.subtopic6_3 +
+            Number(getData.response.result[i].subtopic6_3);
+
+          this.SD.subtopic1_1 =
+            this.SD.subtopic1_1 +
+            Number(getData.response.result[i].subtopic1_1) *
+              Number(getData.response.result[i].subtopic1_1);
+          this.SD.subtopic1_2 =
+            this.SD.subtopic1_2 +
+            Number(getData.response.result[i].subtopic1_2) *
+              Number(getData.response.result[i].subtopic1_2);
+          this.SD.subtopic1_3 =
+            this.SD.subtopic1_3 +
+            Number(getData.response.result[i].subtopic1_3) *
+              Number(getData.response.result[i].subtopic1_3);
+          this.SD.subtopic1_4 =
+            this.SD.subtopic1_4 +
+            Number(getData.response.result[i].subtopic1_4) *
+              Number(getData.response.result[i].subtopic1_4);
+          this.SD.subtopic1_5 =
+            this.SD.subtopic1_5 +
+            Number(getData.response.result[i].subtopic1_5) *
+              Number(getData.response.result[i].subtopic1_5);
+          this.SD.subtopic2_1 =
+            this.SD.subtopic2_1 +
+            Number(getData.response.result[i].subtopic2_1) *
+              Number(getData.response.result[i].subtopic2_1);
+          this.SD.subtopic2_2 =
+            this.SD.subtopic2_2 +
+            Number(getData.response.result[i].subtopic2_2) *
+              Number(getData.response.result[i].subtopic2_2);
+          this.SD.subtopic2_3 =
+            this.SD.subtopic2_3 +
+            Number(getData.response.result[i].subtopic2_3) *
+              Number(getData.response.result[i].subtopic2_3);
+          this.SD.subtopic2_4 =
+            this.SD.subtopic2_4 +
+            Number(getData.response.result[i].subtopic2_4) *
+              Number(getData.response.result[i].subtopic2_4);
+          this.SD.subtopic2_5 =
+            this.SD.subtopic2_5 +
+            Number(getData.response.result[i].subtopic2_5) *
+              Number(getData.response.result[i].subtopic2_5);
+          this.SD.subtopic3_1 =
+            this.SD.subtopic3_1 +
+            Number(getData.response.result[i].subtopic3_1) *
+              Number(getData.response.result[i].subtopic3_1);
+          this.SD.subtopic3_2 =
+            this.SD.subtopic3_2 +
+            Number(getData.response.result[i].subtopic3_2) *
+              Number(getData.response.result[i].subtopic3_2);
+          this.SD.subtopic3_3 =
+            this.SD.subtopic3_3 +
+            Number(getData.response.result[i].subtopic3_3) *
+              Number(getData.response.result[i].subtopic3_3);
+          this.SD.subtopic3_4 =
+            this.SD.subtopic3_4 +
+            Number(getData.response.result[i].subtopic3_4) *
+              Number(getData.response.result[i].subtopic3_4);
+          this.SD.subtopic3_5 =
+            this.SD.subtopic3_5 +
+            Number(getData.response.result[i].subtopic3_5) *
+              Number(getData.response.result[i].subtopic3_5);
+          this.SD.subtopic4_1 =
+            this.SD.subtopic4_1 +
+            Number(getData.response.result[i].subtopic4_1) *
+              Number(getData.response.result[i].subtopic4_1);
+          this.SD.subtopic4_2 =
+            this.SD.subtopic4_2 +
+            Number(getData.response.result[i].subtopic4_2) *
+              Number(getData.response.result[i].subtopic4_2);
+          this.SD.subtopic4_3 =
+            this.SD.subtopic4_3 +
+            Number(getData.response.result[i].subtopic4_3) *
+              Number(getData.response.result[i].subtopic4_3);
+          this.SD.subtopic4_4 =
+            this.SD.subtopic4_4 +
+            Number(getData.response.result[i].subtopic4_4) *
+              Number(getData.response.result[i].subtopic4_4);
+          this.SD.subtopic5_1 =
+            this.SD.subtopic5_1 +
+            Number(getData.response.result[i].subtopic5_1) *
+              Number(getData.response.result[i].subtopic5_1);
+          this.SD.subtopic5_2 =
+            this.SD.subtopic5_2 +
+            Number(getData.response.result[i].subtopic5_2) *
+              Number(getData.response.result[i].subtopic5_2);
+          this.SD.subtopic5_3 =
+            this.SD.subtopic5_3 +
+            Number(getData.response.result[i].subtopic5_3) *
+              Number(getData.response.result[i].subtopic5_3);
+          this.SD.subtopic6_1 =
+            this.SD.subtopic6_1 +
+            Number(getData.response.result[i].subtopic6_1) *
+              Number(getData.response.result[i].subtopic6_1);
+          this.SD.subtopic6_2 =
+            this.SD.subtopic6_2 +
+            Number(getData.response.result[i].subtopic6_2) *
+              Number(getData.response.result[i].subtopic6_2);
+          this.SD.subtopic6_3 =
+            this.SD.subtopic6_3 +
+            Number(getData.response.result[i].subtopic6_3) *
+              Number(getData.response.result[i].subtopic6_3);
         }
-        // this.Episode1.avg_men =
-        //   (this.Episode1.count_men * 100) / getData.response.result.length;
-        // this.Episode1.avg_men = this.Episode1.avg_men.toFixed(2);
+        this.totalSD.subtopic1_1 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic1_1 -
+            this.Episode2.subtopic1_1 * this.Episode2.subtopic1_1) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic1_2 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic1_2 -
+            this.Episode2.subtopic1_2 * this.Episode2.subtopic1_2) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic1_3 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic1_3 -
+            this.Episode2.subtopic1_3 * this.Episode2.subtopic1_3) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic1_4 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic1_4 -
+            this.Episode2.subtopic1_4 * this.Episode2.subtopic1_4) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic1_5 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic1_5 -
+            this.Episode2.subtopic1_5 * this.Episode2.subtopic1_5) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic2_1 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic2_1 -
+            this.Episode2.subtopic2_1 * this.Episode2.subtopic2_1) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic2_2 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic2_2 -
+            this.Episode2.subtopic2_2 * this.Episode2.subtopic2_2) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic2_3 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic2_3 -
+            this.Episode2.subtopic2_3 * this.Episode2.subtopic2_3) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic2_4 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic2_4 -
+            this.Episode2.subtopic2_4 * this.Episode2.subtopic2_4) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic2_5 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic2_5 -
+            this.Episode2.subtopic2_5 * this.Episode2.subtopic2_5) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic3_1 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic3_1 -
+            this.Episode2.subtopic3_1 * this.Episode2.subtopic3_1) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic3_2 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic3_2 -
+            this.Episode2.subtopic3_2 * this.Episode2.subtopic3_2) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic3_3 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic3_3 -
+            this.Episode2.subtopic3_3 * this.Episode2.subtopic3_3) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic3_4 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic3_4 -
+            this.Episode2.subtopic3_4 * this.Episode2.subtopic3_4) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic3_5 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic3_5 -
+            this.Episode2.subtopic3_5 * this.Episode2.subtopic3_5) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic4_1 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic4_1 -
+            this.Episode2.subtopic4_1 * this.Episode2.subtopic4_1) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic4_2 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic4_2 -
+            this.Episode2.subtopic4_2 * this.Episode2.subtopic4_2) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic4_3 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic4_3 -
+            this.Episode2.subtopic4_3 * this.Episode2.subtopic4_3) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic4_4 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic4_4 -
+            this.Episode2.subtopic4_4 * this.Episode2.subtopic4_4) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic5_1 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic5_1 -
+            this.Episode2.subtopic5_1 * this.Episode2.subtopic5_1) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic5_1 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic5_1 -
+            this.Episode2.subtopic5_1 * this.Episode2.subtopic5_1) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic5_2 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic5_2 -
+            this.Episode2.subtopic5_2 * this.Episode2.subtopic5_2) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic5_3 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic5_3 -
+            this.Episode2.subtopic5_3 * this.Episode2.subtopic5_3) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic6_1 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic6_1 -
+            this.Episode2.subtopic6_1 * this.Episode2.subtopic6_1) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic6_2 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic6_2 -
+            this.Episode2.subtopic6_2 * this.Episode2.subtopic6_2) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.subtopic6_3 = Math.sqrt(
+          (this.dataAssessment.length * this.SD.subtopic6_3 -
+            this.Episode2.subtopic6_3 * this.Episode2.subtopic6_3) /
+            (this.dataAssessment.length * (this.dataAssessment.length - 1))
+        );
+        this.totalSD.Total1 = Math.sqrt(
+          (5 *
+            (Math.pow(this.totalSD.subtopic1_1, 2) +
+              Math.pow(this.totalSD.subtopic1_2, 2) +
+              Math.pow(this.totalSD.subtopic1_3, 2) +
+              Math.pow(this.totalSD.subtopic1_4, 2) +
+              Math.pow(this.totalSD.subtopic1_5, 2)) -
+            Math.pow(
+              this.totalSD.subtopic1_1 +
+                this.totalSD.subtopic1_2 +
+                this.totalSD.subtopic1_3 +
+                this.totalSD.subtopic1_4 +
+                this.totalSD.subtopic1_5,
+              2
+            )) /
+            (5 * (5 - 1))
+        );
+        this.totalSD.Total2 = Math.sqrt(
+          (5 *
+            (Math.pow(this.totalSD.subtopic2_1, 2) +
+              Math.pow(this.totalSD.subtopic2_2, 2) +
+              Math.pow(this.totalSD.subtopic2_3, 2) +
+              Math.pow(this.totalSD.subtopic2_4, 2) +
+              Math.pow(this.totalSD.subtopic2_5, 2)) -
+            Math.pow(
+              this.totalSD.subtopic2_1 +
+                this.totalSD.subtopic2_2 +
+                this.totalSD.subtopic2_3 +
+                this.totalSD.subtopic2_4 +
+                this.totalSD.subtopic2_5,
+              2
+            )) /
+            (5 * (5 - 1))
+        );
+        this.totalSD.Total3 = Math.sqrt(
+          (5 *
+            (Math.pow(this.totalSD.subtopic3_1, 2) +
+              Math.pow(this.totalSD.subtopic3_2, 2) +
+              Math.pow(this.totalSD.subtopic3_3, 2) +
+              Math.pow(this.totalSD.subtopic3_4, 2) +
+              Math.pow(this.totalSD.subtopic3_5, 2)) -
+            Math.pow(
+              this.totalSD.subtopic3_1 +
+                this.totalSD.subtopic3_2 +
+                this.totalSD.subtopic3_3 +
+                this.totalSD.subtopic3_4 +
+                this.totalSD.subtopic3_5,
+              2
+            )) /
+            (5 * (5 - 1))
+        );
+
+        this.totalSD.Total4 = Math.sqrt(
+          (4 *
+            (Math.pow(this.totalSD.subtopic4_1, 2) +
+              Math.pow(this.totalSD.subtopic4_2, 2) +
+              Math.pow(this.totalSD.subtopic4_3, 2) +
+              Math.pow(this.totalSD.subtopic4_4, 2)) -
+            Math.pow(
+              this.totalSD.subtopic4_1 +
+                this.totalSD.subtopic4_2 +
+                this.totalSD.subtopic4_3 +
+                this.totalSD.subtopic4_4,
+              2
+            )) /
+            (4 * (4 - 1))
+        );
+        this.totalSD.Total5 = Math.sqrt(
+          (3 *
+            (Math.pow(this.totalSD.subtopic5_1, 2) +
+              Math.pow(this.totalSD.subtopic5_2, 2) +
+              Math.pow(this.totalSD.subtopic5_3, 2)) -
+            Math.pow(
+              this.totalSD.subtopic5_1 +
+                this.totalSD.subtopic5_2 +
+                this.totalSD.subtopic5_3,
+              2
+            )) /
+            (3 * (3 - 1))
+        );
+        this.totalSD.Total6 = Math.sqrt(
+          (3 *
+            (Math.pow(this.totalSD.subtopic6_1, 2) +
+              Math.pow(this.totalSD.subtopic6_2, 2) +
+              Math.pow(this.totalSD.subtopic6_3, 2)) -
+            Math.pow(
+              this.totalSD.subtopic6_1 +
+                this.totalSD.subtopic6_2 +
+                this.totalSD.subtopic6_3,
+              2
+            )) /
+            (3 * (3 - 1))
+        );
+
+        if (this.Episode2.subtopic1_1 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic1_1 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic1_1 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic1_1 = 'ดี';
+        } else if (
+          this.Episode2.subtopic1_1 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic1_1 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic1_1 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic1_1 = 'พอใช้';
+        } else if (this.Episode2.subtopic1_1 / this.dataAssessment.length > 0) {
+          this.rating.subtopic1_1 = 'ควรปรับปรุง';
+        }
+        if (this.Episode2.subtopic1_2 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic1_2 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic1_2 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic1_2 = 'ดี';
+        } else if (
+          this.Episode2.subtopic1_2 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic1_2 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic1_2 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic1_2 = 'พอใช้';
+        } else if (this.Episode2.subtopic1_2 / this.dataAssessment.length > 0) {
+          this.rating.subtopic1_2 = 'ควรปรับปรุง';
+        }
+        if (this.Episode2.subtopic1_3 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic1_3 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic1_3 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic1_3 = 'ดี';
+        } else if (
+          this.Episode2.subtopic1_3 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic1_3 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic1_3 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic1_3 = 'พอใช้';
+        } else if (this.Episode2.subtopic1_3 / this.dataAssessment.length > 0) {
+          this.rating.subtopic1_3 = 'ควรปรับปรุง';
+        }
+        if (this.Episode2.subtopic1_4 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic1_4 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic1_4 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic1_4 = 'ดี';
+        } else if (
+          this.Episode2.subtopic1_4 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic1_4 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic1_4 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic1_4 = 'พอใช้';
+        } else if (this.Episode2.subtopic1_4 / this.dataAssessment.length > 0) {
+          this.rating.subtopic1_4 = 'ควรปรับปรุง';
+        }
+        if (this.Episode2.subtopic1_5 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic1_5 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic1_5 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic1_5 = 'ดี';
+        } else if (
+          this.Episode2.subtopic1_5 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic1_5 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic1_5 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic1_5 = 'พอใช้';
+        } else if (this.Episode2.subtopic1_5 / this.dataAssessment.length > 0) {
+          this.rating.subtopic1_5 = 'ควรปรับปรุง';
+        }
+        if (
+          (this.Episode2.subtopic1_1 / this.dataAssessment.length +
+            this.Episode2.subtopic1_2 / this.dataAssessment.length +
+            this.Episode2.subtopic1_3 / this.dataAssessment.length +
+            this.Episode2.subtopic1_4 / this.dataAssessment.length +
+            this.Episode2.subtopic1_5 / this.dataAssessment.length) /
+            5 >
+          4.5
+        ) {
+          this.rating.Total1 = 'ดีมาก';
+        } else if (
+          (this.Episode2.subtopic1_1 / this.dataAssessment.length +
+            this.Episode2.subtopic1_2 / this.dataAssessment.length +
+            this.Episode2.subtopic1_3 / this.dataAssessment.length +
+            this.Episode2.subtopic1_4 / this.dataAssessment.length +
+            this.Episode2.subtopic1_5 / this.dataAssessment.length) /
+            5 >
+          3.5
+        ) {
+          this.rating.Total1 = 'ดี';
+        } else if (
+          (this.Episode2.subtopic1_1 / this.dataAssessment.length +
+            this.Episode2.subtopic1_2 / this.dataAssessment.length +
+            this.Episode2.subtopic1_3 / this.dataAssessment.length +
+            this.Episode2.subtopic1_4 / this.dataAssessment.length +
+            this.Episode2.subtopic1_5 / this.dataAssessment.length) /
+            5 >
+          2.5
+        ) {
+          this.rating.Total1 = 'ปานกลาง';
+        } else if (
+          (this.Episode2.subtopic1_1 / this.dataAssessment.length +
+            this.Episode2.subtopic1_2 / this.dataAssessment.length +
+            this.Episode2.subtopic1_3 / this.dataAssessment.length +
+            this.Episode2.subtopic1_4 / this.dataAssessment.length +
+            this.Episode2.subtopic1_5 / this.dataAssessment.length) /
+            5 >
+          1.5
+        ) {
+          this.rating.Total1 = 'พอใช้';
+        } else if (
+          (this.Episode2.subtopic1_1 / this.dataAssessment.length +
+            this.Episode2.subtopic1_2 / this.dataAssessment.length +
+            this.Episode2.subtopic1_3 / this.dataAssessment.length +
+            this.Episode2.subtopic1_4 / this.dataAssessment.length +
+            this.Episode2.subtopic1_5 / this.dataAssessment.length) /
+            5 >
+          0
+        ) {
+          this.rating.Total1 = 'ควรปรับปรุง';
+        }
+
+        if (this.Episode2.subtopic2_1 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic2_1 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic2_1 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic2_1 = 'ดี';
+        } else if (
+          this.Episode2.subtopic2_1 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic2_1 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic2_1 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic2_1 = 'พอใช้';
+        } else if (this.Episode2.subtopic2_1 / this.dataAssessment.length > 0) {
+          this.rating.subtopic2_1 = 'ควรปรับปรุง';
+        }
+        if (this.Episode2.subtopic2_2 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic2_2 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic2_2 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic2_2 = 'ดี';
+        } else if (
+          this.Episode2.subtopic2_2 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic2_2 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic2_2 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic2_2 = 'พอใช้';
+        } else if (this.Episode2.subtopic2_2 / this.dataAssessment.length > 0) {
+          this.rating.subtopic2_2 = 'ควรปรับปรุง';
+        }
+        if (this.Episode2.subtopic2_3 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic2_3 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic2_3 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic2_3 = 'ดี';
+        } else if (
+          this.Episode2.subtopic2_3 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic2_3 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic2_3 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic2_3 = 'พอใช้';
+        } else if (this.Episode2.subtopic2_3 / this.dataAssessment.length > 0) {
+          this.rating.subtopic2_3 = 'ควรปรับปรุง';
+        }
+        if (this.Episode2.subtopic2_4 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic2_4 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic2_4 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic2_4 = 'ดี';
+        } else if (
+          this.Episode2.subtopic2_4 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic2_4 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic2_4 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic2_4 = 'พอใช้';
+        } else if (this.Episode2.subtopic2_4 / this.dataAssessment.length > 0) {
+          this.rating.subtopic2_4 = 'ควรปรับปรุง';
+        }
+        if (this.Episode2.subtopic2_5 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic2_5 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic2_5 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic2_5 = 'ดี';
+        } else if (
+          this.Episode2.subtopic2_5 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic2_5 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic2_5 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic2_5 = 'พอใช้';
+        } else if (this.Episode2.subtopic2_5 / this.dataAssessment.length > 0) {
+          this.rating.subtopic2_5 = 'ควรปรับปรุง';
+        }
+        if (
+          (this.Episode2.subtopic2_1 / this.dataAssessment.length +
+            this.Episode2.subtopic2_2 / this.dataAssessment.length +
+            this.Episode2.subtopic2_3 / this.dataAssessment.length +
+            this.Episode2.subtopic2_4 / this.dataAssessment.length +
+            this.Episode2.subtopic2_5 / this.dataAssessment.length) /
+            5 >
+          4.5
+        ) {
+          this.rating.Total2 = 'ดีมาก';
+        } else if (
+          (this.Episode2.subtopic2_1 / this.dataAssessment.length +
+            this.Episode2.subtopic2_2 / this.dataAssessment.length +
+            this.Episode2.subtopic2_3 / this.dataAssessment.length +
+            this.Episode2.subtopic2_4 / this.dataAssessment.length +
+            this.Episode2.subtopic2_5 / this.dataAssessment.length) /
+            5 >
+          3.5
+        ) {
+          this.rating.Total2 = 'ดี';
+        } else if (
+          (this.Episode2.subtopic2_1 / this.dataAssessment.length +
+            this.Episode2.subtopic2_2 / this.dataAssessment.length +
+            this.Episode2.subtopic2_3 / this.dataAssessment.length +
+            this.Episode2.subtopic2_4 / this.dataAssessment.length +
+            this.Episode2.subtopic2_5 / this.dataAssessment.length) /
+            5 >
+          2.5
+        ) {
+          this.rating.Total2 = 'ปานกลาง';
+        } else if (
+          (this.Episode2.subtopic2_1 / this.dataAssessment.length +
+            this.Episode2.subtopic2_2 / this.dataAssessment.length +
+            this.Episode2.subtopic2_3 / this.dataAssessment.length +
+            this.Episode2.subtopic2_4 / this.dataAssessment.length +
+            this.Episode2.subtopic2_5 / this.dataAssessment.length) /
+            5 >
+          1.5
+        ) {
+          this.rating.Total2 = 'พอใช้';
+        } else if (
+          (this.Episode2.subtopic2_1 / this.dataAssessment.length +
+            this.Episode2.subtopic2_2 / this.dataAssessment.length +
+            this.Episode2.subtopic2_3 / this.dataAssessment.length +
+            this.Episode2.subtopic2_4 / this.dataAssessment.length +
+            this.Episode2.subtopic2_5 / this.dataAssessment.length) /
+            5 >
+          0
+        ) {
+          this.rating.Total2 = 'ควรปรับปรุง';
+        }
+
+        if (this.Episode2.subtopic3_1 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic3_1 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic3_1 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic3_1 = 'ดี';
+        } else if (
+          this.Episode2.subtopic3_1 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic3_1 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic3_1 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic3_1 = 'พอใช้';
+        } else if (this.Episode2.subtopic3_1 / this.dataAssessment.length > 0) {
+          this.rating.subtopic3_1 = 'ควรปรับปรุง';
+        }
+        if (this.Episode2.subtopic3_2 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic3_2 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic3_2 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic3_2 = 'ดี';
+        } else if (
+          this.Episode2.subtopic3_2 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic3_2 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic3_2 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic3_2 = 'พอใช้';
+        } else if (this.Episode2.subtopic3_2 / this.dataAssessment.length > 0) {
+          this.rating.subtopic3_2 = 'ควรปรับปรุง';
+        }
+        if (this.Episode2.subtopic3_3 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic3_3 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic3_3 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic3_3 = 'ดี';
+        } else if (
+          this.Episode2.subtopic3_3 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic3_3 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic3_3 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic3_3 = 'พอใช้';
+        } else if (this.Episode2.subtopic3_3 / this.dataAssessment.length > 0) {
+          this.rating.subtopic3_3 = 'ควรปรับปรุง';
+        }
+        if (this.Episode2.subtopic3_4 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic3_4 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic3_4 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic3_4 = 'ดี';
+        } else if (
+          this.Episode2.subtopic3_4 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic3_4 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic3_4 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic3_4 = 'พอใช้';
+        } else if (this.Episode2.subtopic3_4 / this.dataAssessment.length > 0) {
+          this.rating.subtopic3_4 = 'ควรปรับปรุง';
+        }
+        if (this.Episode2.subtopic3_5 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic3_5 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic3_5 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic3_5 = 'ดี';
+        } else if (
+          this.Episode2.subtopic3_5 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic3_5 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic3_5 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic3_5 = 'พอใช้';
+        } else if (this.Episode2.subtopic3_5 / this.dataAssessment.length > 0) {
+          this.rating.subtopic3_5 = 'ควรปรับปรุง';
+        }
+        if (
+          (this.Episode2.subtopic3_1 / this.dataAssessment.length +
+            this.Episode2.subtopic3_2 / this.dataAssessment.length +
+            this.Episode2.subtopic3_3 / this.dataAssessment.length +
+            this.Episode2.subtopic3_4 / this.dataAssessment.length +
+            this.Episode2.subtopic3_5 / this.dataAssessment.length) /
+            5 >
+          4.5
+        ) {
+          this.rating.Total3 = 'ดีมาก';
+        } else if (
+          (this.Episode2.subtopic3_1 / this.dataAssessment.length +
+            this.Episode2.subtopic3_2 / this.dataAssessment.length +
+            this.Episode2.subtopic3_3 / this.dataAssessment.length +
+            this.Episode2.subtopic3_4 / this.dataAssessment.length +
+            this.Episode2.subtopic3_5 / this.dataAssessment.length) /
+            5 >
+          3.5
+        ) {
+          this.rating.Total3 = 'ดี';
+        } else if (
+          (this.Episode2.subtopic3_1 / this.dataAssessment.length +
+            this.Episode2.subtopic3_2 / this.dataAssessment.length +
+            this.Episode2.subtopic3_3 / this.dataAssessment.length +
+            this.Episode2.subtopic3_4 / this.dataAssessment.length +
+            this.Episode2.subtopic3_5 / this.dataAssessment.length) /
+            5 >
+          2.5
+        ) {
+          this.rating.Total3 = 'ปานกลาง';
+        } else if (
+          (this.Episode2.subtopic3_1 / this.dataAssessment.length +
+            this.Episode2.subtopic3_2 / this.dataAssessment.length +
+            this.Episode2.subtopic3_3 / this.dataAssessment.length +
+            this.Episode2.subtopic3_4 / this.dataAssessment.length +
+            this.Episode2.subtopic3_5 / this.dataAssessment.length) /
+            5 >
+          1.5
+        ) {
+          this.rating.Total3 = 'พอใช้';
+        } else if (
+          (this.Episode2.subtopic3_1 / this.dataAssessment.length +
+            this.Episode2.subtopic3_2 / this.dataAssessment.length +
+            this.Episode2.subtopic3_3 / this.dataAssessment.length +
+            this.Episode2.subtopic3_4 / this.dataAssessment.length +
+            this.Episode2.subtopic3_5 / this.dataAssessment.length) /
+            5 >
+          0
+        ) {
+          this.rating.Total3 = 'ควรปรับปรุง';
+        }
+        if (this.Episode2.subtopic4_1 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic4_1 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic4_1 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic4_1 = 'ดี';
+        } else if (
+          this.Episode2.subtopic4_1 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic4_1 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic4_1 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic4_1 = 'พอใช้';
+        } else if (this.Episode2.subtopic4_1 / this.dataAssessment.length > 0) {
+          this.rating.subtopic4_1 = 'ควรปรับปรุง';
+        }
+        if (this.Episode2.subtopic4_2 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic4_2 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic4_2 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic4_2 = 'ดี';
+        } else if (
+          this.Episode2.subtopic4_2 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic4_2 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic4_2 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic4_2 = 'พอใช้';
+        } else if (this.Episode2.subtopic4_2 / this.dataAssessment.length > 0) {
+          this.rating.subtopic4_2 = 'ควรปรับปรุง';
+        }
+        if (this.Episode2.subtopic4_3 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic4_3 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic4_3 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic4_3 = 'ดี';
+        } else if (
+          this.Episode2.subtopic4_3 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic4_3 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic4_3 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic4_3 = 'พอใช้';
+        } else if (this.Episode2.subtopic4_3 / this.dataAssessment.length > 0) {
+          this.rating.subtopic4_3 = 'ควรปรับปรุง';
+        }
+        if (this.Episode2.subtopic4_4 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic4_4 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic4_4 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic4_4 = 'ดี';
+        } else if (
+          this.Episode2.subtopic4_4 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic4_4 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic4_4 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic4_4 = 'พอใช้';
+        } else if (this.Episode2.subtopic4_4 / this.dataAssessment.length > 0) {
+          this.rating.subtopic4_4 = 'ควรปรับปรุง';
+        }
+
+        if (
+          (this.Episode2.subtopic4_1 / this.dataAssessment.length +
+            this.Episode2.subtopic4_2 / this.dataAssessment.length +
+            this.Episode2.subtopic4_3 / this.dataAssessment.length +
+            this.Episode2.subtopic4_4 / this.dataAssessment.length) /
+            4 >
+          4.5
+        ) {
+          this.rating.Total4 = 'ดีมาก';
+        } else if (
+          (this.Episode2.subtopic4_1 / this.dataAssessment.length +
+            this.Episode2.subtopic4_2 / this.dataAssessment.length +
+            this.Episode2.subtopic4_3 / this.dataAssessment.length +
+            this.Episode2.subtopic4_4 / this.dataAssessment.length) /
+            4 >
+          3.5
+        ) {
+          this.rating.Total4 = 'ดี';
+        } else if (
+          (this.Episode2.subtopic4_1 / this.dataAssessment.length +
+            this.Episode2.subtopic4_2 / this.dataAssessment.length +
+            this.Episode2.subtopic4_3 / this.dataAssessment.length +
+            this.Episode2.subtopic4_4 / this.dataAssessment.length) /
+            4 >
+          2.5
+        ) {
+          this.rating.Total4 = 'ปานกลาง';
+        } else if (
+          (this.Episode2.subtopic4_1 / this.dataAssessment.length +
+            this.Episode2.subtopic4_2 / this.dataAssessment.length +
+            this.Episode2.subtopic4_3 / this.dataAssessment.length +
+            this.Episode2.subtopic4_4 / this.dataAssessment.length) /
+            4 >
+          1.5
+        ) {
+          this.rating.Total4 = 'พอใช้';
+        } else if (
+          (this.Episode2.subtopic4_1 / this.dataAssessment.length +
+            this.Episode2.subtopic4_2 / this.dataAssessment.length +
+            this.Episode2.subtopic4_3 / this.dataAssessment.length +
+            this.Episode2.subtopic4_4 / this.dataAssessment.length) /
+            4 >
+          0
+        ) {
+          this.rating.Total4 = 'ควรปรับปรุง';
+        }
+        if (this.Episode2.subtopic5_1 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic5_1 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic5_1 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic5_1 = 'ดี';
+        } else if (
+          this.Episode2.subtopic5_1 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic5_1 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic5_1 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic5_1 = 'พอใช้';
+        } else if (this.Episode2.subtopic5_1 / this.dataAssessment.length > 0) {
+          this.rating.subtopic5_1 = 'ควรปรับปรุง';
+        }
+        if (this.Episode2.subtopic5_2 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic5_2 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic5_2 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic5_2 = 'ดี';
+        } else if (
+          this.Episode2.subtopic5_2 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic5_2 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic5_2 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic5_2 = 'พอใช้';
+        } else if (this.Episode2.subtopic5_2 / this.dataAssessment.length > 0) {
+          this.rating.subtopic5_2 = 'ควรปรับปรุง';
+        }
+        if (this.Episode2.subtopic5_3 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic5_3 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic5_3 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic5_3 = 'ดี';
+        } else if (
+          this.Episode2.subtopic5_3 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic5_3 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic5_3 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic5_3 = 'พอใช้';
+        } else if (this.Episode2.subtopic5_3 / this.dataAssessment.length > 0) {
+          this.rating.subtopic5_3 = 'ควรปรับปรุง';
+        }
+
+        if (
+          (this.Episode2.subtopic5_1 / this.dataAssessment.length +
+            this.Episode2.subtopic5_2 / this.dataAssessment.length +
+            this.Episode2.subtopic5_3 / this.dataAssessment.length) /
+            3 >
+          4.5
+        ) {
+          this.rating.Total5 = 'ดีมาก';
+        } else if (
+          (this.Episode2.subtopic5_1 / this.dataAssessment.length +
+            this.Episode2.subtopic5_2 / this.dataAssessment.length +
+            this.Episode2.subtopic5_3 / this.dataAssessment.length) /
+            3 >
+          3.5
+        ) {
+          this.rating.Total5 = 'ดี';
+        } else if (
+          (this.Episode2.subtopic5_1 / this.dataAssessment.length +
+            this.Episode2.subtopic5_2 / this.dataAssessment.length +
+            this.Episode2.subtopic5_3 / this.dataAssessment.length) /
+            3 >
+          2.5
+        ) {
+          this.rating.Total5 = 'ปานกลาง';
+        } else if (
+          (this.Episode2.subtopic5_1 / this.dataAssessment.length +
+            this.Episode2.subtopic5_2 / this.dataAssessment.length +
+            this.Episode2.subtopic5_3 / this.dataAssessment.length) /
+            3 >
+          1.5
+        ) {
+          this.rating.Total5 = 'พอใช้';
+        } else if (
+          (this.Episode2.subtopic5_1 / this.dataAssessment.length +
+            this.Episode2.subtopic5_2 / this.dataAssessment.length +
+            this.Episode2.subtopic5_3 / this.dataAssessment.length) /
+            3 >
+          0
+        ) {
+          this.rating.Total5 = 'ควรปรับปรุง';
+        }
+        if (this.Episode2.subtopic6_1 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic6_1 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic6_1 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic6_1 = 'ดี';
+        } else if (
+          this.Episode2.subtopic6_1 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic6_1 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic6_1 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic6_1 = 'พอใช้';
+        } else if (this.Episode2.subtopic6_1 / this.dataAssessment.length > 0) {
+          this.rating.subtopic6_1 = 'ควรปรับปรุง';
+        }
+        if (this.Episode2.subtopic6_2 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic6_2 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic6_2 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic6_2 = 'ดี';
+        } else if (
+          this.Episode2.subtopic6_2 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic6_2 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic6_2 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic6_2 = 'พอใช้';
+        } else if (this.Episode2.subtopic6_2 / this.dataAssessment.length > 0) {
+          this.rating.subtopic6_2 = 'ควรปรับปรุง';
+        }
+        if (this.Episode2.subtopic6_3 / this.dataAssessment.length > 4.5) {
+          this.rating.subtopic6_3 = 'ดีมาก';
+        } else if (
+          this.Episode2.subtopic6_3 / this.dataAssessment.length >
+          3.5
+        ) {
+          this.rating.subtopic6_3 = 'ดี';
+        } else if (
+          this.Episode2.subtopic6_3 / this.dataAssessment.length >
+          2.5
+        ) {
+          this.rating.subtopic6_3 = 'ปานกลาง';
+        } else if (
+          this.Episode2.subtopic6_3 / this.dataAssessment.length >
+          1.5
+        ) {
+          this.rating.subtopic6_3 = 'พอใช้';
+        } else if (this.Episode2.subtopic6_3 / this.dataAssessment.length > 0) {
+          this.rating.subtopic6_3 = 'ควรปรับปรุง';
+        }
+
+        if (
+          (this.Episode2.subtopic6_1 / this.dataAssessment.length +
+            this.Episode2.subtopic6_2 / this.dataAssessment.length +
+            this.Episode2.subtopic6_3 / this.dataAssessment.length) /
+            3 >
+          4.5
+        ) {
+          this.rating.Total6 = 'ดีมาก';
+        } else if (
+          (this.Episode2.subtopic6_1 / this.dataAssessment.length +
+            this.Episode2.subtopic6_2 / this.dataAssessment.length +
+            this.Episode2.subtopic6_3 / this.dataAssessment.length) /
+            3 >
+          3.5
+        ) {
+          this.rating.Total6 = 'ดี';
+        } else if (
+          (this.Episode2.subtopic6_1 / this.dataAssessment.length +
+            this.Episode2.subtopic6_2 / this.dataAssessment.length +
+            this.Episode2.subtopic6_3 / this.dataAssessment.length) /
+            3 >
+          2.5
+        ) {
+          this.rating.Total6 = 'ปานกลาง';
+        } else if (
+          (this.Episode2.subtopic6_1 / this.dataAssessment.length +
+            this.Episode2.subtopic6_2 / this.dataAssessment.length +
+            this.Episode2.subtopic6_3 / this.dataAssessment.length) /
+            3 >
+          1.5
+        ) {
+          this.rating.Total6 = 'พอใช้';
+        } else if (
+          (this.Episode2.subtopic6_1 / this.dataAssessment.length +
+            this.Episode2.subtopic6_2 / this.dataAssessment.length +
+            this.Episode2.subtopic6_3 / this.dataAssessment.length) /
+            3 >
+          0
+        ) {
+          this.rating.Total6 = 'ควรปรับปรุง';
+        }
       } else {
+        this.dataAssessment = null;
       }
     } else {
       alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
@@ -293,6 +1794,49 @@ export class AssessmentDataComponent implements OnInit {
               timer: 1500,
             });
             this.getAssessment();
+            this.Episode1 = {
+              count_men: null,
+              count_women: null,
+              level1: null,
+              level2: null,
+              frequency_over: null,
+              frequency_less: null,
+              frequency_never: null,
+              service_career: null,
+              service_study: null,
+              service_bursary: null,
+              service_personality: null,
+              service_alumni: null,
+              service_other: null,
+            };
+            this.dataAssessment = null;
+            this.Episode2 = {
+              subtopic1_1: null,
+              subtopic1_2: null,
+              subtopic1_3: null,
+              subtopic1_4: null,
+              subtopic1_5: null,
+              subtopic2_1: null,
+              subtopic2_2: null,
+              subtopic2_3: null,
+              subtopic2_4: null,
+              subtopic2_5: null,
+              subtopic3_1: null,
+              subtopic3_2: null,
+              subtopic3_3: null,
+              subtopic3_4: null,
+              subtopic3_5: null,
+              subtopic4_1: null,
+              subtopic4_2: null,
+              subtopic4_3: null,
+              subtopic4_4: null,
+              subtopic5_1: null,
+              subtopic5_2: null,
+              subtopic5_3: null,
+              subtopic6_1: null,
+              subtopic6_2: null,
+              subtopic6_3: null,
+            };
           } else {
             Swal.fire('ไม่สามารถลบข้อมูลได้!', '', 'error');
           }
