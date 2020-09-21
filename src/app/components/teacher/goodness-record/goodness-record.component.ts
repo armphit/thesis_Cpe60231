@@ -439,7 +439,6 @@ export class GoodnessRecordComponent implements OnInit {
           },
           { width: '*', text: '' },
         ];
-        console.log(data_st);
         for (var i = 0; i < this.dataGoodness.length; i++) {
           let dataaaa2 = [
             { text: String(i + 1), style: '', alignment: '', bold: false },

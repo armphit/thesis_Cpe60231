@@ -1,3 +1,4 @@
+import { AssessmentDataComponent } from './assessment-data/assessment-data.component';
 import { ActionPlanComponent } from './action-plan/action-plan.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -44,6 +45,10 @@ const routes: Routes = [
       {
         path: 'action-plan',
         component: ActionPlanComponent,
+      },
+      {
+        path: 'assessment-data',
+        component: AssessmentDataComponent,
       },
       {
         path: '',

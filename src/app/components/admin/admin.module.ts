@@ -12,6 +12,7 @@ import { SemesterDataComponent } from './manage-data/semester-data/semester-data
 import { GoodnessRecordComponent } from './goodness-record/goodness-record.component';
 import { ActionPlanComponent } from './action-plan/action-plan.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { AssessmentDataComponent } from './assessment-data/assessment-data.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
     SemesterDataComponent,
     GoodnessRecordComponent,
     ActionPlanComponent,
+    AssessmentDataComponent,
   ],
   imports: [
     CommonModule,

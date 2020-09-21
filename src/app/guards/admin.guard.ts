@@ -6,11 +6,14 @@ import {
   UrlTree,
 } from '@angular/router';
 import { Observable } from 'rxjs';
+import { HttpService } from '../services/http.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdminGuard implements CanActivate {
+  private notfoundPath: string = '/notfound';
+  constructor(public service: HttpService) {}
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
@@ -22,6 +25,7 @@ export class AdminGuard implements CanActivate {
     if (JSON.parse(localStorage.getItem('userLogin')).status == '3000') {
       return true;
     } else {
+      this.service.navRouter(this.notfoundPath);
       return false;
     }
   }

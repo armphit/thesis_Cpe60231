@@ -1,9 +1,7 @@
-import { async } from '@angular/core/testing';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpService } from 'src/app/services/http.service';
 import Swal from 'sweetalert2';
-import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-assessment-data',
@@ -11,13 +9,22 @@ import * as XLSX from 'xlsx';
   styleUrls: ['./assessment-data.component.scss'],
 })
 export class AssessmentDataComponent implements OnInit {
-  public dataGroup: any = null;
-  public codeGroup: any = null;
-  public nameGroup: any = null;
   public assessment_year: FormGroup;
+  public dataFaculty: any = null;
+  public codeFaculty: any = null;
+  public dataMajor: any = null;
+  public nameMajor: any = null;
+  public acronym: any = null;
+  public codeMajor: any = null;
+  public dataBranch: any = null;
+  public codeBranch: any = null;
+  public dataGroup: any = null;
+  public groupName: any = null;
+
+  public groupID: any = null;
+  public groupUser_name: any = null;
+  public nameBranchhead: any = null;
   public range: Array<any> = [];
-  public data: any = null;
-  public filesName: any = 'โปรดเลือกไฟล์';
   public dataAssessment: any = null;
   public commentAssessment: Array<any> = [];
 
@@ -167,23 +174,14 @@ export class AssessmentDataComponent implements OnInit {
     Total2: null,
     Total1: null,
   };
-
   public dataBranch_Faculty = {
     branch: null,
     faculty: null,
   };
-  public dataBranchhead: any = null;
-  public dataBranch: any = null;
-  public dataGroup_Branchhead: any = null;
-  public group_Branchhead: any = null;
-  public group_name_Branchhead: any = null;
-
   constructor(public http: HttpService, private formBuilder: FormBuilder) {
-    this.getGroup();
-    this.getCURDATE();
+    this.getFaculty();
     this.getYear();
-    this.getBranchhead();
-    this.getBranch();
+    this.getCURDATE();
   }
 
   ngOnInit(): void {
@@ -191,10 +189,75 @@ export class AssessmentDataComponent implements OnInit {
       _year: [``, Validators.required],
     });
   }
+
+  public getFaculty = async () => {
+    let getData: any = await this.http.post('admin/getFaculty');
+    if (getData.connect) {
+      if (getData['response']['rowCount'] > 0) {
+        this.dataFaculty = getData['response']['result'];
+      } else {
+        this.dataFaculty = [];
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+  };
+
+  public async clickFaculty(codeFaculty, nameFaculty) {
+    this.codeMajor = null;
+    this.codeBranch = null;
+
+    this.groupID = null;
+    this.codeFaculty = codeFaculty.substr(0, 2);
+    let formData = new FormData();
+    formData.append('code', this.codeFaculty);
+    let getData: any = await this.http.post('admin/getMajor', formData);
+
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        this.dataMajor = getData.response.result;
+      } else {
+        this.dataMajor = null;
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+  }
+
+  public async clickMajor(codeMajor, nameMajor, acronym) {
+    this.codeBranch = null;
+
+    this.groupID = null;
+    this.nameMajor = nameMajor;
+    this.codeMajor = codeMajor;
+    let formData = new FormData();
+    formData.append('code', this.codeMajor);
+    let getData: any = await this.http.post('admin/getBranch', formData);
+
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        this.dataBranch = getData.response.result;
+      } else {
+        this.dataBranch = null;
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+    this.getBranchhead();
+    // this.getGroup();
+  }
+
+  public clickBranch(codeBranch, name, acronym) {
+    this.groupID = null;
+    this.acronym = acronym;
+    this.codeBranch = codeBranch;
+    this.getGroup();
+  }
+
   public getGroup = async () => {
     let formData = new FormData();
-    formData.append('ID', JSON.parse(localStorage.getItem('userLogin')).userID);
-    let getData: any = await this.http.post('teacher/getGroup', formData);
+    formData.append('codeBranch', this.codeBranch);
+    let getData: any = await this.http.post('admin/getGroup', formData);
 
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
@@ -203,12 +266,20 @@ export class AssessmentDataComponent implements OnInit {
         this.dataGroup = null;
       }
     } else {
-      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+      Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
     }
   };
-  public clickGroup(codeGroup, group_name) {
-    this.codeGroup = codeGroup;
-    this.nameGroup = group_name;
+  public async clickGroup(
+    codeGroup: any,
+    namegroup: any,
+    titlename: any,
+    fname: any,
+    lname: any
+  ) {
+    this.groupID = codeGroup;
+    this.groupName = namegroup;
+    this.groupUser_name = titlename + fname + ' ' + lname;
+    // this.getStudent();
     this.getAssessment();
     this.Episode1 = {
       count_men: 0,
@@ -226,7 +297,7 @@ export class AssessmentDataComponent implements OnInit {
       service_other: 0,
     };
     this.dataAssessment = null;
-    this.filesName = 'โปรดเลือกไฟล์';
+
     this.Episode2 = {
       subtopic1_1: null,
       subtopic1_2: null,
@@ -320,13 +391,38 @@ export class AssessmentDataComponent implements OnInit {
       Total1: null,
     };
     this.commentAssessment = [];
-    this.group_Branchhead = null;
   }
+
+  public getBranchhead = async () => {
+    let formData = new FormData();
+    formData.append('code', this.codeMajor);
+    let getData: any = await this.http.post('admin/getBranchhead', formData);
+
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        let a =
+          getData.response.result[0].titlename +
+          getData.response.result[0].fname +
+          ' ' +
+          getData.response.result[0].lname;
+
+        if (a == '0 null') {
+          a = '';
+          this.nameBranchhead = a;
+        } else {
+          this.nameBranchhead = a;
+        }
+      } else {
+        this.nameBranchhead = null;
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+  };
   public getYearAssessment(e) {
     this.assessment_year = this.formBuilder.group({
       _year: [e, Validators.required],
     });
-    this.filesName = 'โปรดเลือกไฟล์';
     this.getAssessment();
     this.Episode1 = {
       count_men: 0,
@@ -344,6 +440,7 @@ export class AssessmentDataComponent implements OnInit {
       service_other: 0,
     };
     this.dataAssessment = null;
+
     this.Episode2 = {
       subtopic1_1: null,
       subtopic1_2: null,
@@ -444,15 +541,12 @@ export class AssessmentDataComponent implements OnInit {
     for (var i = 0; i < 10; i++) {
       this.range[i] = { value: `${year - i}` };
     }
-    this.data = null;
-    this.filesName = null;
   };
   public getCURDATE = async () => {
     let getData: any = await this.http.post('teacher/getCURDATE');
 
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
-        //this.dataCURDATE.term = getData.response.result[0].term ;
         this.assessment_year.patchValue({
           _year: getData.response.result[0].year,
         });
@@ -462,69 +556,15 @@ export class AssessmentDataComponent implements OnInit {
       alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
     }
   };
-  public uploadFileAssessment(evt) {
-    this.filesName = evt.target.files[0].name;
-    const target: DataTransfer = <DataTransfer>evt.target;
-    if (target.files.length !== 1) throw new Error('Cannot use');
-    const reader: FileReader = new FileReader();
-    reader.onload = (e: any) => {
-      const bstr: string = e.target.result;
-      const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
-      const wsname: string = wb.SheetNames[0];
-      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
-
-      this.data = XLSX.utils.sheet_to_json(ws, { header: 2 });
-    };
-    reader.readAsBinaryString(target.files[0]);
-  }
-  public async uploadAssessment() {
-    if (this.data == null) {
-      Swal.fire('โปรดเลือกไฟล์!', '', 'error');
-    } else {
-      for (let i = 0; i < this.data.length; i++) {
-        let Form = new FormData();
-        Object.keys(this.data[i]).forEach((key) => {
-          Form.append(key, this.data[i][key]);
-        });
-        Form.append('group', this.codeGroup);
-        Form.append('year', this.assessment_year.value._year);
-
-        var getData: any = await this.http.post('teacher/addAssessment', Form);
-
-        // Form.forEach((value, key) => {
-        //   console.log(key + ':' + value);
-        // });
-      }
-
-      if (getData.connect) {
-        if (getData.response.rowCount > 0) {
-          Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
-          this.getAssessment();
-          this.data = null;
-          this.filesName = 'โปรดเลือกไฟล์';
-        } else {
-          Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
-        }
-      } else {
-        Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
-      }
-    }
-  }
   public getAssessment = async () => {
     var a = null;
     var b = null;
     let formData = new FormData();
-    var group = null;
-    if (this.codeGroup != null) {
-      group = this.codeGroup;
-      a = this.nameGroup.split('.', 1);
-      b = this.nameGroup.replace(a + '.', '');
-    } else if (this.codeGroup == null) {
-      group = this.group_Branchhead;
-      a = this.group_name_Branchhead.split('.', 1);
-      b = this.group_name_Branchhead.replace(a + '.', '');
-    }
-    formData.append('group', group);
+
+    a = this.groupName.split('.', 1);
+    b = this.groupName.replace(a + '.', '');
+
+    formData.append('group', this.groupID);
     // formData.append('group', this.group_Branchhead);
     formData.append('year', this.assessment_year.value._year);
     let getData: any = await this.http.post('teacher/getAssessment', formData);
@@ -1779,15 +1819,8 @@ export class AssessmentDataComponent implements OnInit {
     return num.toFixed(2);
   }
   public getBranch_Faculty = async () => {
-    var group = null;
-    if (this.codeGroup != null) {
-      group = this.codeGroup;
-    } else if (this.codeGroup == null) {
-      group = this.group_Branchhead;
-    }
-
     let formData = new FormData();
-    formData.append('ID', group);
+    formData.append('ID', this.groupID);
     let getData: any = await this.http.post(
       'teacher/getBranch_Faculty',
       formData
@@ -1804,315 +1837,4 @@ export class AssessmentDataComponent implements OnInit {
       alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
     }
   };
-  public delAssessment = async () => {
-    let formData = new FormData();
-    formData.append('group', this.codeGroup);
-    formData.append('year', this.assessment_year.value._year);
-
-    this.http.confirmAlert('ลบรายการนี้หรือไม่?').then(async (value: any) => {
-      if (value) {
-        let getData: any = await this.http.post(
-          'teacher/delAssessment',
-          formData
-        );
-
-        if (getData.connect) {
-          if (getData.response.rowCount > 0) {
-            Swal.fire({
-              position: 'top',
-              icon: 'success',
-              title: 'ลบข้อมูลสำเร็จ',
-              showConfirmButton: false,
-              timer: 1500,
-            });
-            this.getAssessment();
-            this.Episode1 = {
-              count_men: 0,
-              count_women: 0,
-              level1: 0,
-              level2: 0,
-              frequency_over: 0,
-              frequency_less: 0,
-              frequency_never: 0,
-              service_career: 0,
-              service_study: 0,
-              service_bursary: 0,
-              service_personality: 0,
-              service_alumni: 0,
-              service_other: 0,
-            };
-            this.dataAssessment = null;
-            this.Episode2 = {
-              subtopic1_1: null,
-              subtopic1_2: null,
-              subtopic1_3: null,
-              subtopic1_4: null,
-              subtopic1_5: null,
-              subtopic2_1: null,
-              subtopic2_2: null,
-              subtopic2_3: null,
-              subtopic2_4: null,
-              subtopic2_5: null,
-              subtopic3_1: null,
-              subtopic3_2: null,
-              subtopic3_3: null,
-              subtopic3_4: null,
-              subtopic3_5: null,
-              subtopic4_1: null,
-              subtopic4_2: null,
-              subtopic4_3: null,
-              subtopic4_4: null,
-              subtopic5_1: null,
-              subtopic5_2: null,
-              subtopic5_3: null,
-              subtopic6_1: null,
-              subtopic6_2: null,
-              subtopic6_3: null,
-            };
-            this.SD = {
-              subtopic1_1: null,
-              subtopic1_2: null,
-              subtopic1_3: null,
-              subtopic1_4: null,
-              subtopic1_5: null,
-
-              subtopic2_1: null,
-              subtopic2_2: null,
-              subtopic2_3: null,
-              subtopic2_4: null,
-              subtopic2_5: null,
-
-              subtopic3_1: null,
-              subtopic3_2: null,
-              subtopic3_3: null,
-              subtopic3_4: null,
-              subtopic3_5: null,
-
-              subtopic4_1: null,
-              subtopic4_2: null,
-              subtopic4_3: null,
-              subtopic4_4: null,
-
-              subtopic5_1: null,
-              subtopic5_2: null,
-              subtopic5_3: null,
-
-              subtopic6_1: null,
-              subtopic6_2: null,
-              subtopic6_3: null,
-            };
-            this.totalSD = {
-              subtopic1_1: null,
-              subtopic1_2: null,
-              subtopic1_3: null,
-              subtopic1_4: null,
-              subtopic1_5: null,
-              subtopic2_1: null,
-              subtopic2_2: null,
-              subtopic2_3: null,
-              subtopic2_4: null,
-              subtopic2_5: null,
-              subtopic3_1: null,
-              subtopic3_2: null,
-              subtopic3_3: null,
-              subtopic3_4: null,
-              subtopic3_5: null,
-              subtopic4_1: null,
-              subtopic4_2: null,
-              subtopic4_3: null,
-              subtopic4_4: null,
-              subtopic5_1: null,
-              subtopic5_2: null,
-              subtopic5_3: null,
-              subtopic6_1: null,
-              subtopic6_2: null,
-              subtopic6_3: null,
-              Total6: null,
-              Total5: null,
-              Total4: null,
-              Total3: null,
-              Total2: null,
-              Total1: null,
-            };
-            this.commentAssessment = [];
-          } else {
-            Swal.fire('ไม่สามารถลบข้อมูลได้!', '', 'error');
-          }
-        }
-      }
-    });
-  };
-
-  public getBranchhead = async () => {
-    let formData = new FormData();
-    formData.append('ID', JSON.parse(localStorage.getItem('userLogin')).userID);
-    let getData: any = await this.http.post('teacher/getBranchhead', formData);
-
-    if (getData.connect) {
-      if (getData.response.rowCount > 0) {
-        this.dataBranchhead = getData.response.result;
-      } else {
-        this.dataBranchhead = null;
-      }
-    } else {
-      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
-    }
-  };
-
-  public getBranch = async () => {
-    let formData = new FormData();
-    formData.append(
-      'code',
-      JSON.parse(localStorage.getItem('userLogin')).branch
-    );
-    let getData: any = await this.http.post('admin/getBranch', formData);
-    if (getData.connect) {
-      if (getData.response.rowCount > 0) {
-        this.dataBranch = getData.response.result;
-      } else {
-        this.dataBranch = null;
-      }
-    } else {
-      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
-    }
-  };
-  public async clickBranch_Branchhead(i) {
-    let formData = new FormData();
-    formData.append('codeBranch', i.code);
-    let getData: any = await this.http.post('admin/getGroup', formData);
-
-    if (getData.connect) {
-      if (getData.response.rowCount > 0) {
-        this.dataGroup_Branchhead = getData.response.result;
-      } else {
-        this.dataGroup_Branchhead = null;
-      }
-    } else {
-      Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
-    }
-    this.group_Branchhead = null;
-    // this.dataActionPlan_Branchhead = null;
-  }
-  // public getYearactionPlan_Branchhead(e) {
-  //   this.actionPlan_year_Branchhead = this.formBuilder.group({
-  //     year: [e, Validators.required],
-  //   });
-
-  // }
-  public async clickgroup_Branchhead(i) {
-    this.group_Branchhead = i.study_group_id;
-    this.group_name_Branchhead = i.study_group_name;
-    this.codeGroup = null;
-    this.getAssessment();
-    this.Episode1 = {
-      count_men: 0,
-      count_women: 0,
-      level1: 0,
-      level2: 0,
-      frequency_over: 0,
-      frequency_less: 0,
-      frequency_never: 0,
-      service_career: 0,
-      service_study: 0,
-      service_bursary: 0,
-      service_personality: 0,
-      service_alumni: 0,
-      service_other: 0,
-    };
-    this.dataAssessment = null;
-    this.filesName = 'โปรดเลือกไฟล์';
-    this.Episode2 = {
-      subtopic1_1: null,
-      subtopic1_2: null,
-      subtopic1_3: null,
-      subtopic1_4: null,
-      subtopic1_5: null,
-      subtopic2_1: null,
-      subtopic2_2: null,
-      subtopic2_3: null,
-      subtopic2_4: null,
-      subtopic2_5: null,
-      subtopic3_1: null,
-      subtopic3_2: null,
-      subtopic3_3: null,
-      subtopic3_4: null,
-      subtopic3_5: null,
-      subtopic4_1: null,
-      subtopic4_2: null,
-      subtopic4_3: null,
-      subtopic4_4: null,
-      subtopic5_1: null,
-      subtopic5_2: null,
-      subtopic5_3: null,
-      subtopic6_1: null,
-      subtopic6_2: null,
-      subtopic6_3: null,
-    };
-    this.SD = {
-      subtopic1_1: null,
-      subtopic1_2: null,
-      subtopic1_3: null,
-      subtopic1_4: null,
-      subtopic1_5: null,
-
-      subtopic2_1: null,
-      subtopic2_2: null,
-      subtopic2_3: null,
-      subtopic2_4: null,
-      subtopic2_5: null,
-
-      subtopic3_1: null,
-      subtopic3_2: null,
-      subtopic3_3: null,
-      subtopic3_4: null,
-      subtopic3_5: null,
-
-      subtopic4_1: null,
-      subtopic4_2: null,
-      subtopic4_3: null,
-      subtopic4_4: null,
-
-      subtopic5_1: null,
-      subtopic5_2: null,
-      subtopic5_3: null,
-
-      subtopic6_1: null,
-      subtopic6_2: null,
-      subtopic6_3: null,
-    };
-    this.totalSD = {
-      subtopic1_1: null,
-      subtopic1_2: null,
-      subtopic1_3: null,
-      subtopic1_4: null,
-      subtopic1_5: null,
-      subtopic2_1: null,
-      subtopic2_2: null,
-      subtopic2_3: null,
-      subtopic2_4: null,
-      subtopic2_5: null,
-      subtopic3_1: null,
-      subtopic3_2: null,
-      subtopic3_3: null,
-      subtopic3_4: null,
-      subtopic3_5: null,
-      subtopic4_1: null,
-      subtopic4_2: null,
-      subtopic4_3: null,
-      subtopic4_4: null,
-      subtopic5_1: null,
-      subtopic5_2: null,
-      subtopic5_3: null,
-      subtopic6_1: null,
-      subtopic6_2: null,
-      subtopic6_3: null,
-      Total6: null,
-      Total5: null,
-      Total4: null,
-      Total3: null,
-      Total2: null,
-      Total1: null,
-    };
-    this.commentAssessment = [];
-  }
 }

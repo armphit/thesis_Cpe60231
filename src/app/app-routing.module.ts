@@ -1,3 +1,4 @@
+import { NotfoundComponent } from './components/notfound/notfound.component';
 import { AdminGuard } from './guards/admin.guard';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -40,6 +41,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+  },
+  {
+    path: '**',
+    component: NotfoundComponent,
   },
 ];
 

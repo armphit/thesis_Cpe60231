@@ -17,6 +17,7 @@ import { TeacherComponent } from './components/teacher/teacher.component';
 import { StudentComponent } from './components/student/student.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
+import { NotfoundComponent } from './components/notfound/notfound.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { AuthGuard } from './guards/auth.guard';
     TeacherComponent,
     StudentComponent,
     LoginComponent,
+    NotfoundComponent,
   ],
   imports: [
     BrowserModule,

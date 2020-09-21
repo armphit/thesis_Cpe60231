@@ -42,8 +42,10 @@ export class LoginComponent implements OnInit {
               this.onlogin(a);
               // console.log(a);
             } else {
-              window.location.replace(environment.ssoLogout);
               this.service.alertLog('error', 'ไม่พบข้อมูลผู้ใช้งาน');
+              setTimeout(function () {
+                window.location.replace(environment.ssoLogout);
+              }, 3000);
             }
           });
       }

@@ -349,7 +349,6 @@ export class ManageDataComponent implements OnInit {
   }
 
   public async uploadStudent() {
-    console.log(this.data);
     if (this.data == null) {
       Swal.fire('โปรดเลือกไฟล์!', '', 'error');
     } else {
@@ -520,7 +519,7 @@ export class ManageDataComponent implements OnInit {
       );
     } else {
       let getData: any = await this.http.post('teacher/addCalendar', formData);
-      console.log(getData);
+
       if (getData.connect) {
         if (getData.response.result) {
           Swal.fire({

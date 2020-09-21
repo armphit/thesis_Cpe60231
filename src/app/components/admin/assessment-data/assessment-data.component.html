@@ -1,0 +1,973 @@
+<div
+  class="panel-body"
+  style="margin-left: 10px; margin-right: 10px"
+  *ngIf="assessment_year.value._year"
+>
+  <div class="row">
+    <div class="col-sm-6">
+      คณะ:&nbsp;&nbsp;<mat-form-field style="width: 80%">
+        <mat-label>โปรดเลือกคณะ</mat-label>
+        <mat-select required>
+          <mat-option
+            *ngFor="let i of dataFaculty; let x = index"
+            [value]="i.name"
+            (click)="clickFaculty(i.code, i.name)"
+          >
+            {{ i.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-6" *ngIf="codeFaculty!">
+      สาขา:&nbsp;&nbsp;<mat-form-field style="width: 80%">
+        <mat-label>โปรดเลือกสาขา</mat-label>
+        <mat-select required>
+          <mat-option
+            *ngFor="let i of dataMajor; let x = index"
+            [value]="i.name"
+            (click)="clickMajor(i.code, i.name, i.acronym)"
+          >
+            {{ i.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6" *ngIf="codeMajor!">
+      โปรแกรมวิชา:&nbsp;&nbsp;<mat-form-field style="width: 80%">
+        <mat-label>โปรดเลือกโปรแกรมวิชา</mat-label>
+        <mat-select required>
+          <mat-option
+            style="width: auto"
+            *ngFor="let i of dataBranch; let x = index"
+            [value]="i.name"
+            (click)="clickBranch(i.code, i.name, i.acronym)"
+          >
+            {{ i.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-6" *ngIf="codeBranch!">
+      กลุ่มเรียน:&nbsp;&nbsp;<mat-form-field>
+        <mat-label>โปรดเลือกกลุ่มเรียน</mat-label>
+        <mat-select required>
+          <mat-option
+            style="width: auto"
+            *ngFor="let i of dataGroup; let x = index"
+            [value]="i.study_group_id"
+            (click)="
+              clickGroup(
+                i.study_group_id,
+                i.study_group_name,
+                i.titlename,
+                i.fname,
+                i.lname
+              )
+            "
+          >
+            {{ i.study_group_name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row" *ngIf="groupID!" style="padding-bottom: 15px">
+    <div class="col-sm-6">
+      หัวหน้าสาขาวิชา :&nbsp;&nbsp;{{ nameBranchhead }}
+    </div>
+    <div class="col-sm-6">
+      <span></span>อาจารย์ที่ปรึกษา : &nbsp;&nbsp;{{ groupUser_name }}
+    </div>
+  </div>
+  <div *ngIf="groupID!">
+    <form [formGroup]="assessment_year">
+      ปีการศึกษา : &nbsp;&nbsp;
+      <mat-form-field style="width: 25%">
+        <mat-label>เลือกปีการศึกษา</mat-label>
+        <mat-select
+          formControlName="_year"
+          (selectionChange)="getYearAssessment($event.value)"
+          required
+        >
+          <mat-option *ngFor="let i of range" [value]="i.value">
+            {{ i.value }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </div>
+</div>
+<mat-tab-group *ngIf="dataAssessment! && groupID!">
+  <mat-tab label="ส่วนที่ 1">
+    <table class="table table-bordered" *ngIf="dataAssessment!">
+      <thead>
+        <tr>
+          <th scope="col">ส่วนที่ 1 ข้อมูลส่วนตัว</th>
+          <th scope="col" style="vertical-align: middle; text-align: center">
+            จำนวน
+          </th>
+          <th scope="col" style="vertical-align: middle; text-align: center">
+            ร้อยละ
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>1. เพศ</th>
+          <th></th>
+          <th></th>
+        </tr>
+        <tr>
+          <td><span style="padding-left: 15px">เพศชาย</span></td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ Episode1.count_men }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue((Episode1.count_men * 100) / dataAssessment.length) }}
+          </td>
+        </tr>
+        <tr>
+          <td><span style="padding-left: 15px">เพศหญิง</span></td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ Episode1.count_women }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue((Episode1.count_women * 100) / dataAssessment.length) }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 150px">รวม</span>
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ dataAssessment.length }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{
+              getValue((dataAssessment.length * 100) / dataAssessment.length)
+            }}
+          </td>
+        </tr>
+        <tr>
+          <th>2. ระดับการศึกษา</th>
+          <th></th>
+          <th></th>
+        </tr>
+        <tr>
+          <td><span style="padding-left: 15px">ปวส.</span></td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ Episode1.level1 }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue((Episode1.level1 * 100) / dataAssessment.length) }}
+          </td>
+        </tr>
+        <tr>
+          <td><span style="padding-left: 15px">ปริญญาตรี</span></td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ Episode1.level2 }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue((Episode1.level2 * 100) / dataAssessment.length) }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 150px">รวม</span>
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ dataAssessment.length }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{
+              getValue((dataAssessment.length * 100) / dataAssessment.length)
+            }}
+          </td>
+        </tr>
+        <tr>
+          <th colspan="3">
+            3.{{ " " }} {{ dataBranch_Faculty.faculty }}{{ " " }}
+            {{ dataBranch_Faculty.branch }}
+          </th>
+        </tr>
+        <tr>
+          <th>4. ความถี่ในการใช้บริการ</th>
+          <th></th>
+          <th></th>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px"> ไม่เคยมารับบริการ</span>
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ Episode1.frequency_never }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{
+              getValue((Episode1.frequency_never * 100) / dataAssessment.length)
+            }}
+          </td>
+        </tr>
+        <tr>
+          <td><span style="padding-left: 15px"> น้อยกว่า 5 ครั้ง</span></td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ Episode1.frequency_less }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{
+              getValue((Episode1.frequency_less * 100) / dataAssessment.length)
+            }}
+          </td>
+        </tr>
+        <tr>
+          <td><span style="padding-left: 15px"> มากกว่า 5 ครั้ง</span></td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ Episode1.frequency_over }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{
+              getValue((Episode1.frequency_over * 100) / dataAssessment.length)
+            }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 150px">รวม</span>
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ dataAssessment.length }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{
+              getValue((dataAssessment.length * 100) / dataAssessment.length)
+            }}
+          </td>
+        </tr>
+        <tr>
+          <th>5. เข้ารับบริการเรื่อง</th>
+          <th></th>
+          <th></th>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px"> ข้อมูลเรื่องอาชีพ</span>
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ Episode1.service_career }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{
+              getValue((Episode1.service_career * 100) / dataAssessment.length)
+            }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px"> ข้อมูลเรื่องการศึกษา</span>
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ Episode1.service_study }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{
+              getValue((Episode1.service_study * 100) / dataAssessment.length)
+            }}
+          </td>
+        </tr>
+        <tr>
+          <td><span style="padding-left: 15px"> ทุนการศึกษา</span></td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ Episode1.service_bursary }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{
+              getValue((Episode1.service_bursary * 100) / dataAssessment.length)
+            }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px"
+              >ข้อมูลบุคลิกภาพ ธรรมะ สุขภาพและการปรับตัว</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ Episode1.service_personality }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{
+              getValue(
+                (Episode1.service_personality * 100) / dataAssessment.length
+              )
+            }}
+          </td>
+        </tr>
+        <tr>
+          <td><span style="padding-left: 15px"> บริการศิษย์เก่า</span></td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ Episode1.service_alumni }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{
+              getValue((Episode1.service_alumni * 100) / dataAssessment.length)
+            }}
+          </td>
+        </tr>
+        <tr>
+          <td><span style="padding-left: 15px"> อื่นๆ</span></td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ Episode1.service_other }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{
+              getValue((Episode1.service_other * 100) / dataAssessment.length)
+            }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 150px">รวม</span>
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ dataAssessment.length }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{
+              getValue((dataAssessment.length * 100) / dataAssessment.length)
+            }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </mat-tab>
+  <mat-tab label="ส่วนที่ 2">
+    <table class="table table-bordered" *ngIf="dataAssessment!">
+      <thead>
+        <tr>
+          <th
+            scope="col"
+            rowspan="2"
+            style="width: 60%; vertical-align: middle; text-align: center"
+          >
+            หัวข้อประเมิน
+          </th>
+          <th
+            scope="col"
+            colspan="3"
+            style="vertical-align: middle; text-align: center"
+          >
+            ระดับความพึงพอใจ (ร้อยละ)
+          </th>
+        </tr>
+        <tr>
+          <th
+            scope="col"
+            style="width: 12%; vertical-align: middle; text-align: center"
+          >
+            x&#772;
+          </th>
+          <th
+            scope="col"
+            style="width: 12%; vertical-align: middle; text-align: center"
+          >
+            S.D.
+          </th>
+          <th scope="col" style="vertical-align: middle; text-align: center">
+            ระดับความพึงพอใจ
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>1. คุณลักษณะด้านความสามารถเชิงวิชาการ</th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px">
+              1.1 รู้บทบาทหน้าที่ของอาจารย์ที่ปรึกษา</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic1_1 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic1_1) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic1_1 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px">1.2 มีเทคนิคให้คำปรึกษา</span>
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic1_2 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic1_2) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic1_2 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px">1.3 มีความสามารถให้คำแนะนำ</span>
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic1_3 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic1_3) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic1_3 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px"
+              >1.4 มีความรู้เกี่ยวกับกฎระเบียบของมหาวิทยาลัย</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic1_4 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic1_4) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic1_4 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px"
+              >1.5 มีความรู้ความสนใจเกี่ยวกับเหตุการณ์ปัจจุบัน</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic1_5 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic1_5) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic1_5 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 150px">รวม</span>
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{
+              getValue(
+                (Episode2.subtopic1_1 / dataAssessment.length +
+                  Episode2.subtopic1_2 / dataAssessment.length +
+                  Episode2.subtopic1_3 / dataAssessment.length +
+                  Episode2.subtopic1_4 / dataAssessment.length +
+                  Episode2.subtopic1_5 / dataAssessment.length) /
+                  5
+              )
+            }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.Total1) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.Total1 }}
+          </td>
+        </tr>
+        <tr>
+          <th>2. คุณลักษณะด้านบุคลิกภาพ</th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px">
+              2.1 มีความประพฤติแบบอย่างที่ดี มีความกระตือรือร้น
+              สนใจในหน้าที่</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic2_1 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic2_1) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic2_1 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px"
+              >2.2 รับฟังความคิดเห็นของนักศึกษา</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic2_2 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic2_2) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic2_2 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px"
+              >2.3 มีบุคลิกภาพที่อบอุ่นและสุภาพเรียบร้อย สุขุมรอบคอบ
+              คุมอารมณ์</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic2_3 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic2_3) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic2_3 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px"
+              >2.4 เอาใจใส่นักศึกษาอย่างทั่วถึงกันและสม่ำเสมอ เท่าเทียมกัน</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic2_4 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic2_4) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic2_4 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px"
+              >2.5 มีความพร้อมในการช่วยเหลือให้นักศึกษา เผชิญกับปัญหาต่างๆ</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic2_5 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic2_5) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic2_5 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 150px">รวม</span>
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{
+              getValue(
+                (Episode2.subtopic2_1 / dataAssessment.length +
+                  Episode2.subtopic2_2 / dataAssessment.length +
+                  Episode2.subtopic2_3 / dataAssessment.length +
+                  Episode2.subtopic2_4 / dataAssessment.length +
+                  Episode2.subtopic2_5 / dataAssessment.length) /
+                  5
+              )
+            }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.Total2) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.Total2 }}
+          </td>
+        </tr>
+        <tr>
+          <th>3. คุณลักษณะด้านเจตคติ</th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px">
+              3.1 มีความเต็มใจและยินดีในการทำหน้าที่อาจารย์ที่ปรึกษา</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic3_1 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic3_1) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic3_1 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px"
+              >3.2 มีความมุ่งมั่นต่อคุณภาพงานการให้คำปรึกษาด้านวิชาการ</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic3_2 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic3_2) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic3_2 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px">3.3 การเป็นคนมองโลกในแง่ดี</span>
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic3_3 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic3_3) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic3_3 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px"
+              >3.4 การให้ความสำคัญกับนักศึกษาทุกคนเท่าเทียมกัน</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic3_4 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic3_4) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic3_4 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px"
+              >3.5 มีความยุติธรรมแก่นักศึกษา</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic3_5 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic3_5) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic3_5 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 150px">รวม</span>
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{
+              getValue(
+                (Episode2.subtopic3_1 / dataAssessment.length +
+                  Episode2.subtopic3_2 / dataAssessment.length +
+                  Episode2.subtopic3_3 / dataAssessment.length +
+                  Episode2.subtopic3_4 / dataAssessment.length +
+                  Episode2.subtopic3_5 / dataAssessment.length) /
+                  5
+              )
+            }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.Total3) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.Total3 }}
+          </td>
+        </tr>
+        <tr>
+          <th>4. คุณลักษณะด้านจรรยาบรรณ</th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px">
+              4.1 รักษาความลับ ข้อมูลส่วนตัวของนักศึกษา</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic4_1 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic4_1) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic4_1 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px"
+              >4.2 คำนึงถึงสวัสดิภาพของนักศึกษา</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic4_2 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic4_2) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic4_2 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px"
+              >4.3 การให้กำลังใจแก่นักศึกษาที่เข้ามาขอรับคำปรึกษา</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic4_3 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic4_3) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic4_3 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px"
+              >4.4 มีความเมตตา และกรุณากับนักศึกษา</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic4_4 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic4_4) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic4_4 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 150px">รวม</span>
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{
+              getValue(
+                (Episode2.subtopic4_1 / dataAssessment.length +
+                  Episode2.subtopic4_2 / dataAssessment.length +
+                  Episode2.subtopic4_3 / dataAssessment.length +
+                  Episode2.subtopic4_4 / dataAssessment.length) /
+                  4
+              )
+            }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.Total4) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.Total4 }}
+          </td>
+        </tr>
+        <tr>
+          <th>5. คุณลักษณะด้านทักษะการปฏิบัติงาน</th>
+
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px">
+              5.1 ความสามารถนำข้อมูลที่ทันสมัยมาใช้ในการให้คำปรึกษา</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic5_1 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic5_1) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic5_1 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px"
+              >5.2 ใช้ภาษาเพื่อถ่ายทอดความคิดในการให้คำปรึกษาได้ดี</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic5_2 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic5_2) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic5_2 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px"
+              >5.3 มีความสามารถในการแก้ปัญหาเฉพาะหน้าให้กับนักศึกษาได้</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic5_3 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic5_3) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic5_3 }}
+          </td>
+        </tr>
+        <tr></tr>
+
+        <tr>
+          <td>
+            <span style="padding-left: 150px">รวม</span>
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{
+              getValue(
+                (Episode2.subtopic5_1 / dataAssessment.length +
+                  Episode2.subtopic5_2 / dataAssessment.length +
+                  Episode2.subtopic5_3 / dataAssessment.length) /
+                  3
+              )
+            }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.Total5) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.Total5 }}
+          </td>
+        </tr>
+        <tr>
+          <th>6. คุณลักษณะด้านความรับผิดชอบ</th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px">
+              6.1 ใส่ใจการปฏิบัติหน้าที่ให้คำปรึกษา</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic6_1 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic6_1) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic6_1 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px"
+              >6.2 จัดทำแฟ้มข้อมูลนักศึกษาให้เป็นปัจจุบันอยู่เสมอ</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic6_2 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic6_2) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic6_2 }}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style="padding-left: 15px"
+              >6.3 ให้โอกาสนักศึกษา เข้ามารับคำปรึกษา
+              อย่างสะดวกในบรรยากาศที่อบอุ่น</span
+            >
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(Episode2.subtopic6_3 / dataAssessment.length) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.subtopic6_3) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.subtopic6_3 }}
+          </td>
+        </tr>
+        <tr></tr>
+
+        <tr>
+          <td>
+            <span style="padding-left: 150px">รวม</span>
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{
+              getValue(
+                (Episode2.subtopic6_1 / dataAssessment.length +
+                  Episode2.subtopic6_2 / dataAssessment.length +
+                  Episode2.subtopic6_3 / dataAssessment.length) /
+                  3
+              )
+            }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ getValue(totalSD.Total6) }}
+          </td>
+          <td style="vertical-align: middle; text-align: right">
+            {{ rating.Total6 }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </mat-tab>
+  <mat-tab label="ส่วนที่ 3">
+    <table class="table" ng *ngIf="dataAssessment!">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">ลำดับ</th>
+          <th scope="col">ความคิดเห็น</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let i of commentAssessment; let x = index">
+          <th scope="row">{{ x + 1 }}</th>
+          <td>{{ i }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </mat-tab>
+</mat-tab-group>
