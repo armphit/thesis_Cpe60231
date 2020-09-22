@@ -655,12 +655,14 @@
         </tr>
       </tbody>
     </table>
-    <div style="padding-left: 15px" *ngIf="dataAdvice != null">
+    <div style="padding-left: 15px" *ngIf="dataAdvice_notNull != null">
       <button type="button" class="btn btn-primary" (click)="clickPDF_group()">
         Export to PDF
       </button>
       &nbsp;&nbsp;&nbsp;
-      <button type="button" class="btn btn-primary">Export to Word</button>
+      <button type="button" class="btn btn-primary" (click)="docxGroup()">
+        Export to Word
+      </button>
     </div>
   </mat-tab>
   <mat-tab label="ข้อมูลการนัดหมาย">

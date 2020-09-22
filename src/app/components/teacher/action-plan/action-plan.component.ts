@@ -5,6 +5,22 @@ import Swal from 'sweetalert2';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 
+import {
+  AlignmentType,
+  Document,
+  HeadingLevel,
+  Packer,
+  Paragraph,
+  Table,
+  TableCell,
+  TableRow,
+  TabStopPosition,
+  TabStopType,
+  TextRun,
+  UnderlineType,
+} from 'docx';
+import { saveAs } from 'file-saver';
+
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 pdfMake.fonts = {
   THSarabunNew: {
@@ -1103,6 +1119,7 @@ export class ActionPlanComponent implements OnInit {
             ' ' +
             this.dataBranchhead_action_plan[0].lname +
             ' )',
+
           fontSize: 16,
           alignment: 'right',
         },
@@ -1126,4 +1143,48 @@ export class ActionPlanComponent implements OnInit {
 
     pdfMake.createPdf(dd).open();
   };
+  public create(): Document {
+    const document = new Document();
+    document.addSection({
+      margins: {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+      },
+      children: [
+        new Paragraph({
+          children: [
+            new TextRun('Hello World'),
+            new TextRun({
+              text: 'Foo bar',
+              bold: true,
+            }),
+            new TextRun({
+              text: '\tGithub is the best',
+              bold: true,
+            }),
+          ],
+        }),
+        new Paragraph({
+          text: 'Hello World',
+          heading: HeadingLevel.HEADING_1,
+        }),
+        new Paragraph('Foo bar'),
+        new Paragraph('Github is the best'),
+      ],
+    });
+
+    return document;
+  }
+  public createDOC() {
+    // const documentCreator = new DocumentCreator();
+    const doc = this.create();
+
+    Packer.toBlob(doc).then((blob) => {
+      console.log(blob);
+      saveAs(blob, 'example.docx');
+      console.log('Document created successfully');
+    });
+  }
 }
