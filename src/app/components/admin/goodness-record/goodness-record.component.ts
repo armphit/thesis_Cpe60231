@@ -2,6 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { HttpService } from 'src/app/services/http.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+  AlignmentType,
+  Document,
+  HeadingLevel,
+  Packer,
+  Paragraph,
+  Table,
+  TableCell,
+  TableRow,
+  TabStopPosition,
+  TabStopType,
+  TextRun,
+  UnderlineType,
+  WidthType,
+} from 'docx';
+import { saveAs } from 'file-saver';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 
@@ -539,5 +555,314 @@ export class GoodnessRecordComponent implements OnInit {
       };
       img.src = url;
     });
+  }
+  public async createDOC() {
+    let formData = new FormData();
+    formData.append('ID', this.groupID);
+    let getData: any = await this.http.post(
+      'teacher/getBranch_Faculty',
+      formData
+    );
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        let branch = getData.response.result[0].NAME;
+        let faculty = getData.response.result[0].n;
+        var date = new Date();
+        let a = this.groupName.split('.', 1);
+        let b = this.groupName.replace(a + '.', '');
+        let c = String(date.getFullYear() + 543);
+        let d = c.substring(2);
+        let e = b.substring(0, 2);
+        let f = Number(d) - Number(e) + 1;
+        let g = String(branch.split(' ', 1));
+        var dataG = null;
+
+        var dataRow = [
+          new TableRow({
+            children: [
+              new TableCell({
+                // width: {
+                //   size: 1,
+                //   type: WidthType.PERCENTAGE,
+                // },
+                children: [
+                  new Paragraph({
+                    children: [
+                      new TextRun({ text: 'ลำดับที่', bold: true, size: 32 }),
+                    ],
+                    alignment: AlignmentType.CENTER,
+                  }),
+                ],
+              }),
+
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: 'ชื่อ - สกุล',
+                        bold: true,
+                        size: 32,
+                      }),
+                    ],
+                    alignment: AlignmentType.CENTER,
+                  }),
+                ],
+              }),
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: 'พฤติกรรมดีเด่น',
+                        bold: true,
+                        size: 32,
+                      }),
+                    ],
+                    alignment: AlignmentType.CENTER,
+                  }),
+                ],
+              }),
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: 'รางวัลที่ได้รับ',
+                        bold: true,
+                        size: 32,
+                      }),
+                    ],
+                    alignment: AlignmentType.CENTER,
+                  }),
+                ],
+              }),
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [
+                      new TextRun({ text: 'หมายเหตุ', bold: true, size: 32 }),
+                    ],
+                    alignment: AlignmentType.CENTER,
+                  }),
+                ],
+              }),
+            ],
+            tableHeader: true,
+          }),
+        ];
+        for (var i = 0; i < this.dataGoodness.length; i++) {
+          var aw = null;
+          var no = null;
+          if (this.dataGoodness[i].osb_award == null) {
+            aw = ' ';
+          } else {
+            aw = this.dataGoodness[i].osb_award;
+          }
+          if (this.dataGoodness[i].osb_note == null) {
+            no = ' ';
+          } else {
+            no = this.dataGoodness[i].osb_note;
+          }
+          dataG = new TableRow({
+            children: [
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [new TextRun({ text: `${i + 1}`, size: 32 })],
+                    alignment: AlignmentType.CENTER,
+                  }),
+                ],
+                width: { size: 5, type: WidthType.PERCENTAGE },
+              }),
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text:
+                          this.dataGoodness[i].titlename +
+                          this.dataGoodness[i].fname +
+                          ' ' +
+                          this.dataGoodness[i].lname,
+                        size: 32,
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: this.dataGoodness[i].osb_detail,
+                        size: 32,
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [new TextRun({ text: aw, size: 32 })],
+                  }),
+                ],
+              }),
+
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [new TextRun({ text: no, size: 32 })],
+                  }),
+                ],
+              }),
+            ],
+          });
+          dataRow.push(dataG);
+        }
+        // const documentCreator = new DocumentCreator();
+        const doc = new Document();
+        doc.addSection({
+          properties: {},
+          children: [
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text:
+                    'บันทึกรายงานพฤติกรรมดีเด่นของนักศึกษา ปีการศึกษา ' +
+                    this.goodness_year.value._year +
+                    '\n',
+                  bold: true,
+                  size: 32,
+                }),
+              ],
+              alignment: AlignmentType.CENTER,
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text:
+                    'นักศึกษาชั้นปี' +
+                    ' ' +
+                    f +
+                    '  ' +
+                    'ห้อง' +
+                    ' ' +
+                    this.groupName +
+                    '  ' +
+                    'ระดับ ปริญญาตรี',
+                  bold: true,
+                  size: 32,
+                }),
+              ],
+              alignment: AlignmentType.CENTER,
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: g + '  ' + faculty,
+                  bold: true,
+                  size: 32,
+                }),
+              ],
+              alignment: AlignmentType.CENTER,
+            }),
+            new Table({
+              width: {
+                size: 100,
+                type: WidthType.PERCENTAGE,
+              },
+              rows: dataRow,
+
+              alignment: AlignmentType.CENTER,
+            }),
+
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: 'คำชี้แจง:',
+                  bold: true,
+                  underline: { color: 'black' },
+                  size: 24,
+                }),
+                new TextRun({
+                  text:
+                    ' บันทึกรายงานฉบับนี้ใช้สำรวจนักศึกษาที่ดีเด่นด้านต่างๆ เพื่อให้ท่านสำรวจพฤติกรรมของนักศึกษา โดยระบุให้ชัดเจน ในช่องพฤติกรรมว่าดีเด่นด้านใด ดังนี้',
+                  size: 24,
+                }),
+              ],
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: '1.ด้านการเรียนดีเด่น',
+                  bold: true,
+                  size: 24,
+                }),
+                new TextRun({
+                  text:
+                    '  แต่ละปีการศึกษามีผลการเรียนในระดับ 3.5 ขึ้นไป และสอบผ่านทุกรายวิชาหรือ การได้รับทุนการศึกษาจากบริษัท หน่วยงาน ชมรมฯลฯ ซึ่งพิจารณาจากผลการเรียนการได้รับโควตาให้เรียนต่อเป็นกรณีพิเศษ',
+                  size: 24,
+                }),
+              ],
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: '2.ด้านกิจกรรมดีเด่น',
+                  bold: true,
+                  size: 24,
+                }),
+                new TextRun({
+                  text:
+                    '  เคยได้รับรางวัลจากการแข่งขันทักษะทางวิชาชีพ การประกวดสุนทรพจน์ การโต้วาที การตอบปัญหา การเล่นกีฬา ฯลฯ',
+                  size: 24,
+                }),
+              ],
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: '3.ด้านคุณธรรมจริยธรรมดีเด่น',
+                  bold: true,
+                  size: 24,
+                }),
+                new TextRun({
+                  text:
+                    '  เป็นผู้ที่มีพฤติกรรมแสดงออกถึงความซื่อสัตย์อดทน ขยันหมั่นเพียร เอื้อเฟื้อเผื่อแผ่ โอบอ้อมอารี เช่น เก็บของได้และนำส่งคืนเจ้าของสมควรได้รับการเชิดชูเกียรติ ฯลฯ',
+                  size: 24,
+                }),
+              ],
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: '4.ด้านบำเพ็ญประโยชน์เพื่อสังคม',
+                  bold: true,
+                  size: 24,
+                  font: 'Myfont',
+                }),
+                new TextRun({
+                  text:
+                    '  เป็นผู้ที่มีความเสียสละต่อส่วนรวม เป็นผู้นำกลุ่มมีความคิดริเริ่มในการทำ กิจกรรมรับผิดชอบ มีมนุษยสัมพันธ์ดี เช่น การบริจาคโลหิต เป็นประธานชมรม ฯลฯ',
+                  size: 24,
+                }),
+              ],
+            }),
+          ],
+        });
+
+        Packer.toBlob(doc).then((blob) => {
+          saveAs(blob, `Goodness_${this.groupName}.docx`);
+          console.log('Document created successfully');
+        });
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
   }
 }

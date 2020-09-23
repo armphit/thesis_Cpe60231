@@ -728,6 +728,7 @@ export class AdviceDataComponent implements OnInit {
     } else if (b.substring(4) == '3') {
       g = 'สมทบ';
     }
+
     if (this.dataAppointment_Student != null) {
       h = 'มีนัดพบติดตามผลดังตาราง';
       j =
@@ -922,7 +923,7 @@ export class AdviceDataComponent implements OnInit {
           text:
             '\nลงชื่อ.................................................................\n( ' +
             this.dataReply_id.nameTeacher +
-            ' )',
+            ' )\nอาจารย์ที่ปรึกษา/ผู้ให้คำปรึกษา',
           fontSize: 16,
           alignment: 'right',
         },
@@ -1256,6 +1257,7 @@ export class AdviceDataComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text: 'วัน เดือน ปี',
                         bold: true,
                         size: 32,
@@ -1267,10 +1269,15 @@ export class AdviceDataComponent implements OnInit {
               }),
 
               new TableCell({
+                width: {
+                  size: 5000,
+                  type: WidthType.NIL,
+                },
                 children: [
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text: 'ชื่อ-สกุล นักศึกษา',
                         bold: true,
                         size: 32,
@@ -1285,6 +1292,7 @@ export class AdviceDataComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text: 'เรื่องที่นักศึกษา ขอรับคำปรึกษาและแนะแนว',
                         bold: true,
                         size: 32,
@@ -1299,6 +1307,7 @@ export class AdviceDataComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text:
                           'บันทึกการบริการ ให้คำปรึกษาและแนะแนว อ.ที่ปรึกษา',
                         bold: true,
@@ -1314,6 +1323,7 @@ export class AdviceDataComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text: 'กรณีให้คำปรึกษาและแนะแนวไม่ได้',
                         bold: true,
                         size: 32,
@@ -1328,6 +1338,7 @@ export class AdviceDataComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text: 'สรุปผล/วันที่รับเรื่องกลับคืน',
                         bold: true,
                         size: 32,
@@ -1338,6 +1349,7 @@ export class AdviceDataComponent implements OnInit {
                 ],
               }),
             ],
+            tableHeader: true,
           }),
         ];
         for (var i = 0; i < this.dataAdvice_notNull.length; i++) {
@@ -1350,6 +1362,7 @@ export class AdviceDataComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text: a[2] + '/' + a[1] + '/' + b,
                         size: 32,
                       }),
@@ -1360,10 +1373,15 @@ export class AdviceDataComponent implements OnInit {
                 width: { size: 5, type: WidthType.PERCENTAGE },
               }),
               new TableCell({
+                width: {
+                  size: 5000,
+                  type: WidthType.NIL,
+                },
                 children: [
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text:
                           this.dataAdvice_notNull[i].titlename +
                           this.dataAdvice_notNull[i].fname +
@@ -1381,6 +1399,7 @@ export class AdviceDataComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text: this.dataAdvice_notNull[i].subject_advice,
                         size: 32,
                       }),
@@ -1394,6 +1413,7 @@ export class AdviceDataComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text: this.dataAdvice_notNull[i].reply,
                         size: 32,
                       }),
@@ -1417,7 +1437,6 @@ export class AdviceDataComponent implements OnInit {
                 ],
               }),
             ],
-            tableHeader: true,
           });
           dataRow.push(dataG);
         }
@@ -1429,12 +1448,14 @@ export class AdviceDataComponent implements OnInit {
             new Paragraph({
               children: [
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text:
                     'แบบบันทึกการให้คำปรึกษาและแนะแนวโดยอาจารย์ที่ปรึกษา' +
                     ' ' +
                     'ปีการศึกษา' +
                     ' ' +
                     this.advice_year.value._year,
+
                   bold: true,
                   size: 32,
                 }),
@@ -1444,6 +1465,7 @@ export class AdviceDataComponent implements OnInit {
             new Paragraph({
               children: [
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text:
                     'นักศึกษาชั้นปี' +
                     ' ' +
@@ -1463,6 +1485,7 @@ export class AdviceDataComponent implements OnInit {
             new Paragraph({
               children: [
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text: g + '  ' + faculty,
                   bold: true,
                   size: 32,
@@ -1479,10 +1502,21 @@ export class AdviceDataComponent implements OnInit {
 
               alignment: AlignmentType.CENTER,
             }),
-
             new Paragraph({
               children: [
                 new TextRun({
+                  font: 'TH SarabunPSK',
+                  text: '',
+                  bold: true,
+                  underline: { color: 'black' },
+                  size: 24,
+                }),
+              ],
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  font: 'TH SarabunPSK',
                   text: 'หมายเหตุ:',
                   bold: true,
                   underline: { color: 'black' },
@@ -1493,11 +1527,13 @@ export class AdviceDataComponent implements OnInit {
             new Paragraph({
               children: [
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text: '1. เรื่องที่นักศึกษาขอรับคำปรึกษาและแนะแนว',
                   bold: true,
                   size: 24,
                 }),
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text:
                     '  เช่น การให้คำปรึกษาในเรื่องทางวิชาการ  การใช้ชีวิต เช่น การปรับตัว บุคลิกภาพ สุขภาพจิต ด้านอาชีพ การศึกษาต่อ ทุนการศึกษา ฯลฯ อื่นๆ (ระบุ)……………………',
                   size: 24,
@@ -1507,11 +1543,13 @@ export class AdviceDataComponent implements OnInit {
             new Paragraph({
               children: [
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text: '2.กรณีให้คำปรึกษาและแนะแนวไม่ได้',
                   bold: true,
                   size: 24,
                 }),
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text:
                     '  เช่น ปัญหาชีวิต ครอบครัว สังคม ที่ต้องใช้จิตวิทยาสูง ให้ระบุหน่วยงานที่ส่งต่อ วัน/เดือน/ปีที่ส่ง',
                   size: 24,
@@ -1529,5 +1567,398 @@ export class AdviceDataComponent implements OnInit {
     } else {
       alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
     }
+  };
+  public docxStudent = async () => {
+    var date = new Date();
+    let a = this.dataReply_id.group.split('.', 1);
+    let b = this.dataReply_id.group.replace(a + '.', '');
+    let c = String(date.getFullYear() + 543);
+    let d = c.substring(2);
+    let e = b.substring(0, 2);
+    let f = Number(d) - Number(e) + 1;
+    let g = null;
+    let h = null;
+    let data_aap = null;
+    let j = null;
+    if (b.substring(4) == '1') {
+      g = 'ปกติ';
+    } else if (b.substring(4) == '2') {
+      g = 'บ่าย';
+    } else if (b.substring(4) == '3') {
+      g = 'สมทบ';
+    }
+    if (this.dataAppointment_Student != null) {
+      var dataG = null;
+
+      var dataRow = [
+        new TableRow({
+          children: [
+            new TableCell({
+              width: {
+                size: 50,
+                type: WidthType.PERCENTAGE,
+              },
+
+              children: [
+                new Paragraph({
+                  pageBreakBefore: true,
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: 'ว/ด/ป',
+                      bold: true,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: 'ผลที่เกิด/คำแนะนำเพิ่มเติม',
+                      bold: true,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: 'หมายเหตุ',
+                      bold: true,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+          ],
+          tableHeader: true,
+        }),
+      ];
+      for (var i = 0; i < this.dataAppointment_Student.length; i++) {
+        var formattedDate = new Date(this.dataAppointment_Student[i].app_date);
+        const date =
+          'วันที่' +
+          '  ' +
+          formattedDate.getDate() +
+          '  ' +
+          this.thmonth[formattedDate.getMonth()] +
+          '  ' +
+          (formattedDate.getFullYear() + 543);
+        dataG = new TableRow({
+          children: [
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: date,
+                      size: 32,
+                    }),
+                  ],
+                }),
+              ],
+              width: { size: 5, type: WidthType.PERCENTAGE },
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: this.dataAppointment_Student[i].app_suggestion,
+                      size: 32,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: this.dataAppointment_Student[i].app_detail,
+                      size: 32,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        });
+        dataRow.push(dataG);
+      }
+      h = 'มีนัดพบติดตามผลดังตาราง';
+      j =
+        '\n*** เก็บไว้ที่งานแนะแนวการศึกษาและอาชีพ กองพัฒนานักศึกษา/อาจารย์ที่ปรึกษา/แผนกงานพัฒนานักศึกษา คณะฯ';
+      data_aap = new Table({
+        width: {
+          size: 100,
+          type: WidthType.PERCENTAGE,
+        },
+        rows: dataRow,
+
+        alignment: AlignmentType.CENTER,
+      });
+    } else if (this.dataAppointment_Student == null) {
+      h = 'ไม่มีนัดพบติดตามผล';
+      j = '';
+      data_aap = new Paragraph({
+        children: [
+          new TextRun({
+            font: 'TH SarabunPSK',
+            text: '',
+            bold: true,
+            size: 32,
+          }),
+        ],
+        alignment: AlignmentType.LEFT,
+      });
+    }
+
+    // const documentCreator = new DocumentCreator();
+    const doc = new Document();
+    doc.addSection({
+      properties: {},
+      children: [
+        new Paragraph({
+          children: [
+            new TextRun({
+              font: 'TH SarabunPSK',
+              text:
+                'แบบบันทึกการบริการให้คำปรึกษาและแนะแนวมหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน' +
+                ' ' +
+                'ประจำปีการศึกษา' +
+                ' ' +
+                this.dataReply_id.year,
+              bold: true,
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.CENTER,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              font: 'TH SarabunPSK',
+              text: 'ที่ มทร. อีสาน',
+              bold: true,
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.RIGHT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              font: 'TH SarabunPSK',
+              text:
+                '.........................................................................................................................................................',
+              bold: true,
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.CENTER,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              font: 'TH SarabunPSK',
+              text: 'ข้อมูลนักศึกษา',
+              bold: true,
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.LEFT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              font: 'TH SarabunPSK',
+              text: 'ชื่อ – สกุล' + '  ' + this.dataReply_id.nameStudent,
+
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.LEFT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              font: 'TH SarabunPSK',
+              text:
+                'นักศึกษา' +
+                this.dataReply_id.faculty +
+                '  ' +
+                this.dataReply_id.brunch,
+
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.LEFT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              font: 'TH SarabunPSK',
+              text: 'ชั้นปีที่' + ' ' + f + '  ' + 'รอบ' + ' ' + g,
+
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.LEFT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              font: 'TH SarabunPSK',
+              text:
+                'ขอรับการให้คำปรึกษาแนะแนวในเรื่อง (สรุปปัญหาโดยย่อ)' +
+                ' ' +
+                this.dataReply_id.detail,
+
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.LEFT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({ font: 'TH SarabunPSK', text: '', size: 32 }),
+          ],
+          alignment: AlignmentType.RIGHT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              font: 'TH SarabunPSK',
+              text:
+                'ลงชื่อ................................................................',
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.RIGHT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              font: 'TH SarabunPSK',
+              text: '( ' + this.dataReply_id.nameStudent + ' )',
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.RIGHT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({ font: 'TH SarabunPSK', text: '', size: 32 }),
+          ],
+          alignment: AlignmentType.RIGHT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              font: 'TH SarabunPSK',
+              text: 'บันทึกของอาจารย์ที่ปรึกษา/ผู้ให้คำปรึกษา',
+              bold: true,
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.LEFT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              font: 'TH SarabunPSK',
+              text: this.dataReply_id.reply,
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.LEFT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({ font: 'TH SarabunPSK', text: '', size: 32 }),
+          ],
+          alignment: AlignmentType.RIGHT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              font: 'TH SarabunPSK',
+              text:
+                'ลงชื่อ................................................................',
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.RIGHT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              font: 'TH SarabunPSK',
+              text: '(' + this.dataReply_id.nameTeacher + ' )',
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.RIGHT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              font: 'TH SarabunPSK',
+              text: 'อาจารย์ที่ปรึกษา/ผู้ให้คำปรึกษา',
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.RIGHT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({ font: 'TH SarabunPSK', text: '', size: 32 }),
+          ],
+          alignment: AlignmentType.RIGHT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              font: 'TH SarabunPSK',
+              text: 'ติดตามผล',
+              underline: { color: 'black' },
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.LEFT,
+        }),
+        new Paragraph({
+          children: [new TextRun({ font: 'TH SarabunPSK', text: h, size: 32 })],
+          alignment: AlignmentType.LEFT,
+        }),
+        data_aap,
+      ],
+    });
+
+    Packer.toBlob(doc).then((blob) => {
+      saveAs(blob, `Advice_${this.dataReply_id.nameStudent}.docx`);
+      console.log('Document created successfully');
+    });
   };
 }

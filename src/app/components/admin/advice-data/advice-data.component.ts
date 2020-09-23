@@ -2,6 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2';
+import {
+  AlignmentType,
+  Document,
+  HeadingLevel,
+  Packer,
+  Paragraph,
+  Table,
+  TableCell,
+  TableRow,
+  TabStopPosition,
+  TabStopType,
+  TextRun,
+  UnderlineType,
+  WidthType,
+} from 'docx';
+import { saveAs } from 'file-saver';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 
@@ -842,4 +858,696 @@ export class AdviceDataComponent implements OnInit {
       }
     }
   }
+  public docxGroup = async () => {
+    let formData = new FormData();
+    formData.append('ID', this.groupID);
+    let getData: any = await this.http.post(
+      'teacher/getBranch_Faculty',
+      formData
+    );
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        let branch = getData.response.result[0].NAME;
+        let faculty = getData.response.result[0].n;
+        var date = new Date();
+        let a = this.nameGroup.split('.', 1);
+        let b = this.nameGroup.replace(a + '.', '');
+        let c = String(date.getFullYear() + 543);
+        let d = c.substring(2);
+        let e = b.substring(0, 2);
+        let f = Number(d) - Number(e) + 1;
+        let g = String(branch.split(' ', 1));
+        var dataG = null;
+
+        var dataRow = [
+          new TableRow({
+            children: [
+              new TableCell({
+                // width: {
+                //   size: 1,
+                //   type: WidthType.PERCENTAGE,
+                // },
+                children: [
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: 'วัน เดือน ปี',
+                        bold: true,
+                        size: 32,
+                      }),
+                    ],
+                    alignment: AlignmentType.CENTER,
+                  }),
+                ],
+              }),
+
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: 'ชื่อ-สกุล นักศึกษา',
+                        bold: true,
+                        size: 32,
+                      }),
+                    ],
+                    alignment: AlignmentType.CENTER,
+                  }),
+                ],
+              }),
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: 'เรื่องที่นักศึกษา ขอรับคำปรึกษาและแนะแนว',
+                        bold: true,
+                        size: 32,
+                      }),
+                    ],
+                    alignment: AlignmentType.CENTER,
+                  }),
+                ],
+              }),
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text:
+                          'บันทึกการบริการ ให้คำปรึกษาและแนะแนว อ.ที่ปรึกษา',
+                        bold: true,
+                        size: 32,
+                      }),
+                    ],
+                    alignment: AlignmentType.CENTER,
+                  }),
+                ],
+              }),
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: 'กรณีให้คำปรึกษาและแนะแนวไม่ได้',
+                        bold: true,
+                        size: 32,
+                      }),
+                    ],
+                    alignment: AlignmentType.CENTER,
+                  }),
+                ],
+              }),
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: 'สรุปผล/วันที่รับเรื่องกลับคืน',
+                        bold: true,
+                        size: 32,
+                      }),
+                    ],
+                    alignment: AlignmentType.CENTER,
+                  }),
+                ],
+              }),
+            ],
+            tableHeader: true,
+          }),
+        ];
+        for (var i = 0; i < this.dataAdvice.length; i++) {
+          let a = this.dataAdvice[i].advice_date.split('-');
+          let b = Number(a[0]) + 543;
+          dataG = new TableRow({
+            children: [
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: a[2] + '/' + a[1] + '/' + b,
+                        size: 32,
+                      }),
+                    ],
+                    alignment: AlignmentType.CENTER,
+                  }),
+                ],
+                width: { size: 5, type: WidthType.PERCENTAGE },
+              }),
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text:
+                          this.dataAdvice[i].titlename +
+                          this.dataAdvice[i].fname +
+                          ' ' +
+                          this.dataAdvice[i].lname,
+                        size: 32,
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: this.dataAdvice[i].subject_advice,
+                        size: 32,
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: this.dataAdvice[i].reply,
+                        size: 32,
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [new TextRun({ text: ' ', size: 32 })],
+                  }),
+                ],
+              }),
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [new TextRun({ text: ' ', size: 32 })],
+                  }),
+                ],
+              }),
+            ],
+          });
+          dataRow.push(dataG);
+        }
+        // const documentCreator = new DocumentCreator();
+        const doc = new Document();
+        doc.addSection({
+          properties: {},
+          children: [
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text:
+                    'แบบบันทึกการให้คำปรึกษาและแนะแนวโดยอาจารย์ที่ปรึกษา' +
+                    ' ' +
+                    'ปีการศึกษา' +
+                    ' ' +
+                    this.advice_year.value._year,
+                  bold: true,
+                  size: 32,
+                }),
+              ],
+              alignment: AlignmentType.CENTER,
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text:
+                    'นักศึกษาชั้นปี' +
+                    ' ' +
+                    f +
+                    '  ' +
+                    'ห้อง' +
+                    ' ' +
+                    this.nameGroup +
+                    '  ' +
+                    'ระดับ ปริญญาตรี',
+                  bold: true,
+                  size: 32,
+                }),
+              ],
+              alignment: AlignmentType.CENTER,
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: g + '  ' + faculty,
+                  bold: true,
+                  size: 32,
+                }),
+              ],
+              alignment: AlignmentType.CENTER,
+            }),
+            new Table({
+              width: {
+                size: 100,
+                type: WidthType.PERCENTAGE,
+              },
+              rows: dataRow,
+
+              alignment: AlignmentType.CENTER,
+            }),
+
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: 'หมายเหตุ:',
+                  bold: true,
+                  underline: { color: 'black' },
+                  size: 24,
+                }),
+              ],
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: '1. เรื่องที่นักศึกษาขอรับคำปรึกษาและแนะแนว',
+                  bold: true,
+                  size: 24,
+                }),
+                new TextRun({
+                  text:
+                    '  เช่น การให้คำปรึกษาในเรื่องทางวิชาการ  การใช้ชีวิต เช่น การปรับตัว บุคลิกภาพ สุขภาพจิต ด้านอาชีพ การศึกษาต่อ ทุนการศึกษา ฯลฯ อื่นๆ (ระบุ)……………………',
+                  size: 24,
+                }),
+              ],
+            }),
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: '2.กรณีให้คำปรึกษาและแนะแนวไม่ได้',
+                  bold: true,
+                  size: 24,
+                }),
+                new TextRun({
+                  text:
+                    '  เช่น ปัญหาชีวิต ครอบครัว สังคม ที่ต้องใช้จิตวิทยาสูง ให้ระบุหน่วยงานที่ส่งต่อ วัน/เดือน/ปีที่ส่ง',
+                  size: 24,
+                }),
+              ],
+            }),
+          ],
+        });
+
+        Packer.toBlob(doc).then((blob) => {
+          saveAs(blob, `Advice_${this.nameGroup}.docx`);
+          console.log('Document created successfully');
+        });
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+  };
+  public docxStudent = async () => {
+    var date = new Date();
+    let a = this.nameGroup.split('.', 1);
+    let b = this.nameGroup.replace(a + '.', '');
+    let c = String(date.getFullYear() + 543);
+    let d = c.substring(2);
+    let e = b.substring(0, 2);
+    let f = Number(d) - Number(e) + 1;
+    let g = null;
+    let h = null;
+    let data_aap = null;
+    let j = null;
+    if (b.substring(4) == '1') {
+      g = 'ปกติ';
+    } else if (b.substring(4) == '2') {
+      g = 'บ่าย';
+    } else if (b.substring(4) == '3') {
+      g = 'สมทบ';
+    }
+    if (this.dataAppointment_Student != null) {
+      var dataG = null;
+
+      var dataRow = [
+        new TableRow({
+          children: [
+            new TableCell({
+              width: {
+                size: 50,
+                type: WidthType.PERCENTAGE,
+              },
+
+              children: [
+                new Paragraph({
+                  pageBreakBefore: true,
+                  children: [
+                    new TextRun({
+                      text: 'ว/ด/ป',
+                      bold: true,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      text: 'ผลที่เกิด/คำแนะนำเพิ่มเติม',
+                      bold: true,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      text: 'หมายเหตุ',
+                      bold: true,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+          ],
+          tableHeader: true,
+        }),
+      ];
+      for (var i = 0; i < this.dataAppointment_Student.length; i++) {
+        var formattedDate = new Date(this.dataAppointment_Student[i].app_date);
+        const date =
+          'วันที่' +
+          '  ' +
+          formattedDate.getDate() +
+          '  ' +
+          this.thmonth[formattedDate.getMonth()] +
+          '  ' +
+          (formattedDate.getFullYear() + 543);
+        dataG = new TableRow({
+          children: [
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      text: date,
+                      size: 32,
+                    }),
+                  ],
+                }),
+              ],
+              width: { size: 5, type: WidthType.PERCENTAGE },
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      text: this.dataAppointment_Student[i].app_suggestion,
+                      size: 32,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      text: this.dataAppointment_Student[i].app_detail,
+                      size: 32,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        });
+        dataRow.push(dataG);
+      }
+      h = 'มีนัดพบติดตามผลดังตาราง';
+      j =
+        '\n*** เก็บไว้ที่งานแนะแนวการศึกษาและอาชีพ กองพัฒนานักศึกษา/อาจารย์ที่ปรึกษา/แผนกงานพัฒนานักศึกษา คณะฯ';
+      data_aap = new Table({
+        width: {
+          size: 100,
+          type: WidthType.PERCENTAGE,
+        },
+        rows: dataRow,
+
+        alignment: AlignmentType.CENTER,
+      });
+    } else if (this.dataAppointment_Student == null) {
+      h = 'ไม่มีนัดพบติดตามผล';
+      j = '';
+      data_aap = new Paragraph({
+        children: [
+          new TextRun({
+            text: '',
+            bold: true,
+            size: 32,
+          }),
+        ],
+        alignment: AlignmentType.LEFT,
+      });
+    }
+
+    // const documentCreator = new DocumentCreator();
+    const doc = new Document();
+    doc.addSection({
+      properties: {},
+      children: [
+        new Paragraph({
+          children: [
+            new TextRun({
+              text:
+                'แบบบันทึกการบริการให้คำปรึกษาและแนะแนวมหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน' +
+                ' ' +
+                'ประจำปีการศึกษา' +
+                ' ' +
+                this.advice_year.value._year,
+              bold: true,
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.CENTER,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: 'ที่ มทร. อีสาน',
+              bold: true,
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.RIGHT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              text:
+                '.........................................................................................................................................................',
+              bold: true,
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.CENTER,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: 'ข้อมูลนักศึกษา',
+              bold: true,
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.LEFT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: 'ชื่อ – สกุล' + '  ' + this.dataReply_id.nameStudent,
+
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.LEFT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              text:
+                'นักศึกษา' +
+                this.dataReply_id.faculty +
+                '  ' +
+                this.dataReply_id.brunch,
+
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.LEFT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: 'ชั้นปีที่' + ' ' + f + '  ' + 'รอบ' + ' ' + g,
+
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.LEFT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              text:
+                'ขอรับการให้คำปรึกษาแนะแนวในเรื่อง (สรุปปัญหาโดยย่อ)' +
+                ' ' +
+                this.dataReply_id.detail,
+
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.LEFT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: '',
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.RIGHT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: 'ลงชื่อ....................................',
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.RIGHT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: '( ' + this.dataReply_id.nameStudent + ' )',
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.RIGHT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: '',
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.RIGHT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: 'บันทึกของอาจารย์ที่ปรึกษา/ผู้ให้คำปรึกษา',
+              bold: true,
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.LEFT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: this.dataReply_id.reply,
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.LEFT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: '',
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.RIGHT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: 'ลงชื่อ....................................',
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.RIGHT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: '(' + this.groupUser_name + ' )',
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.RIGHT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: 'อาจารย์ที่ปรึกษา/ผู้ให้คำปรึกษา',
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.RIGHT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: '',
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.RIGHT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: 'ติดตามผล',
+              underline: { color: 'black' },
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.LEFT,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              text: h,
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.LEFT,
+        }),
+        data_aap,
+      ],
+    });
+
+    Packer.toBlob(doc).then((blob) => {
+      saveAs(blob, `Advice_${this.dataReply_id.nameStudent}.docx`);
+      console.log('Document created successfully');
+    });
+  };
 }

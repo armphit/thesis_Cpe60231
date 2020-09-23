@@ -295,7 +295,11 @@
                     Export to PDF
                   </button>
                   &nbsp;&nbsp;&nbsp;
-                  <button type="button" class="btn btn-primary">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="docxStudent()"
+                  >
                     Export to Word
                   </button>
                 </div>
@@ -324,5 +328,7 @@
     Export to PDF
   </button>
   &nbsp;&nbsp;&nbsp;
-  <button type="button" class="btn btn-primary">Export to Word</button>
+  <button type="button" class="btn btn-primary" (click)="docxGroup()">
+    Export to Word
+  </button>
 </div>

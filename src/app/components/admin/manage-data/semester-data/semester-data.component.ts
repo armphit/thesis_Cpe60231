@@ -129,6 +129,9 @@ export class SemesterDataComponent implements OnInit {
               showConfirmButton: false,
               timer: 1500,
             });
+            setTimeout(function () {
+              window.location.reload(true);
+            }, 1500);
             this.getCalendar();
           } else {
             Swal.fire('ไม่สามารถลบข้อมูลได้!', '', 'error');
@@ -216,6 +219,9 @@ export class SemesterDataComponent implements OnInit {
           Swal.fire('เพิ่มปีการศึกษาเสร็จสิ้น', '', 'success');
           let win: any = window;
           win.$('#addCalendar').modal('hide');
+          setTimeout(function () {
+            window.location.reload(true);
+          }, 1500);
           this.getCalendar();
         } else if (getData.response.error) {
           Swal.fire(
