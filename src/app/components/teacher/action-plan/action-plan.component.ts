@@ -155,8 +155,10 @@ export class ActionPlanComponent implements OnInit {
     this.getListPlan();
     this.getActionPlan_Completed();
     this.getActionPlan_Status();
-    // this.getBranchhead_action_plan();
-    // this.getAdvice_notNull();
+    this.dataPlan_month = null;
+    this.month = [];
+    this.month2 = [];
+    this.dataActionPlan_Completed = null;
   }
   public getYearactionPlan(e) {
     this.actionPlan_year = this.formBuilder.group({
@@ -164,30 +166,35 @@ export class ActionPlanComponent implements OnInit {
     });
     this.month_plan();
     this.getListPlan();
+    this.getActionPlan_Completed();
     this.getActionPlan_Status();
+    this.dataPlan_month = null;
+    this.month = [];
+    this.month2 = [];
+    this.dataActionPlan_Completed = null;
   }
-  public getMonthactionPlan(e) {
-    this.Plan_month = e;
-  }
-  public addPlan_month = async () => {
-    let formData = new FormData();
-    formData.append('month', this.Plan_month);
-    formData.append('group', this.codeGroup);
-    formData.append('year', this.actionPlan_year.value._year);
+  // public getMonthactionPlan(e) {
+  //   this.Plan_month = e;
+  // }
+  // public addPlan_month = async () => {
+  //   let formData = new FormData();
+  //   formData.append('month', this.Plan_month);
+  //   formData.append('group', this.codeGroup);
+  //   formData.append('year', this.actionPlan_year.value._year);
 
-    let getData: any = await this.http.post('teacher/addMonth', formData);
-    console.log(getData);
-    if (getData.connect) {
-      if (getData.response.rowCount > 0) {
-        Swal.fire('เพิ่มเดือนเริ่มต้นสำเร็จ', '', 'success');
-        this.month_plan();
-      } else {
-        Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
-      }
-    } else {
-      Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
-    }
-  };
+  //   let getData: any = await this.http.post('teacher/addMonth', formData);
+  //   console.log(getData);
+  //   if (getData.connect) {
+  //     if (getData.response.rowCount > 0) {
+  //       Swal.fire('เพิ่มเดือนเริ่มต้นสำเร็จ', '', 'success');
+  //       this.month_plan();
+  //     } else {
+  //       Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
+  //     }
+  //   } else {
+  //     Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+  //   }
+  // };
 
   public getYear = () => {
     var now = new Date();
@@ -327,69 +334,69 @@ export class ActionPlanComponent implements OnInit {
   //   }
   // };
 
-  public month_plan = async () => {
-    let formData = new FormData();
-    formData.append('year', this.actionPlan_year.value._year);
+  // public month_plan = async () => {
+  //   let formData = new FormData();
+  //   formData.append('year', this.actionPlan_year.value._year);
 
-    let getData: any = await this.http.post('teacher/PlanMonth', formData);
+  //   let getData: any = await this.http.post('teacher/PlanMonth', formData);
 
-    if (getData.connect) {
-      if (getData.response.rowCount > 0) {
-        this.dataPlan_month = getData.response.result[0].month;
-        if (this.dataPlan_month != null) {
-          var a = this.thmonth.indexOf(this.dataPlan_month);
-          const b = this.thmonth;
-          const c = this.thmonth;
-          var d = this.actionPlan_year.value._year;
-          var f = String(d.substring(2));
-          var g = String(Number(d.substring(2)) + 1);
+  //   if (getData.connect) {
+  //     if (getData.response.rowCount > 0) {
+  //       this.dataPlan_month = getData.response.result[0].month;
+  //       if (this.dataPlan_month != null) {
+  //         var a = this.thmonth.indexOf(this.dataPlan_month);
+  //         const b = this.thmonth;
+  //         const c = this.thmonth;
+  //         var d = this.actionPlan_year.value._year;
+  //         var f = String(d.substring(2));
+  //         var g = String(Number(d.substring(2)) + 1);
 
-          for (var i = a; i < this.thmonth.length; i++) {
-            this.month[i - a] = b[i] + f;
-          }
-          for (var i = 0; i < a; i++) {
-            this.month2[i] = c[i] + g;
-          }
-        }
-      } else {
-        this.dataPlan_month = null;
-        this.month = [];
-        this.month2 = [];
-      }
-    } else {
-      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
-    }
-  };
-  public delMonth = async () => {
-    let formData = new FormData();
-    formData.append('group', this.codeGroup);
-    formData.append('year', this.actionPlan_year.value._year);
+  //         for (var i = a; i < this.thmonth.length; i++) {
+  //           this.month[i - a] = b[i] + f;
+  //         }
+  //         for (var i = 0; i < a; i++) {
+  //           this.month2[i] = c[i] + g;
+  //         }
+  //       }
+  //     } else {
+  //       this.dataPlan_month = null;
+  //       this.month = [];
+  //       this.month2 = [];
+  //     }
+  //   } else {
+  //     alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+  //   }
+  // };
+  // public delMonth = async () => {
+  //   let formData = new FormData();
+  //   formData.append('group', this.codeGroup);
+  //   formData.append('year', this.actionPlan_year.value._year);
 
-    this.http
-      .confirmAlert('แน่ใจจะเปลี่ยนแปลงหรือไม่?')
-      .then(async (value: any) => {
-        if (value) {
-          let getData: any = await this.http.post('teacher/delMonth', formData);
+  //   this.http
+  //     .confirmAlert('แน่ใจจะเปลี่ยนแปลงหรือไม่?')
+  //     .then(async (value: any) => {
+  //       if (value) {
+  //         let getData: any = await this.http.post('teacher/delMonth', formData);
 
-          if (getData.connect) {
-            if (getData.response.rowCount > 0) {
-              Swal.fire({
-                position: 'top',
-                icon: 'success',
-                title: 'ลบข้อมูลสำเร็จ',
-                showConfirmButton: false,
-                timer: 1500,
-              });
-              this.month = [];
-              this.month2 = [];
-              this.month_plan();
-            } else {
-              Swal.fire('ไม่สามารถลบข้อมูลได้!', '', 'error');
-            }
-          }
-        }
-      });
-  };
+  //         if (getData.connect) {
+  //           if (getData.response.rowCount > 0) {
+  //             Swal.fire({
+  //               position: 'top',
+  //               icon: 'success',
+  //               title: 'ลบข้อมูลสำเร็จ',
+  //               showConfirmButton: false,
+  //               timer: 1500,
+  //             });
+  //             this.month = [];
+  //             this.month2 = [];
+  //             this.month_plan();
+  //           } else {
+  //             Swal.fire('ไม่สามารถลบข้อมูลได้!', '', 'error');
+  //           }
+  //         }
+  //       }
+  //     });
+  // };
   public delListPlan = async (data) => {
     let formData = new FormData();
     formData.append('ID', data);
@@ -402,7 +409,7 @@ export class ActionPlanComponent implements OnInit {
             'teacher/delListPlan',
             formData
           );
-          console.log(getData);
+
           if (getData.connect) {
             if (getData.response.rowCount > 0) {
               Swal.fire({
@@ -424,6 +431,7 @@ export class ActionPlanComponent implements OnInit {
   };
   public getActionPlan_Completed = async () => {
     let formData = new FormData();
+
     formData.append('group', this.codeGroup);
     formData.append('year', this.actionPlan_year.value._year);
     let getData: any = await this.http.post(
@@ -610,6 +618,9 @@ export class ActionPlanComponent implements OnInit {
     }
     this.group_Branchhead = null;
     this.dataActionPlan_Branchhead = null;
+    this.dataPlan_month_Branchhead = null;
+    this.month_Branchhead = [];
+    this.month2_Branchhead = [];
   }
   public getYearactionPlan_Branchhead(e) {
     this.actionPlan_year_Branchhead = this.formBuilder.group({
@@ -618,12 +629,18 @@ export class ActionPlanComponent implements OnInit {
     this.getActionPlan_Completed_Branchhead();
     this.month_plan_Branchhead();
     this.getActionPlan_Status_Branchhead();
+    this.dataPlan_month_Branchhead = null;
+    this.month_Branchhead = [];
+    this.month2_Branchhead = [];
   }
   public async clickgroup_Branchhead(i) {
     this.group_Branchhead = i.study_group_id;
     this.getActionPlan_Completed_Branchhead();
     this.month_plan_Branchhead();
     this.getActionPlan_Status_Branchhead();
+    this.dataPlan_month_Branchhead = null;
+    this.month_Branchhead = [];
+    this.month2_Branchhead = [];
   }
   public getActionPlan_Completed_Branchhead = async () => {
     let formData = new FormData();
@@ -646,30 +663,36 @@ export class ActionPlanComponent implements OnInit {
   };
   public month_plan_Branchhead = async () => {
     let formData = new FormData();
-    formData.append('group', this.group_Branchhead);
     formData.append('year', this.actionPlan_year_Branchhead.value.year);
 
-    let getData: any = await this.http.post('teacher/PlanMonth', formData);
+    let getData: any = await this.http.post('teacher/getMo', formData);
 
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
-        this.dataPlan_month_Branchhead = getData.response.result[0].month;
+        var date = getData.response.result[0].date_start.split('-', 2);
+        this.dataPlan_month_Branchhead = Number(date[1]) - 1;
+
         if (this.dataPlan_month_Branchhead != null) {
-          var a = this.thmonth.indexOf(this.dataPlan_month_Branchhead);
           const b = this.thmonth;
           const c = this.thmonth;
           var d = this.actionPlan_year_Branchhead.value.year;
           var f = String(d.substring(2));
           var g = String(Number(d.substring(2)) + 1);
 
-          for (var i = a; i < this.thmonth.length; i++) {
-            this.month_Branchhead[i - a] = b[i] + f;
+          for (
+            let i = this.dataPlan_month_Branchhead;
+            i < this.thmonth.length;
+            i++
+          ) {
+            this.month_Branchhead[i - this.dataPlan_month_Branchhead] =
+              b[i] + f;
           }
-          for (var i = 0; i < a; i++) {
+          for (let i = 0; i < this.dataPlan_month_Branchhead; i++) {
             this.month2_Branchhead[i] = c[i] + g;
           }
         }
       } else {
+        this.dataPlan_month_Branchhead = null;
         this.month_Branchhead = [];
         this.month2_Branchhead = [];
       }
@@ -691,7 +714,7 @@ export class ActionPlanComponent implements OnInit {
             'teacher/addActionPlan_Status',
             formData
           );
-          console.log(getData);
+
           if (getData.connect) {
             if (getData.response.rowCount > 0) {
               Swal.fire({
@@ -2095,7 +2118,39 @@ export class ActionPlanComponent implements OnInit {
 
     Packer.toBlob(doc).then((blob) => {
       saveAs(blob, `Plan_${this.nameGroup}.docx`);
-      console.log('Document created successfully');
     });
   }
+  public month_plan = async () => {
+    let formData = new FormData();
+    formData.append('year', this.actionPlan_year.value._year);
+
+    let getData: any = await this.http.post('teacher/getMo', formData);
+
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        var date = getData.response.result[0].date_start.split('-', 2);
+        this.dataPlan_month = Number(date[1]) - 1;
+        if (this.dataPlan_month != null) {
+          const b = this.thmonth;
+          const c = this.thmonth;
+          var d = this.actionPlan_year.value._year;
+          var f = String(d.substring(2));
+          var g = String(Number(d.substring(2)) + 1);
+
+          for (let i = this.dataPlan_month; i < this.thmonth.length; i++) {
+            this.month[i - this.dataPlan_month] = b[i] + f;
+          }
+          for (let i = 0; i < this.dataPlan_month; i++) {
+            this.month2[i] = c[i] + g;
+          }
+        }
+      } else {
+        this.dataPlan_month = null;
+        this.month = [];
+        this.month2 = [];
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+  };
 }

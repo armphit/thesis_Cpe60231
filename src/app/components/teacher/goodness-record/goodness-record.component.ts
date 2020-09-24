@@ -1036,7 +1036,6 @@ export class GoodnessRecordComponent implements OnInit {
 
         Packer.toBlob(doc).then((blob) => {
           saveAs(blob, `Goodness_${this.nameGroup}.docx`);
-          console.log('Document created successfully');
         });
       }
     } else {

@@ -373,7 +373,7 @@
       <tbody>
         <tr *ngFor="let i of dataGoodness_BranchHead; let x = index">
           <th scope="row">{{ x + 1 }}</th>
-          <td>{{ i.titlename }}{{ i.fname }}{{ i.lname }}</td>
+          <td>{{ i.titlename }}{{ i.fname }}{{ "  " }}{{ i.lname }}</td>
           <td>
             {{ i.osb_detail }}
           </td>

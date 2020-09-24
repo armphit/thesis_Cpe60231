@@ -588,7 +588,12 @@ export class GoodnessRecordComponent implements OnInit {
                 children: [
                   new Paragraph({
                     children: [
-                      new TextRun({ text: 'ลำดับที่', bold: true, size: 32 }),
+                      new TextRun({
+                        font: 'TH SarabunPSK',
+                        text: 'ลำดับที่',
+                        bold: true,
+                        size: 32,
+                      }),
                     ],
                     alignment: AlignmentType.CENTER,
                   }),
@@ -600,6 +605,7 @@ export class GoodnessRecordComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text: 'ชื่อ - สกุล',
                         bold: true,
                         size: 32,
@@ -614,6 +620,7 @@ export class GoodnessRecordComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text: 'พฤติกรรมดีเด่น',
                         bold: true,
                         size: 32,
@@ -628,6 +635,7 @@ export class GoodnessRecordComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text: 'รางวัลที่ได้รับ',
                         bold: true,
                         size: 32,
@@ -641,7 +649,12 @@ export class GoodnessRecordComponent implements OnInit {
                 children: [
                   new Paragraph({
                     children: [
-                      new TextRun({ text: 'หมายเหตุ', bold: true, size: 32 }),
+                      new TextRun({
+                        font: 'TH SarabunPSK',
+                        text: 'หมายเหตุ',
+                        bold: true,
+                        size: 32,
+                      }),
                     ],
                     alignment: AlignmentType.CENTER,
                   }),
@@ -680,6 +693,7 @@ export class GoodnessRecordComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text:
                           this.dataGoodness[i].titlename +
                           this.dataGoodness[i].fname +
@@ -697,6 +711,7 @@ export class GoodnessRecordComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text: this.dataGoodness[i].osb_detail,
                         size: 32,
                       }),
@@ -732,6 +747,7 @@ export class GoodnessRecordComponent implements OnInit {
             new Paragraph({
               children: [
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text:
                     'บันทึกรายงานพฤติกรรมดีเด่นของนักศึกษา ปีการศึกษา ' +
                     this.goodness_year.value._year +
@@ -745,6 +761,7 @@ export class GoodnessRecordComponent implements OnInit {
             new Paragraph({
               children: [
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text:
                     'นักศึกษาชั้นปี' +
                     ' ' +
@@ -764,6 +781,7 @@ export class GoodnessRecordComponent implements OnInit {
             new Paragraph({
               children: [
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text: g + '  ' + faculty,
                   bold: true,
                   size: 32,
@@ -784,12 +802,14 @@ export class GoodnessRecordComponent implements OnInit {
             new Paragraph({
               children: [
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text: 'คำชี้แจง:',
                   bold: true,
                   underline: { color: 'black' },
                   size: 24,
                 }),
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text:
                     ' บันทึกรายงานฉบับนี้ใช้สำรวจนักศึกษาที่ดีเด่นด้านต่างๆ เพื่อให้ท่านสำรวจพฤติกรรมของนักศึกษา โดยระบุให้ชัดเจน ในช่องพฤติกรรมว่าดีเด่นด้านใด ดังนี้',
                   size: 24,
@@ -799,11 +819,13 @@ export class GoodnessRecordComponent implements OnInit {
             new Paragraph({
               children: [
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text: '1.ด้านการเรียนดีเด่น',
                   bold: true,
                   size: 24,
                 }),
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text:
                     '  แต่ละปีการศึกษามีผลการเรียนในระดับ 3.5 ขึ้นไป และสอบผ่านทุกรายวิชาหรือ การได้รับทุนการศึกษาจากบริษัท หน่วยงาน ชมรมฯลฯ ซึ่งพิจารณาจากผลการเรียนการได้รับโควตาให้เรียนต่อเป็นกรณีพิเศษ',
                   size: 24,
@@ -813,11 +835,13 @@ export class GoodnessRecordComponent implements OnInit {
             new Paragraph({
               children: [
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text: '2.ด้านกิจกรรมดีเด่น',
                   bold: true,
                   size: 24,
                 }),
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text:
                     '  เคยได้รับรางวัลจากการแข่งขันทักษะทางวิชาชีพ การประกวดสุนทรพจน์ การโต้วาที การตอบปัญหา การเล่นกีฬา ฯลฯ',
                   size: 24,
@@ -827,11 +851,13 @@ export class GoodnessRecordComponent implements OnInit {
             new Paragraph({
               children: [
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text: '3.ด้านคุณธรรมจริยธรรมดีเด่น',
                   bold: true,
                   size: 24,
                 }),
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text:
                     '  เป็นผู้ที่มีพฤติกรรมแสดงออกถึงความซื่อสัตย์อดทน ขยันหมั่นเพียร เอื้อเฟื้อเผื่อแผ่ โอบอ้อมอารี เช่น เก็บของได้และนำส่งคืนเจ้าของสมควรได้รับการเชิดชูเกียรติ ฯลฯ',
                   size: 24,
@@ -841,12 +867,13 @@ export class GoodnessRecordComponent implements OnInit {
             new Paragraph({
               children: [
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text: '4.ด้านบำเพ็ญประโยชน์เพื่อสังคม',
                   bold: true,
                   size: 24,
-                  font: 'Myfont',
                 }),
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text:
                     '  เป็นผู้ที่มีความเสียสละต่อส่วนรวม เป็นผู้นำกลุ่มมีความคิดริเริ่มในการทำ กิจกรรมรับผิดชอบ มีมนุษยสัมพันธ์ดี เช่น การบริจาคโลหิต เป็นประธานชมรม ฯลฯ',
                   size: 24,
@@ -858,7 +885,6 @@ export class GoodnessRecordComponent implements OnInit {
 
         Packer.toBlob(doc).then((blob) => {
           saveAs(blob, `Goodness_${this.groupName}.docx`);
-          console.log('Document created successfully');
         });
       }
     } else {

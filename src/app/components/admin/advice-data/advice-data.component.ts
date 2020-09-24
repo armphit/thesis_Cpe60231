@@ -891,6 +891,7 @@ export class AdviceDataComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text: 'วัน เดือน ปี',
                         bold: true,
                         size: 32,
@@ -906,6 +907,7 @@ export class AdviceDataComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text: 'ชื่อ-สกุล นักศึกษา',
                         bold: true,
                         size: 32,
@@ -920,6 +922,7 @@ export class AdviceDataComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text: 'เรื่องที่นักศึกษา ขอรับคำปรึกษาและแนะแนว',
                         bold: true,
                         size: 32,
@@ -934,6 +937,7 @@ export class AdviceDataComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text:
                           'บันทึกการบริการ ให้คำปรึกษาและแนะแนว อ.ที่ปรึกษา',
                         bold: true,
@@ -949,6 +953,7 @@ export class AdviceDataComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text: 'กรณีให้คำปรึกษาและแนะแนวไม่ได้',
                         bold: true,
                         size: 32,
@@ -963,6 +968,7 @@ export class AdviceDataComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text: 'สรุปผล/วันที่รับเรื่องกลับคืน',
                         bold: true,
                         size: 32,
@@ -986,6 +992,7 @@ export class AdviceDataComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text: a[2] + '/' + a[1] + '/' + b,
                         size: 32,
                       }),
@@ -1000,6 +1007,7 @@ export class AdviceDataComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text:
                           this.dataAdvice[i].titlename +
                           this.dataAdvice[i].fname +
@@ -1017,6 +1025,7 @@ export class AdviceDataComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text: this.dataAdvice[i].subject_advice,
                         size: 32,
                       }),
@@ -1030,6 +1039,7 @@ export class AdviceDataComponent implements OnInit {
                   new Paragraph({
                     children: [
                       new TextRun({
+                        font: 'TH SarabunPSK',
                         text: this.dataAdvice[i].reply,
                         size: 32,
                       }),
@@ -1064,6 +1074,7 @@ export class AdviceDataComponent implements OnInit {
             new Paragraph({
               children: [
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text:
                     'แบบบันทึกการให้คำปรึกษาและแนะแนวโดยอาจารย์ที่ปรึกษา' +
                     ' ' +
@@ -1079,6 +1090,7 @@ export class AdviceDataComponent implements OnInit {
             new Paragraph({
               children: [
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text:
                     'นักศึกษาชั้นปี' +
                     ' ' +
@@ -1098,6 +1110,7 @@ export class AdviceDataComponent implements OnInit {
             new Paragraph({
               children: [
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text: g + '  ' + faculty,
                   bold: true,
                   size: 32,
@@ -1118,6 +1131,7 @@ export class AdviceDataComponent implements OnInit {
             new Paragraph({
               children: [
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text: 'หมายเหตุ:',
                   bold: true,
                   underline: { color: 'black' },
@@ -1128,11 +1142,13 @@ export class AdviceDataComponent implements OnInit {
             new Paragraph({
               children: [
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text: '1. เรื่องที่นักศึกษาขอรับคำปรึกษาและแนะแนว',
                   bold: true,
                   size: 24,
                 }),
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text:
                     '  เช่น การให้คำปรึกษาในเรื่องทางวิชาการ  การใช้ชีวิต เช่น การปรับตัว บุคลิกภาพ สุขภาพจิต ด้านอาชีพ การศึกษาต่อ ทุนการศึกษา ฯลฯ อื่นๆ (ระบุ)……………………',
                   size: 24,
@@ -1142,11 +1158,13 @@ export class AdviceDataComponent implements OnInit {
             new Paragraph({
               children: [
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text: '2.กรณีให้คำปรึกษาและแนะแนวไม่ได้',
                   bold: true,
                   size: 24,
                 }),
                 new TextRun({
+                  font: 'TH SarabunPSK',
                   text:
                     '  เช่น ปัญหาชีวิต ครอบครัว สังคม ที่ต้องใช้จิตวิทยาสูง ให้ระบุหน่วยงานที่ส่งต่อ วัน/เดือน/ปีที่ส่ง',
                   size: 24,
@@ -1158,7 +1176,6 @@ export class AdviceDataComponent implements OnInit {
 
         Packer.toBlob(doc).then((blob) => {
           saveAs(blob, `Advice_${this.nameGroup}.docx`);
-          console.log('Document created successfully');
         });
       }
     } else {
@@ -1201,6 +1218,7 @@ export class AdviceDataComponent implements OnInit {
                   pageBreakBefore: true,
                   children: [
                     new TextRun({
+                      font: 'TH SarabunPSK',
                       text: 'ว/ด/ป',
                       bold: true,
                       size: 32,
@@ -1216,6 +1234,7 @@ export class AdviceDataComponent implements OnInit {
                 new Paragraph({
                   children: [
                     new TextRun({
+                      font: 'TH SarabunPSK',
                       text: 'ผลที่เกิด/คำแนะนำเพิ่มเติม',
                       bold: true,
                       size: 32,
@@ -1230,6 +1249,7 @@ export class AdviceDataComponent implements OnInit {
                 new Paragraph({
                   children: [
                     new TextRun({
+                      font: 'TH SarabunPSK',
                       text: 'หมายเหตุ',
                       bold: true,
                       size: 32,
@@ -1260,6 +1280,7 @@ export class AdviceDataComponent implements OnInit {
                 new Paragraph({
                   children: [
                     new TextRun({
+                      font: 'TH SarabunPSK',
                       text: date,
                       size: 32,
                     }),
@@ -1273,6 +1294,7 @@ export class AdviceDataComponent implements OnInit {
                 new Paragraph({
                   children: [
                     new TextRun({
+                      font: 'TH SarabunPSK',
                       text: this.dataAppointment_Student[i].app_suggestion,
                       size: 32,
                     }),
@@ -1286,6 +1308,7 @@ export class AdviceDataComponent implements OnInit {
                 new Paragraph({
                   children: [
                     new TextRun({
+                      font: 'TH SarabunPSK',
                       text: this.dataAppointment_Student[i].app_detail,
                       size: 32,
                     }),
@@ -1315,6 +1338,7 @@ export class AdviceDataComponent implements OnInit {
       data_aap = new Paragraph({
         children: [
           new TextRun({
+            font: 'TH SarabunPSK',
             text: '',
             bold: true,
             size: 32,
@@ -1332,6 +1356,7 @@ export class AdviceDataComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text:
                 'แบบบันทึกการบริการให้คำปรึกษาและแนะแนวมหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน' +
                 ' ' +
@@ -1347,6 +1372,7 @@ export class AdviceDataComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text: 'ที่ มทร. อีสาน',
               bold: true,
               size: 32,
@@ -1357,6 +1383,7 @@ export class AdviceDataComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text:
                 '.........................................................................................................................................................',
               bold: true,
@@ -1368,6 +1395,7 @@ export class AdviceDataComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text: 'ข้อมูลนักศึกษา',
               bold: true,
               size: 32,
@@ -1378,6 +1406,7 @@ export class AdviceDataComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text: 'ชื่อ – สกุล' + '  ' + this.dataReply_id.nameStudent,
 
               size: 32,
@@ -1388,6 +1417,7 @@ export class AdviceDataComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text:
                 'นักศึกษา' +
                 this.dataReply_id.faculty +
@@ -1402,6 +1432,7 @@ export class AdviceDataComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text: 'ชั้นปีที่' + ' ' + f + '  ' + 'รอบ' + ' ' + g,
 
               size: 32,
@@ -1412,6 +1443,7 @@ export class AdviceDataComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text:
                 'ขอรับการให้คำปรึกษาแนะแนวในเรื่อง (สรุปปัญหาโดยย่อ)' +
                 ' ' +
@@ -1424,16 +1456,14 @@ export class AdviceDataComponent implements OnInit {
         }),
         new Paragraph({
           children: [
-            new TextRun({
-              text: '',
-              size: 32,
-            }),
+            new TextRun({ font: 'TH SarabunPSK', text: '', size: 32 }),
           ],
           alignment: AlignmentType.RIGHT,
         }),
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text: 'ลงชื่อ....................................',
               size: 32,
             }),
@@ -1443,6 +1473,7 @@ export class AdviceDataComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text: '( ' + this.dataReply_id.nameStudent + ' )',
               size: 32,
             }),
@@ -1451,16 +1482,14 @@ export class AdviceDataComponent implements OnInit {
         }),
         new Paragraph({
           children: [
-            new TextRun({
-              text: '',
-              size: 32,
-            }),
+            new TextRun({ font: 'TH SarabunPSK', text: '', size: 32 }),
           ],
           alignment: AlignmentType.RIGHT,
         }),
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text: 'บันทึกของอาจารย์ที่ปรึกษา/ผู้ให้คำปรึกษา',
               bold: true,
               size: 32,
@@ -1471,6 +1500,7 @@ export class AdviceDataComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text: this.dataReply_id.reply,
               size: 32,
             }),
@@ -1479,16 +1509,14 @@ export class AdviceDataComponent implements OnInit {
         }),
         new Paragraph({
           children: [
-            new TextRun({
-              text: '',
-              size: 32,
-            }),
+            new TextRun({ font: 'TH SarabunPSK', text: '', size: 32 }),
           ],
           alignment: AlignmentType.RIGHT,
         }),
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text: 'ลงชื่อ....................................',
               size: 32,
             }),
@@ -1498,6 +1526,7 @@ export class AdviceDataComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text: '(' + this.groupUser_name + ' )',
               size: 32,
             }),
@@ -1507,6 +1536,7 @@ export class AdviceDataComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text: 'อาจารย์ที่ปรึกษา/ผู้ให้คำปรึกษา',
               size: 32,
             }),
@@ -1515,16 +1545,14 @@ export class AdviceDataComponent implements OnInit {
         }),
         new Paragraph({
           children: [
-            new TextRun({
-              text: '',
-              size: 32,
-            }),
+            new TextRun({ font: 'TH SarabunPSK', text: '', size: 32 }),
           ],
           alignment: AlignmentType.RIGHT,
         }),
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text: 'ติดตามผล',
               underline: { color: 'black' },
               size: 32,
@@ -1533,21 +1561,19 @@ export class AdviceDataComponent implements OnInit {
           alignment: AlignmentType.LEFT,
         }),
         new Paragraph({
-          children: [
-            new TextRun({
-              text: h,
-              size: 32,
-            }),
-          ],
+          children: [new TextRun({ font: 'TH SarabunPSK', text: h, size: 32 })],
           alignment: AlignmentType.LEFT,
         }),
         data_aap,
+        new Paragraph({
+          children: [new TextRun({ font: 'TH SarabunPSK', text: j, size: 32 })],
+          alignment: AlignmentType.LEFT,
+        }),
       ],
     });
 
     Packer.toBlob(doc).then((blob) => {
       saveAs(blob, `Advice_${this.dataReply_id.nameStudent}.docx`);
-      console.log('Document created successfully');
     });
   };
 }

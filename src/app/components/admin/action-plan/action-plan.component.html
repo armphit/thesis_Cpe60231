@@ -3,7 +3,7 @@
   style="margin-left: 10px; margin-right: 10px"
   *ngIf="actionPlan_year.value._year"
 >
-  <div class="row">
+  <!-- <div class="row">
     <div class="col-sm-6">
       <form [formGroup]="actionPlan_year">
         ปีการศึกษา : &nbsp;&nbsp;
@@ -53,7 +53,7 @@
         เปลี่ยนแปลงเดือนเริ่มต้น
       </button>
     </div>
-  </div>
+  </div> -->
   <div class="row">
     <div class="col-sm-6">
       คณะ:&nbsp;&nbsp;<mat-form-field style="width: 80%">
@@ -133,6 +133,23 @@
     </div>
   </div>
   <div *ngIf="groupID!">
+    <form [formGroup]="actionPlan_year">
+      ปีการศึกษา : &nbsp;&nbsp;
+      <mat-form-field>
+        <mat-label>เลือกปีการศึกษา</mat-label>
+        <mat-select
+          formControlName="_year"
+          (selectionChange)="getYearactionPlan($event.value)"
+          required
+        >
+          <mat-option *ngFor="let i of range" [value]="i.value">
+            {{ i.value }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </div>
+  <div *ngIf="groupID!">
     สถานะ : &nbsp;
     <button
       type="button"
@@ -153,10 +170,7 @@
   </div>
 </div>
 <div>
-  <table
-    class="table table-bordered"
-    *ngIf="groupID! && dataPlan_month != null && dataActionPlan_Completed!"
-  >
+  <table class="table table-bordered" *ngIf="dataActionPlan_Completed!">
     <thead>
       <tr>
         <th>ลำดับ</th>

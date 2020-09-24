@@ -20,6 +20,9 @@ export class AssessmentDataComponent implements OnInit {
   public filesName: any = 'โปรดเลือกไฟล์';
   public dataAssessment: any = null;
   public commentAssessment: Array<any> = [];
+  public fileExcel: File;
+  public filesName_Excel: any = 'โปรดเลือกไฟล์';
+  public dataFileExcel: any = null;
 
   public Episode1 = {
     count_men: 0,
@@ -184,6 +187,7 @@ export class AssessmentDataComponent implements OnInit {
     this.getYear();
     this.getBranchhead();
     this.getBranch();
+    this.getFileExcel();
   }
 
   ngOnInit(): void {
@@ -227,6 +231,9 @@ export class AssessmentDataComponent implements OnInit {
     };
     this.dataAssessment = null;
     this.filesName = 'โปรดเลือกไฟล์';
+    this.data = null;
+    this.fileExcel = null;
+    this.filesName_Excel = 'โปรดเลือกไฟล์';
     this.Episode2 = {
       subtopic1_1: null,
       subtopic1_2: null,
@@ -327,6 +334,9 @@ export class AssessmentDataComponent implements OnInit {
       _year: [e, Validators.required],
     });
     this.filesName = 'โปรดเลือกไฟล์';
+    this.data = null;
+    this.fileExcel = null;
+    this.filesName_Excel = 'โปรดเลือกไฟล์';
     this.getAssessment();
     this.Episode1 = {
       count_men: 0,
@@ -444,8 +454,8 @@ export class AssessmentDataComponent implements OnInit {
     for (var i = 0; i < 10; i++) {
       this.range[i] = { value: `${year - i}` };
     }
+    this.filesName = 'โปรดเลือกไฟล์';
     this.data = null;
-    this.filesName = null;
   };
   public getCURDATE = async () => {
     let getData: any = await this.http.post('teacher/getCURDATE');
@@ -2021,6 +2031,7 @@ export class AssessmentDataComponent implements OnInit {
     };
     this.dataAssessment = null;
     this.filesName = 'โปรดเลือกไฟล์';
+    this.data = null;
     this.Episode2 = {
       subtopic1_1: null,
       subtopic1_2: null,
@@ -2115,4 +2126,79 @@ export class AssessmentDataComponent implements OnInit {
     };
     this.commentAssessment = [];
   }
+
+  public uploadFileExcel(file) {
+    if (file) {
+      this.fileExcel = file;
+      this.filesName_Excel = file.name;
+    }
+  }
+  public insertFileExcel = async () => {
+    let formData = new FormData();
+
+    formData.append('upload', this.fileExcel);
+    formData.append('file_name', this.filesName_Excel);
+
+    // formData.forEach((value, key) => {
+    //   console.log(key + ':' + value);
+    // });
+    if (this.fileExcel == null) {
+      Swal.fire('โปรดเลือกไฟล์', '', 'error');
+    } else {
+      let getData: any = await this.http.post('teacher/addFileExcel', formData);
+      if (getData.connect) {
+        if (getData.response.rowCount > 0) {
+          Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
+          this.getFileExcel();
+        } else {
+          Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
+        }
+      } else {
+        Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+      }
+    }
+  };
+  public getFileExcel = async () => {
+    let getData: any = await this.http.post('teacher/getFileExcel');
+
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        this.dataFileExcel = getData.response.result[0].file_excel;
+      } else {
+        this.dataFileExcel = null;
+      }
+    } else {
+      alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+    }
+    this.fileExcel = null;
+    this.filesName_Excel = 'โปรดเลือกไฟล์';
+  };
+  public deleteFileExcel = async () => {
+    let formData = new FormData();
+    formData.append('ID', this.dataFileExcel);
+
+    this.http.confirmAlert('ลบรายการนี้หรือไม่?').then(async (value: any) => {
+      if (value) {
+        let getData: any = await this.http.post(
+          'teacher/delFileExcel',
+          formData
+        );
+
+        if (getData.connect) {
+          if (getData.response.rowCount > 0) {
+            this.getFileExcel();
+            Swal.fire({
+              position: 'top',
+              icon: 'success',
+              title: 'ลบข้อมูลสำเร็จ',
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          } else {
+            Swal.fire('ไม่สามารถลบข้อมูลได้!', '', 'error');
+          }
+        }
+      }
+    });
+  };
 }

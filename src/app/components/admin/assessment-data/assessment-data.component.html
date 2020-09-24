@@ -81,22 +81,107 @@
       <span></span>อาจารย์ที่ปรึกษา : &nbsp;&nbsp;{{ groupUser_name }}
     </div>
   </div>
-  <div *ngIf="groupID!">
-    <form [formGroup]="assessment_year">
-      ปีการศึกษา : &nbsp;&nbsp;
-      <mat-form-field style="width: 25%">
-        <mat-label>เลือกปีการศึกษา</mat-label>
-        <mat-select
-          formControlName="_year"
-          (selectionChange)="getYearAssessment($event.value)"
+  <div class="row" *ngIf="groupID!">
+    <div class="col-sm-4">
+      <form [formGroup]="assessment_year">
+        ปีการศึกษา : &nbsp;&nbsp;
+        <mat-form-field style="width: 50%">
+          <mat-label>เลือกปีการศึกษา</mat-label>
+          <mat-select
+            formControlName="_year"
+            (selectionChange)="getYearAssessment($event.value)"
+            required
+          >
+            <mat-option *ngFor="let i of range" [value]="i.value">
+              {{ i.value }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
+    </div>
+    <div class="col" style="padding-top: 12px">
+      <div class="col-sm-4" style="padding-top: 5px">
+        ตัวอย่างแบบประเมินความพึงพอใจ :
+      </div>
+      <div class="col-sm-5" *ngIf="dataFileExcel == null">
+        <input
+          type="file"
+          class="custom-file-input"
+          id="customFile"
+          #fileInput
+          (change)="uploadFileExcel(fileInput.files[0])"
           required
+          accept=".xlsx,.csv"
+        />
+        <label class="custom-file-label text-left" for="customFile">{{
+          filesName_Excel
+        }}</label>
+      </div>
+      <div class="col-sm-2" *ngIf="dataFileExcel == null">
+        <button
+          type="button"
+          class="btn btn-primary"
+          style="margin-top: -2px"
+          (click)="insertFileExcel()"
         >
-          <mat-option *ngFor="let i of range" [value]="i.value">
-            {{ i.value }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </form>
+          บันทึก
+        </button>
+      </div>
+      <div class="col" *ngIf="dataFileExcel!">
+        <button type="button" class="btn btn-primary">
+          <a href="{{ http.PathPDF }}{{ dataFileExcel }}" target="_blank"
+            ><font color="white">คลิกดูตัวอย่าง</font></a
+          >
+        </button>
+        &nbsp;&nbsp;
+        <button
+          type="button"
+          class="btn btn-danger"
+          style="margin-top: -2px"
+          (click)="deleteFileExcel()"
+        >
+          ลบข้อมูลตัวอย่าง
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="groupID!" style="padding-top: 15px">
+    <div class="col-sm-2" style="padding-top: 5px">แบบประเมินความพึงพอใจ :</div>
+    <div class="col-sm-3" *ngIf="dataAssessment == null">
+      <input
+        type="file"
+        class="custom-file-input"
+        id="customFile"
+        #filedata
+        (change)="uploadFileAssessment($event)"
+        required
+        accept=".xlsx,.csv"
+      />
+      <label class="custom-file-label text-left" for="customFile">{{
+        filesName
+      }}</label>
+    </div>
+    <div class="col-sm-3" *ngIf="dataAssessment == null">
+      <button
+        type="button"
+        class="btn btn-primary"
+        style="margin-top: -2px"
+        (click)="uploadAssessment()"
+      >
+        บันทึก
+      </button>
+    </div>
+    <div class="col-sm-2" *ngIf="dataAssessment!">
+      <button
+        type="button"
+        class="btn btn-danger"
+        style="margin-top: -2px"
+        (click)="delAssessment()"
+      >
+        ลบข้อมูลการประเมิน
+      </button>
+    </div>
   </div>
 </div>
 <mat-tab-group *ngIf="dataAssessment! && groupID!">

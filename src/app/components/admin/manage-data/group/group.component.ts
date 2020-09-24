@@ -130,7 +130,6 @@ export class GroupComponent implements OnInit {
 
   public clickAdvisor(advisorID) {
     this.advisorID = advisorID;
-    console.log(this.codeBranch);
   }
 
   public clearFrom() {
@@ -151,7 +150,7 @@ export class GroupComponent implements OnInit {
     let formData = new FormData();
     formData.append('code', this.codeMajor);
     formData.append('ID', this.inBranchhead.value.Branchhead);
-    console.log(formData.get('ID'));
+
     if (this.codeBranchhead == this.inBranchhead.value.Branchhead) {
       Swal.fire('กรุณาเลือกอาจารย์อีกครั้ง!', '', 'error');
     } else {
@@ -207,7 +206,6 @@ export class GroupComponent implements OnInit {
     if (file) {
       this.uploadCurriculumFile = file;
       this.filesName2 = file.name;
-      console.log(this.uploadCurriculumFile);
     }
   }
 
@@ -261,7 +259,7 @@ export class GroupComponent implements OnInit {
     this.http.confirmAlert('ลบรายการนี้หรือไม่?').then(async (value: any) => {
       if (value) {
         let getData: any = await this.http.post('admin/delGroup', formData);
-        console.log(getData);
+
         if (getData.connect) {
           if (getData.response.rowCount > 0) {
             Swal.fire({
@@ -297,7 +295,6 @@ export class GroupComponent implements OnInit {
     if (file) {
       this.curriculumFileupdate = file;
       this.filesName3 = file.name;
-      console.log(this.curriculumFileupdate);
     }
   }
 
@@ -310,7 +307,7 @@ export class GroupComponent implements OnInit {
     formData.append('upload', this.curriculumFileupdate);
 
     let getData: any = await this.http.post('admin/updateGroup', formData);
-    console.log(getData);
+
     if (getData.connect) {
       if (getData.response.result) {
         let win: any = window;

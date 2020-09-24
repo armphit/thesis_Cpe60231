@@ -90,48 +90,48 @@ export class ActionPlanComponent implements OnInit {
       _year: [``, Validators.required],
     });
   }
-  public getMonthactionPlan(e) {
-    this.Plan_month = e;
-  }
-  public addPlan_month = async () => {
-    let formData = new FormData();
-    formData.append('month', this.Plan_month);
-    formData.append('year', this.actionPlan_year.value._year);
+  // public getMonthactionPlan(e) {
+  //   this.Plan_month = e;
+  // }
+  // public addPlan_month = async () => {
+  //   let formData = new FormData();
+  //   formData.append('month', this.Plan_month);
+  //   formData.append('year', this.actionPlan_year.value._year);
 
-    let getData: any = await this.http.post('teacher/addMonth', formData);
-    console.log(getData);
-    if (getData.connect) {
-      if (getData.response.rowCount > 0) {
-        Swal.fire('เพิ่มเดือนเริ่มต้นสำเร็จ', '', 'success');
-        this.month_plan();
-      } else {
-        Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
-      }
-    } else {
-      Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
-    }
-  };
+  //   let getData: any = await this.http.post('teacher/addMonth', formData);
+  //   console.log(getData);
+  //   if (getData.connect) {
+  //     if (getData.response.rowCount > 0) {
+  //       Swal.fire('เพิ่มเดือนเริ่มต้นสำเร็จ', '', 'success');
+  //       this.month_plan();
+  //     } else {
+  //       Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
+  //     }
+  //   } else {
+  //     Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+  //   }
+  // };
   public month_plan = async () => {
     let formData = new FormData();
     formData.append('year', this.actionPlan_year.value._year);
 
-    let getData: any = await this.http.post('teacher/PlanMonth', formData);
+    let getData: any = await this.http.post('teacher/getMo', formData);
 
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
-        this.dataPlan_month = getData.response.result[0].month;
+        var date = getData.response.result[0].date_start.split('-', 2);
+        this.dataPlan_month = Number(date[1]) - 1;
         if (this.dataPlan_month != null) {
-          var a = this.thmonth.indexOf(this.dataPlan_month);
           const b = this.thmonth;
           const c = this.thmonth;
           var d = this.actionPlan_year.value._year;
           var f = String(d.substring(2));
           var g = String(Number(d.substring(2)) + 1);
 
-          for (var i = a; i < this.thmonth.length; i++) {
-            this.month[i - a] = b[i] + f;
+          for (let i = this.dataPlan_month; i < this.thmonth.length; i++) {
+            this.month[i - this.dataPlan_month] = b[i] + f;
           }
-          for (var i = 0; i < a; i++) {
+          for (let i = 0; i < this.dataPlan_month; i++) {
             this.month2[i] = c[i] + g;
           }
         }
@@ -144,35 +144,35 @@ export class ActionPlanComponent implements OnInit {
       alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
     }
   };
-  public delMonth = async () => {
-    let formData = new FormData();
-    formData.append('year', this.actionPlan_year.value._year);
+  // public delMonth = async () => {
+  //   let formData = new FormData();
+  //   formData.append('year', this.actionPlan_year.value._year);
 
-    this.http
-      .confirmAlert('แน่ใจจะเปลี่ยนแปลงหรือไม่?')
-      .then(async (value: any) => {
-        if (value) {
-          let getData: any = await this.http.post('teacher/delMonth', formData);
+  //   this.http
+  //     .confirmAlert('แน่ใจจะเปลี่ยนแปลงหรือไม่?')
+  //     .then(async (value: any) => {
+  //       if (value) {
+  //         let getData: any = await this.http.post('teacher/delMonth', formData);
 
-          if (getData.connect) {
-            if (getData.response.rowCount > 0) {
-              Swal.fire({
-                position: 'top',
-                icon: 'success',
-                title: 'ลบข้อมูลสำเร็จ',
-                showConfirmButton: false,
-                timer: 1500,
-              });
-              this.month = [];
-              this.month2 = [];
-              this.month_plan();
-            } else {
-              Swal.fire('ไม่สามารถลบข้อมูลได้!', '', 'error');
-            }
-          }
-        }
-      });
-  };
+  //         if (getData.connect) {
+  //           if (getData.response.rowCount > 0) {
+  //             Swal.fire({
+  //               position: 'top',
+  //               icon: 'success',
+  //               title: 'ลบข้อมูลสำเร็จ',
+  //               showConfirmButton: false,
+  //               timer: 1500,
+  //             });
+  //             this.month = [];
+  //             this.month2 = [];
+  //             this.month_plan();
+  //           } else {
+  //             Swal.fire('ไม่สามารถลบข้อมูลได้!', '', 'error');
+  //           }
+  //         }
+  //       }
+  //     });
+  // };
   public getCURDATE = async () => {
     let getData: any = await this.http.post('teacher/getCURDATE');
 
@@ -201,6 +201,11 @@ export class ActionPlanComponent implements OnInit {
       _year: [e, Validators.required],
     });
     this.month_plan();
+    this.getActionPlan_Completed();
+    this.dataPlan_month = null;
+    this.month = [];
+    this.month2 = [];
+    this.dataActionPlan_Completed = null;
     // this.getListPlan();
     // this.getActionPlan_Status();
   }
@@ -222,6 +227,10 @@ export class ActionPlanComponent implements OnInit {
     this.codeBranch = null;
 
     this.groupID = null;
+    this.dataPlan_month = null;
+    this.month = [];
+    this.month2 = [];
+    this.dataActionPlan_Completed = null;
     this.codeFaculty = codeFaculty.substr(0, 2);
     let formData = new FormData();
     formData.append('code', this.codeFaculty);
@@ -241,6 +250,10 @@ export class ActionPlanComponent implements OnInit {
     this.codeBranch = null;
 
     this.groupID = null;
+    this.dataPlan_month = null;
+    this.dataActionPlan_Completed = null;
+    this.month = [];
+    this.month2 = [];
     this.nameMajor = nameMajor;
     this.codeMajor = codeMajor;
     let formData = new FormData();
@@ -262,6 +275,10 @@ export class ActionPlanComponent implements OnInit {
 
   public clickBranch(codeBranch, name, acronym) {
     this.groupID = null;
+    this.dataPlan_month = null;
+    this.dataActionPlan_Completed = null;
+    this.month = [];
+    this.month2 = [];
     this.acronym = acronym;
     this.codeBranch = codeBranch;
     this.getGroup();
@@ -292,10 +309,13 @@ export class ActionPlanComponent implements OnInit {
     this.groupID = codeGroup;
     this.groupName = namegroup;
     this.groupUser_name = titlename + fname + ' ' + lname;
-    // this.getStudent();
-    // this.getGoodness();
+    this.dataPlan_month = null;
+    this.month = [];
+    this.month2 = [];
+    this.dataActionPlan_Completed = null;
     this.getActionPlan_Status();
     this.getActionPlan_Completed();
+    this.month_plan();
   }
 
   public getBranchhead = async () => {
@@ -1043,157 +1063,444 @@ export class ActionPlanComponent implements OnInit {
       } else {
         action.m12 = '';
       }
-      dataG = new TableRow({
-        children: [
-          new TableCell({
-            rowSpan: 2,
-            children: [
-              new Paragraph({
-                children: [new TextRun({ text: `${i + 1}`, size: 32 })],
-                alignment: AlignmentType.CENTER,
-              }),
-            ],
-            width: { size: 5, type: WidthType.PERCENTAGE },
-          }),
-          new TableCell({
-            rowSpan: 2,
-            children: [
-              new Paragraph({
-                children: [
-                  new TextRun({
-                    text: this.dataActionPlan_Completed[i].action_plan_list,
-                    size: 32,
-                  }),
-                ],
-              }),
-            ],
-          }),
+      if (i % 2 == 0) {
+        dataG = new TableRow({
+          children: [
+            new TableCell({
+              rowSpan: 2,
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: `${i / 2 + 1}`,
+                      size: 32,
+                    }),
+                  ],
 
-          new TableCell({
-            children: [
-              new Paragraph({
-                children: [
-                  new TextRun({
-                    text: this.dataActionPlan_Completed[i].apa_distance,
-                    size: 32,
-                  }),
-                ],
-                alignment: AlignmentType.CENTER,
-              }),
-            ],
-          }),
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+              width: { size: 5, type: WidthType.PERCENTAGE },
+            }),
+            new TableCell({
+              rowSpan: 2,
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: this.dataActionPlan_Completed[i].action_plan_list,
+                      size: 32,
+                    }),
+                  ],
+                }),
+              ],
+            }),
 
-          new TableCell({
-            children: [
-              new Paragraph({
-                children: [new TextRun({ text: action.m1, size: 32 })],
-                alignment: AlignmentType.CENTER,
-              }),
-            ],
-          }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: this.dataActionPlan_Completed[i].apa_distance,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
 
-          new TableCell({
-            children: [
-              new Paragraph({
-                children: [new TextRun({ text: action.m2, size: 32 })],
-                alignment: AlignmentType.CENTER,
-              }),
-            ],
-          }),
-          new TableCell({
-            children: [
-              new Paragraph({
-                children: [new TextRun({ text: action.m3, size: 32 })],
-                alignment: AlignmentType.CENTER,
-              }),
-            ],
-          }),
-          new TableCell({
-            children: [
-              new Paragraph({
-                children: [new TextRun({ text: action.m4, size: 32 })],
-                alignment: AlignmentType.CENTER,
-              }),
-            ],
-          }),
-          new TableCell({
-            children: [
-              new Paragraph({
-                children: [new TextRun({ text: action.m5, size: 32 })],
-                alignment: AlignmentType.CENTER,
-              }),
-            ],
-          }),
-          new TableCell({
-            children: [
-              new Paragraph({
-                children: [new TextRun({ text: action.m6, size: 32 })],
-                alignment: AlignmentType.CENTER,
-              }),
-            ],
-          }),
-          new TableCell({
-            children: [
-              new Paragraph({
-                children: [new TextRun({ text: action.m7, size: 32 })],
-                alignment: AlignmentType.CENTER,
-              }),
-            ],
-          }),
-          new TableCell({
-            children: [
-              new Paragraph({
-                children: [new TextRun({ text: action.m8, size: 32 })],
-                alignment: AlignmentType.CENTER,
-              }),
-            ],
-          }),
-          new TableCell({
-            children: [
-              new Paragraph({
-                children: [new TextRun({ text: action.m9, size: 32 })],
-                alignment: AlignmentType.CENTER,
-              }),
-            ],
-          }),
-          new TableCell({
-            children: [
-              new Paragraph({
-                children: [new TextRun({ text: action.m10, size: 32 })],
-                alignment: AlignmentType.CENTER,
-              }),
-            ],
-          }),
-          new TableCell({
-            children: [
-              new Paragraph({
-                children: [new TextRun({ text: action.m11, size: 32 })],
-                alignment: AlignmentType.CENTER,
-              }),
-            ],
-          }),
-          new TableCell({
-            children: [
-              new Paragraph({
-                children: [new TextRun({ text: action.m12, size: 32 })],
-                alignment: AlignmentType.CENTER,
-              }),
-            ],
-          }),
-          new TableCell({
-            children: [
-              new Paragraph({
-                children: [
-                  new TextRun({
-                    text: this.dataActionPlan_Completed[i].note,
-                    size: 32,
-                  }),
-                ],
-              }),
-            ],
-          }),
-        ],
-      });
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m1,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m2,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m3,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m4,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m5,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m6,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m7,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m8,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m9,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m10,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m11,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m12,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: this.dataActionPlan_Completed[i].note,
+                      size: 32,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        });
+      } else {
+        dataG = new TableRow({
+          children: [
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: this.dataActionPlan_Completed[i].apa_distance,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m1,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m2,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m3,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m4,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m5,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m6,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m7,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m8,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m9,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m10,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m11,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: action.m12,
+                      size: 32,
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+            new TableCell({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      font: 'TH SarabunPSK',
+                      text: this.dataActionPlan_Completed[i].note,
+                      size: 32,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        });
+      }
+
       dataRow.push(dataG);
     }
     // const documentCreator = new DocumentCreator();

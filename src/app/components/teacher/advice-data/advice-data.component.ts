@@ -199,7 +199,7 @@ export class AdviceDataComponent implements OnInit {
     this.dataReply.advice_Advisor = dataReply.advice_advisor;
 
     this.fileAdvice = null;
-    this.filesName = null;
+    this.filesName = 'โปรดเลือกไฟล์';
     this.getYear();
     this.formAdvice.reset();
   }
@@ -384,6 +384,7 @@ export class AdviceDataComponent implements OnInit {
   public deleteReplyAdvice = async (dataReply: any) => {
     let formData = new FormData();
     formData.append('ID', dataReply.reply_advice_id);
+    formData.append('name', dataReply.reply_advice_file);
 
     this.http.confirmAlert('ลบรายการนี้หรือไม่?').then(async (value: any) => {
       if (value) {
@@ -1561,7 +1562,6 @@ export class AdviceDataComponent implements OnInit {
 
         Packer.toBlob(doc).then((blob) => {
           saveAs(blob, `Advice_${this.nameGroup}.docx`);
-          console.log('Document created successfully');
         });
       }
     } else {
@@ -1958,7 +1958,6 @@ export class AdviceDataComponent implements OnInit {
 
     Packer.toBlob(doc).then((blob) => {
       saveAs(blob, `Advice_${this.dataReply_id.nameStudent}.docx`);
-      console.log('Document created successfully');
     });
   };
 }

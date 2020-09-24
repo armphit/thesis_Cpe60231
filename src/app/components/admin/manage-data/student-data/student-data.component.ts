@@ -72,6 +72,7 @@ export class StudentDataComponent implements OnInit {
     this.codeMajor = null;
     this.codeBranch = null;
     this.groupID = null;
+    this.dataEducational = null;
 
     this.codeFaculty = codeFaculty.substr(0, 2);
     let formData = new FormData();
@@ -92,6 +93,7 @@ export class StudentDataComponent implements OnInit {
   public async clickMajor(codeMajor, nameMajor, acronym) {
     this.codeBranch = null;
     this.groupID = null;
+    this.dataEducational = null;
     this.nameMajor = nameMajor;
     this.codeMajor = codeMajor;
     let formData = new FormData();
@@ -124,6 +126,7 @@ export class StudentDataComponent implements OnInit {
 
   public clickBranch(codeBranch, name, acronym) {
     this.groupID = null;
+    this.dataEducational = null;
     this.acronym = acronym;
     this.codeBranch = codeBranch;
     this.getGroup();
@@ -183,6 +186,7 @@ export class StudentDataComponent implements OnInit {
     this.groupID = codeGroup;
     this.groupName = namegroup;
     this.groupUser_name = titlename + fname + ' ' + lname;
+    // this.dataEducational = null;
     this.getEducational();
   }
 
@@ -199,31 +203,40 @@ export class StudentDataComponent implements OnInit {
       const ws: XLSX.WorkSheet = wb.Sheets[wsname];
 
       this.data = XLSX.utils.sheet_to_json(ws, { header: 2 });
-      console.log(this.data);
     };
     reader.readAsBinaryString(target.files[0]);
   }
 
   public async uploadStudent() {
-    for (let i = 0; i < this.data.length; i++) {
-      //  let getData: any = await this.http.get('admin/uploadStudent/'+this.data[i]);
-      //  console.log(getData)
-      let Form = new FormData();
-      Object.keys(this.data[i]).forEach((key) => {
-        Form.append(key, this.data[i][key]);
-      });
-      Form.append('group', this.groupID);
-      let getData: any = await this.http.post('admin/uploadStudent', Form);
-    }
+    if (this.data == null) {
+      Swal.fire('โปรดเลือกไฟล์!', '', 'error');
+    } else {
+      for (let i = 0; i < this.data.length; i++) {
+        //  let getData: any = await this.http.get('admin/uploadStudent/'+this.data[i]);
+        //  console.log(getData)
+        let Form = new FormData();
+        Object.keys(this.data[i]).forEach((key) => {
+          Form.append(key, this.data[i][key]);
+        });
+        Form.append('group', this.groupID);
+        var getData: any = await this.http.post('admin/uploadStudent', Form);
+      }
 
-    this.getEducational();
-    Swal.fire({
-      position: 'top',
-      icon: 'success',
-      title: 'เพิ่มข้อมูลสำเร็จ',
-      showConfirmButton: false,
-      timer: 1500,
-    });
+      if (getData.connect) {
+        if (getData.response.rowCount > 0) {
+          Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
+          this.getEducational();
+          this.filesName = 'โปรดเลือกไฟล์';
+          this.data = null;
+        } else {
+          Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
+          this.filesName = 'โปรดเลือกไฟล์';
+          this.data = null;
+        }
+      } else {
+        Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+      }
+    }
   }
 
   // public async getStudent() {

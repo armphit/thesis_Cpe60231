@@ -213,7 +213,7 @@ export class SemesterDataComponent implements OnInit {
       );
     } else {
       let getData: any = await this.http.post('teacher/addCalendar', formData);
-      console.log(getData);
+
       if (getData.connect) {
         if (getData.response.result) {
           Swal.fire('เพิ่มปีการศึกษาเสร็จสิ้น', '', 'success');

@@ -23,6 +23,7 @@ export class UploadFileComponent implements OnInit {
   public timetable: any = null;
   public results: any = null;
   public dataCurriculum: any = null;
+  public clickChange: any = null;
 
   constructor(public http: HttpService, private formBuilder: FormBuilder) {
     this.getStudent();
@@ -80,7 +81,7 @@ export class UploadFileComponent implements OnInit {
     formData.append('ID', JSON.parse(localStorage.getItem('userLogin')).userID);
     formData.append('year', this.fileUpload.value.year);
     formData.append('term', this.fileUpload.value.term);
-    console.log(this.selectUpload);
+
     if (this.file == null) {
       Swal.fire('โปรดเลือกไฟล์', '', 'error');
     } else if (this.selectUpload == null) {
@@ -97,6 +98,7 @@ export class UploadFileComponent implements OnInit {
           this.filesName = 'โปรดเลือกไฟล์';
           this.file = null;
           this.selectUpload = 'โปรดเลือกไฟล์ที่ต้องการ';
+          this.clickChange = null;
         } else {
           Swal.fire('เพิ่มข้อมูลไม่สำเร็จ', '', 'error');
         }
@@ -115,6 +117,7 @@ export class UploadFileComponent implements OnInit {
     this.selectUpload = 'โปรดเลือกไฟล์ที่ต้องการ';
     this.filesName = 'โปรดเลือกไฟล์';
     this.file = null;
+    this.clickChange = null;
   }
   public getTerm(e) {
     this.fileUpload = this.formBuilder.group({
@@ -125,11 +128,13 @@ export class UploadFileComponent implements OnInit {
     this.selectUpload = 'โปรดเลือกไฟล์ที่ต้องการ';
     this.filesName = 'โปรดเลือกไฟล์';
     this.file = null;
+    this.clickChange = null;
   }
 
   public getStudy(e) {
     this.filesName = 'โปรดเลือกไฟล์';
     this.file = null;
+    this.clickChange = e;
   }
 
   public getEducation = async () => {

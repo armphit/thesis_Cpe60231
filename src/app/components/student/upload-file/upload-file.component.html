@@ -47,20 +47,17 @@
       </div>
       <div class="panel-body">
         <div class="row">
-          <div class="col-sm-3" style="padding-left: 15px">
-            ประวัติส่วนตัว :&nbsp;&nbsp;
-            <button
-              type="button"
-              class="btn btn-danger btn-sm"
-              *ngIf="getHistory != null"
-            >
+          <div class="col-sm-1.5" style="padding-left: 15px; padding-top: 7px">
+            ประวัติส่วนตัว :
+          </div>
+          <div class="col-sm-2" *ngIf="getHistory != null">
+            <button type="button" class="btn btn-danger btn-sm">
               <a href="{{ http.PathPDF }}{{ getHistory }}" target="_blank"
                 ><font color="white">คลิกดูประวัติส่วนตัว</font></a
               >
             </button>
           </div>
-
-          <div class="col-md-3">
+          <div class="col-sm-3">
             <input
               type="file"
               class="custom-file-input"
@@ -132,7 +129,7 @@
                 </mat-select>
               </mat-form-field>
             </div>
-            <div class="col">
+            <div class="col" *ngIf="clickChange!">
               <div style="padding-top: 15px">
                 <div class="col-md-4">
                   <input

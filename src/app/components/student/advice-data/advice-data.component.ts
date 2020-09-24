@@ -178,7 +178,7 @@ export class AdviceDataComponent implements OnInit {
       //   console.log(key + ':' + value);
       // });
       let getData: any = await this.http.post('student/editAdvice', formData);
-      console.log(getData);
+
       if (getData.connect) {
         if (getData.response.rowCount > 0) {
           let win: any = window;
