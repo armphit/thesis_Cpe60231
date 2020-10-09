@@ -1051,14 +1051,26 @@ export class AdviceDataComponent implements OnInit {
               new TableCell({
                 children: [
                   new Paragraph({
-                    children: [new TextRun({ text: ' ', size: 32 })],
+                    children: [
+                      new TextRun({
+                        font: 'TH SarabunPSK',
+                        text: ' ',
+                        size: 32,
+                      }),
+                    ],
                   }),
                 ],
               }),
               new TableCell({
                 children: [
                   new Paragraph({
-                    children: [new TextRun({ text: ' ', size: 32 })],
+                    children: [
+                      new TextRun({
+                        font: 'TH SarabunPSK',
+                        text: ' ',
+                        size: 32,
+                      }),
+                    ],
                   }),
                 ],
               }),

@@ -235,7 +235,6 @@ export class ActionPlanComponent implements OnInit {
 
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
-        Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
         this.getListPlan();
       } else {
         Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');

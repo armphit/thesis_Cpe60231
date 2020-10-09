@@ -1098,8 +1098,20 @@
             </tr>
           </tbody>
         </table>
+
       </mat-tab>
     </mat-tab-group>
+    <div style="padding-left: 15px;padding-bottom: 15px" *ngIf="dataAssessment!">
+      <button type="button" class="btn btn-primary" (click)="makePdf()">
+        Export to PDF</button
+      >&nbsp;&nbsp;<button
+        type="button"
+        class="btn btn-primary"
+        (click)="createDOC()"
+      >
+        Export to Word
+      </button>
+    </div>
   </mat-tab>
   <mat-tab label="สำหรับหัวหน้าสาขา" *ngIf="dataBranchhead != null">
     <div class="panel-body" style="margin-left: 10px; margin-right: 10px">

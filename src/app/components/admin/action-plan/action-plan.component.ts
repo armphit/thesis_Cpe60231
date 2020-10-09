@@ -815,7 +815,12 @@ export class ActionPlanComponent implements OnInit {
             children: [
               new Paragraph({
                 children: [
-                  new TextRun({ text: 'ลำ\nดับ', bold: true, size: 32 }),
+                  new TextRun({
+                    font: 'TH SarabunPSK',
+                    text: 'ลำ\nดับ',
+                    bold: true,
+                    size: 32,
+                  }),
                 ],
                 alignment: AlignmentType.CENTER,
               }),
@@ -827,6 +832,7 @@ export class ActionPlanComponent implements OnInit {
               new Paragraph({
                 children: [
                   new TextRun({
+                    font: 'TH SarabunPSK',
                     text: 'รายการ',
                     bold: true,
                     size: 32,
@@ -841,6 +847,7 @@ export class ActionPlanComponent implements OnInit {
               new Paragraph({
                 children: [
                   new TextRun({
+                    font: 'TH SarabunPSK',
                     text: 'ช่วงเวลา',
                     bold: true,
                     size: 32,
@@ -855,6 +862,7 @@ export class ActionPlanComponent implements OnInit {
               new Paragraph({
                 children: [
                   new TextRun({
+                    font: 'TH SarabunPSK',
                     text: month[0],
                     bold: true,
                     size: 32,
@@ -868,7 +876,12 @@ export class ActionPlanComponent implements OnInit {
             children: [
               new Paragraph({
                 children: [
-                  new TextRun({ text: month[1], bold: true, size: 32 }),
+                  new TextRun({
+                    font: 'TH SarabunPSK',
+                    text: month[1],
+                    bold: true,
+                    size: 32,
+                  }),
                 ],
                 alignment: AlignmentType.CENTER,
               }),
@@ -878,7 +891,12 @@ export class ActionPlanComponent implements OnInit {
             children: [
               new Paragraph({
                 children: [
-                  new TextRun({ text: month[2], bold: true, size: 32 }),
+                  new TextRun({
+                    font: 'TH SarabunPSK',
+                    text: month[2],
+                    bold: true,
+                    size: 32,
+                  }),
                 ],
                 alignment: AlignmentType.CENTER,
               }),
@@ -888,7 +906,12 @@ export class ActionPlanComponent implements OnInit {
             children: [
               new Paragraph({
                 children: [
-                  new TextRun({ text: month[3], bold: true, size: 32 }),
+                  new TextRun({
+                    font: 'TH SarabunPSK',
+                    text: month[3],
+                    bold: true,
+                    size: 32,
+                  }),
                 ],
                 alignment: AlignmentType.CENTER,
               }),
@@ -898,7 +921,12 @@ export class ActionPlanComponent implements OnInit {
             children: [
               new Paragraph({
                 children: [
-                  new TextRun({ text: month[4], bold: true, size: 32 }),
+                  new TextRun({
+                    font: 'TH SarabunPSK',
+                    text: month[4],
+                    bold: true,
+                    size: 32,
+                  }),
                 ],
                 alignment: AlignmentType.CENTER,
               }),
@@ -908,7 +936,12 @@ export class ActionPlanComponent implements OnInit {
             children: [
               new Paragraph({
                 children: [
-                  new TextRun({ text: month[5], bold: true, size: 32 }),
+                  new TextRun({
+                    font: 'TH SarabunPSK',
+                    text: month[5],
+                    bold: true,
+                    size: 32,
+                  }),
                 ],
                 alignment: AlignmentType.CENTER,
               }),
@@ -918,7 +951,12 @@ export class ActionPlanComponent implements OnInit {
             children: [
               new Paragraph({
                 children: [
-                  new TextRun({ text: month[6], bold: true, size: 32 }),
+                  new TextRun({
+                    font: 'TH SarabunPSK',
+                    text: month[6],
+                    bold: true,
+                    size: 32,
+                  }),
                 ],
                 alignment: AlignmentType.CENTER,
               }),
@@ -928,7 +966,12 @@ export class ActionPlanComponent implements OnInit {
             children: [
               new Paragraph({
                 children: [
-                  new TextRun({ text: month[7], bold: true, size: 32 }),
+                  new TextRun({
+                    font: 'TH SarabunPSK',
+                    text: month[7],
+                    bold: true,
+                    size: 32,
+                  }),
                 ],
                 alignment: AlignmentType.CENTER,
               }),
@@ -938,7 +981,12 @@ export class ActionPlanComponent implements OnInit {
             children: [
               new Paragraph({
                 children: [
-                  new TextRun({ text: month[8], bold: true, size: 32 }),
+                  new TextRun({
+                    font: 'TH SarabunPSK',
+                    text: month[8],
+                    bold: true,
+                    size: 32,
+                  }),
                 ],
                 alignment: AlignmentType.CENTER,
               }),
@@ -948,7 +996,12 @@ export class ActionPlanComponent implements OnInit {
             children: [
               new Paragraph({
                 children: [
-                  new TextRun({ text: month[9], bold: true, size: 32 }),
+                  new TextRun({
+                    font: 'TH SarabunPSK',
+                    text: month[9],
+                    bold: true,
+                    size: 32,
+                  }),
                 ],
                 alignment: AlignmentType.CENTER,
               }),
@@ -958,7 +1011,12 @@ export class ActionPlanComponent implements OnInit {
             children: [
               new Paragraph({
                 children: [
-                  new TextRun({ text: month[10], bold: true, size: 32 }),
+                  new TextRun({
+                    font: 'TH SarabunPSK',
+                    text: month[10],
+                    bold: true,
+                    size: 32,
+                  }),
                 ],
                 alignment: AlignmentType.CENTER,
               }),
@@ -968,7 +1026,12 @@ export class ActionPlanComponent implements OnInit {
             children: [
               new Paragraph({
                 children: [
-                  new TextRun({ text: month[11], bold: true, size: 32 }),
+                  new TextRun({
+                    font: 'TH SarabunPSK',
+                    text: month[11],
+                    bold: true,
+                    size: 32,
+                  }),
                 ],
                 alignment: AlignmentType.CENTER,
               }),
@@ -978,7 +1041,12 @@ export class ActionPlanComponent implements OnInit {
             children: [
               new Paragraph({
                 children: [
-                  new TextRun({ text: 'หมาย\nเหตุ', bold: true, size: 32 }),
+                  new TextRun({
+                    font: 'TH SarabunPSK',
+                    text: 'หมาย\nเหตุ',
+                    bold: true,
+                    size: 32,
+                  }),
                 ],
                 alignment: AlignmentType.CENTER,
               }),
@@ -1090,6 +1158,7 @@ export class ActionPlanComponent implements OnInit {
                   children: [
                     new TextRun({
                       font: 'TH SarabunPSK',
+
                       text: this.dataActionPlan_Completed[i].action_plan_list,
                       size: 32,
                     }),
@@ -1104,6 +1173,7 @@ export class ActionPlanComponent implements OnInit {
                   children: [
                     new TextRun({
                       font: 'TH SarabunPSK',
+
                       text: this.dataActionPlan_Completed[i].apa_distance,
                       size: 32,
                     }),
@@ -1119,6 +1189,7 @@ export class ActionPlanComponent implements OnInit {
                   children: [
                     new TextRun({
                       font: 'TH SarabunPSK',
+
                       text: action.m1,
                       size: 32,
                     }),
@@ -1134,6 +1205,7 @@ export class ActionPlanComponent implements OnInit {
                   children: [
                     new TextRun({
                       font: 'TH SarabunPSK',
+
                       text: action.m2,
                       size: 32,
                     }),
@@ -1148,6 +1220,7 @@ export class ActionPlanComponent implements OnInit {
                   children: [
                     new TextRun({
                       font: 'TH SarabunPSK',
+
                       text: action.m3,
                       size: 32,
                     }),
@@ -1162,6 +1235,7 @@ export class ActionPlanComponent implements OnInit {
                   children: [
                     new TextRun({
                       font: 'TH SarabunPSK',
+
                       text: action.m4,
                       size: 32,
                     }),
@@ -1511,6 +1585,7 @@ export class ActionPlanComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text:
                 'แผนปฏิบัติงานการบริการให้คำปรึกษาและแนะแนว ของอาจารย์ที่ปรึกษา' +
                 ' ' +
@@ -1535,6 +1610,7 @@ export class ActionPlanComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text: '',
               bold: true,
               size: 32,
@@ -1545,6 +1621,7 @@ export class ActionPlanComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text: '',
               bold: true,
               size: 32,
@@ -1555,6 +1632,7 @@ export class ActionPlanComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text:
                 'ลงชื่อ.................................................................',
 
@@ -1566,6 +1644,7 @@ export class ActionPlanComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text: '( ' + this.groupUser_name + ' )',
               size: 32,
             }),
@@ -1575,6 +1654,7 @@ export class ActionPlanComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text: 'ผู้จัดทำแผนปฏิบัติงาน',
               size: 32,
             }),
@@ -1584,6 +1664,7 @@ export class ActionPlanComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text: 'วันที่................................................',
               size: 32,
             }),
@@ -1593,6 +1674,7 @@ export class ActionPlanComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text: '',
               size: 32,
             }),
@@ -1602,6 +1684,7 @@ export class ActionPlanComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text: '',
               bold: true,
               size: 32,
@@ -1612,6 +1695,7 @@ export class ActionPlanComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text:
                 'ลงชื่อ.................................................................',
               size: 32,
@@ -1622,6 +1706,7 @@ export class ActionPlanComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text: '( ' + this.nameBranchhead + ' )',
               size: 32,
             }),
@@ -1631,6 +1716,7 @@ export class ActionPlanComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text: 'หัวหน้าโปรแกรมวิชา/สาขาวิชา ผู้อนุมัติ',
               size: 32,
             }),
@@ -1640,6 +1726,7 @@ export class ActionPlanComponent implements OnInit {
         new Paragraph({
           children: [
             new TextRun({
+              font: 'TH SarabunPSK',
               text: 'วันที่................................................',
               size: 32,
             }),

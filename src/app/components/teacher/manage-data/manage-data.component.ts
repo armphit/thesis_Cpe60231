@@ -23,8 +23,9 @@ export class ManageDataComponent implements OnInit {
   public groupID: any = null;
   public dataBranchEdit: any = null;
   public acronymEdit: any = null;
-  public updateFile: any = null;
-  public updateFile_name: any = 'โปรดเลือกไฟล์';
+
+  public curriculumFileupdate: any = null;
+  public filesName3: any = 'โปรดเลือกไฟล์';
   public codeGroup: any = null;
   public data: any = null;
   public dataStudent: any = null;
@@ -266,8 +267,9 @@ export class ManageDataComponent implements OnInit {
       brunchEdit: [branch_id, Validators.required],
     });
     this.getBranchEdit();
-    this.updateFile = null;
-    this.updateFile_name = 'โปรดเลือกไฟล์';
+
+    this.curriculumFileupdate = null;
+    this.filesName3 = 'โปรดเลือกไฟล์';
   }
 
   public getBranchEdit = async () => {
@@ -287,10 +289,11 @@ export class ManageDataComponent implements OnInit {
       alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
     }
   };
-  updateCurriculum(file) {
+
+  uploadCurriculumUpdate(file) {
     if (file) {
-      this.updateFile = file;
-      this.updateFile_name = file.name;
+      this.curriculumFileupdate = file;
+      this.filesName3 = file.name;
     }
   }
 
@@ -302,7 +305,7 @@ export class ManageDataComponent implements OnInit {
     let formData = new FormData();
     var input = this.formCurriculum.value.groupEdit.trim();
     formData.append('group', this.groupID);
-    formData.append('upload', this.updateFile);
+    formData.append('upload', this.curriculumFileupdate);
     formData.append('group_name', this.acronymEdit + '.' + input.toUpperCase());
     formData.append('branch_id', this.formCurriculum.value.brunchEdit);
     let getData: any = await this.http.post(
@@ -312,12 +315,17 @@ export class ManageDataComponent implements OnInit {
 
     if (getData.connect) {
       if (getData.response.result) {
-        Swal.fire('เพิ่มข้อมูลสำเร็จ', '', 'success');
+        Swal.fire('แก้ไขข้อข้อมูลสำเร็จ', '', 'success');
         let win: any = window;
         win.$('#updateGroup').modal('hide');
+
         this.getGroup();
       } else {
-        Swal.fire('เพิ่มข้อมูลไม่สำเร็จ', '', 'error');
+        Swal.fire({
+          icon: 'error',
+          title: 'แก้ไขข้อข้อมูลไม่สำเร็จ',
+          text: 'กลุ่มเรียนซ้ำ!',
+        });
       }
     } else {
       Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
@@ -363,14 +371,10 @@ export class ManageDataComponent implements OnInit {
         var getData: any = await this.http.post('admin/uploadStudent', Form);
       }
       if (getData.connect) {
-        if (getData.response.rowCount > 0) {
-          Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
-          this.getEducational();
-          this.fileStudentName = 'โปรดเลือกไฟล์';
-          this.data = null;
-        } else {
-          Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
-        }
+        Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
+        this.getEducational();
+        this.fileStudentName = 'โปรดเลือกไฟล์';
+        this.data = null;
       } else {
         Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
       }
@@ -690,4 +694,5 @@ export class ManageDataComponent implements OnInit {
       }
     }
   };
+  public setAll(e) {}
 }

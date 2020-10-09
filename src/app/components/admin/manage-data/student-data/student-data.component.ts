@@ -221,18 +221,12 @@ export class StudentDataComponent implements OnInit {
         Form.append('group', this.groupID);
         var getData: any = await this.http.post('admin/uploadStudent', Form);
       }
-
+      console.log(getData);
       if (getData.connect) {
-        if (getData.response.rowCount > 0) {
-          Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
-          this.getEducational();
-          this.filesName = 'โปรดเลือกไฟล์';
-          this.data = null;
-        } else {
-          Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
-          this.filesName = 'โปรดเลือกไฟล์';
-          this.data = null;
-        }
+        Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
+        this.getEducational();
+        this.filesName = 'โปรดเลือกไฟล์';
+        this.data = null;
       } else {
         Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
       }

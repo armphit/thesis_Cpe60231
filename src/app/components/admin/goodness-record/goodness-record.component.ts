@@ -682,7 +682,13 @@ export class GoodnessRecordComponent implements OnInit {
               new TableCell({
                 children: [
                   new Paragraph({
-                    children: [new TextRun({ text: `${i + 1}`, size: 32 })],
+                    children: [
+                      new TextRun({
+                        font: 'TH SarabunPSK',
+                        text: `${i + 1}`,
+                        size: 32,
+                      }),
+                    ],
                     alignment: AlignmentType.CENTER,
                   }),
                 ],
@@ -723,7 +729,13 @@ export class GoodnessRecordComponent implements OnInit {
               new TableCell({
                 children: [
                   new Paragraph({
-                    children: [new TextRun({ text: aw, size: 32 })],
+                    children: [
+                      new TextRun({
+                        font: 'TH SarabunPSK',
+                        text: aw,
+                        size: 32,
+                      }),
+                    ],
                   }),
                 ],
               }),
@@ -731,7 +743,13 @@ export class GoodnessRecordComponent implements OnInit {
               new TableCell({
                 children: [
                   new Paragraph({
-                    children: [new TextRun({ text: no, size: 32 })],
+                    children: [
+                      new TextRun({
+                        font: 'TH SarabunPSK',
+                        text: no,
+                        size: 32,
+                      }),
+                    ],
                   }),
                 ],
               }),

@@ -28,11 +28,11 @@ export class GroupComponent implements OnInit {
   public dataGroup: any = null;
   public groupUser_edit: any = null;
   public groupID_edit: any = null;
-  public filesName2: any = null;
+  public filesName2: any = 'โปรดเลือกไฟล์';
   public nameBranch: any = null;
   public uploadCurriculumFile: File;
   public curriculumFileupdate: File;
-  public filesName3: any = null;
+  public filesName3: any = 'โปรดเลือกไฟล์';
   public formCurriculum: FormGroup;
 
   constructor(public http: HttpService, private formBuilder: FormBuilder) {
@@ -136,7 +136,7 @@ export class GroupComponent implements OnInit {
     this.inGroup.reset();
     this.inBranchhead.reset();
     this.uploadCurriculumFile = null;
-    this.filesName2 = null;
+    this.filesName2 = 'โปรดเลือกไฟล์';
   }
 
   public getIDBranchhead(codeBranchhead) {
@@ -280,7 +280,7 @@ export class GroupComponent implements OnInit {
 
   public getIDgroup = async (advisorID: any, group_id: any, group_name) => {
     this.curriculumFileupdate = null;
-    this.filesName3 = null;
+    this.filesName3 = 'โปรดเลือกไฟล์';
     let a = group_name.split('.', 1);
     let b = group_name.replace(a + '.', '');
 
@@ -314,9 +314,12 @@ export class GroupComponent implements OnInit {
         win.$('#updateGroup').modal('hide');
         Swal.fire('แก้ไขข้อมูลเสร็จสิ้น', '', 'success');
         this.getGroup();
-        this.curriculumFileupdate = null;
       } else {
-        Swal.fire('แก้ไขข้อมูลไม่สำเร็จ', '', 'error');
+        Swal.fire({
+          icon: 'error',
+          title: 'แก้ไขข้อข้อมูลไม่สำเร็จ',
+          text: 'กลุ่มเรียนซ้ำ!',
+        });
       }
     } else {
       Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');

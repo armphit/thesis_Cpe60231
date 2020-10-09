@@ -3,6 +3,41 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpService } from 'src/app/services/http.service';
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
+import {
+  AlignmentType,
+  Document,
+  HeadingLevel,
+  Packer,
+  Paragraph,
+  Table,
+  TableCell,
+  TableRow,
+  TabStopPosition,
+  TabStopType,
+  TextRun,
+  UnderlineType,
+  WidthType,
+} from 'docx';
+import { saveAs } from 'file-saver';
+
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+pdfMake.fonts = {
+  THSarabunNew: {
+    normal: 'THSarabunNew.ttf',
+    bold: 'THSarabunNew Bold.ttf',
+    italics: 'THSarabunNew Italic.ttf',
+    bolditalics: 'THSarabunNew BoldItalic.ttf',
+  },
+  Roboto: {
+    normal: 'Roboto-Regular.ttf',
+    bold: 'Roboto-Medium.ttf',
+    italics: 'Roboto-Italic.ttf',
+    bolditalics: 'Roboto-MediumItalic.ttf',
+  },
+};
 @Component({
   selector: 'app-assessment-data',
   templateUrl: './assessment-data.component.html',
@@ -2113,4 +2148,5380 @@ export class AssessmentDataComponent implements OnInit {
       }
     });
   };
+  public async makePdf() {
+    let data_st = [
+      { width: '*', text: '' },
+      {
+        width: 'auto',
+        table: {
+          headerRows: 1,
+          widths: [50, 400],
+          body: [
+            [
+              {
+                text: 'ลำดับ',
+                style: 'tableHeader',
+                alignment: 'center',
+                bold: true,
+              },
+
+              {
+                text: 'ความคิดเห็น',
+                style: 'tableHeader',
+                alignment: 'center',
+                bold: true,
+              },
+            ],
+          ],
+          alignment: 'center',
+        },
+      },
+      { width: '*', text: '' },
+    ];
+    for (var i = 0; i < this.commentAssessment.length; i++) {
+      let dataaaa2 = [
+        {
+          text: i + 1,
+          style: '',
+          alignment: 'center',
+          bold: false,
+        },
+        {
+          text: this.commentAssessment[i],
+          style: '',
+          alignment: '',
+          bold: false,
+        },
+      ];
+      data_st[1]['table']['body'].push(dataaaa2);
+    }
+    const dd = {
+      header: {},
+      footer(currentPage, pageCount) {
+        return {
+          columns: [
+            { text: '', fontSize: 15, alignment: 'center' },
+            // {
+            //   text:
+            //     'หน้าที่ ' +
+            //     currentPage.toString() +
+            //     ' จาก ' +
+            //     pageCount +
+            //     ' หน้า',
+            //   margin: [5, 5, 15, 5],
+            //   alignment: 'right',
+            // },
+          ],
+        };
+      },
+      content: [
+        {
+          image: await this.getBase64ImageFromURL('assets/rmuti.png'),
+          width: 30,
+          height: 50,
+        },
+        {
+          text: ' มหาวิทยาลัยเทคโนโลยีราชมงคลอีสาน  นครราชสีมา',
+          fontSize: 12,
+          margin: [35, 0, 0, 20],
+          bold: true,
+        },
+        { width: '*', text: '' },
+        {
+          text:
+            'ผลประเมินความพึงพอใจในการให้บริการให้คำปรึกษาและแนะแนวของอาจารย์ที่ปรึกษา\nประจำปีการศึกษา ' +
+            this.assessment_year.value._year +
+            '\n',
+          fontSize: 16,
+          alignment: 'center',
+          bold: true,
+        },
+        {
+          width: 'auto',
+          table: {
+            headerRows: 1,
+            widths: [320, 80, 80],
+            body: [
+              [
+                {
+                  text: 'ส่วนที่ 1 ข้อมูลส่วนตัว',
+                  style: 'tableHeader',
+                  bold: true,
+                },
+                {
+                  text: 'จำนวน',
+                  style: 'tableHeader',
+                  alignment: 'center',
+                  bold: true,
+                },
+
+                {
+                  text: 'ร้อยละ',
+                  style: 'tableHeader',
+                  alignment: 'center',
+                  bold: true,
+                },
+              ],
+              [
+                {
+                  text: '1. เพศ',
+                  bold: true,
+                },
+                {
+                  text: '',
+
+                  alignment: 'right',
+                },
+                {
+                  text: '',
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: 'เพศชาย',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.Episode1.count_men,
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(
+                    (this.Episode1.count_men * 100) / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: 'เพศหญิง',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.Episode1.count_women,
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(
+                    (this.Episode1.count_women * 100) /
+                      this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: 'รวม',
+                  alignment: 'center',
+                },
+                {
+                  text: this.dataAssessment.length,
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(
+                    (this.dataAssessment.length * 100) /
+                      this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: '2. ระดับการศึกษา',
+                  bold: true,
+                },
+                {
+                  text: '',
+
+                  alignment: 'right',
+                },
+                {
+                  text: '',
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: 'ปวส.',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.Episode1.level1,
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(
+                    (this.Episode1.level1 * 100) / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: 'ปริญญาตรี',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.Episode1.level2,
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(
+                    (this.Episode1.level2 * 100) / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: 'รวม',
+                  alignment: 'center',
+                },
+                {
+                  text: this.dataAssessment.length,
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(
+                    (this.dataAssessment.length * 100) /
+                      this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text:
+                    '3. ' +
+                    this.dataBranch_Faculty.faculty +
+                    ' ' +
+                    this.dataBranch_Faculty.branch,
+                  bold: true,
+                  colSpan: 3,
+                },
+              ],
+              [
+                {
+                  text: '4. ความถี่ในการใช้บริการ',
+                  bold: true,
+                },
+                {
+                  text: '',
+
+                  alignment: 'right',
+                },
+                {
+                  text: '',
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: 'ไม่เคยมารับบริการ',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.Episode1.frequency_never,
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(
+                    (this.Episode1.frequency_never * 100) /
+                      this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: 'น้อยกว่า 5 ครั้ง',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.Episode1.frequency_less,
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(
+                    (this.Episode1.frequency_less * 100) /
+                      this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: 'มากกว่า 5 ครั้ง',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.Episode1.frequency_over,
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(
+                    (this.Episode1.frequency_over * 100) /
+                      this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: 'รวม',
+                  alignment: 'center',
+                },
+                {
+                  text: this.dataAssessment.length,
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(
+                    (this.dataAssessment.length * 100) /
+                      this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: '5. เข้ารับบริการเรื่อง',
+                  bold: true,
+                },
+                {
+                  text: '',
+
+                  alignment: 'right',
+                },
+                {
+                  text: '',
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: 'ข้อมูลเรื่องอาชีพ',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.Episode1.service_career,
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(
+                    (this.Episode1.service_career * 100) /
+                      this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: 'ข้อมูลเรื่องการศึกษา',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.Episode1.service_study,
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(
+                    (this.Episode1.service_study * 100) /
+                      this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: 'ทุนการศึกษา',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.Episode1.service_bursary,
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(
+                    (this.Episode1.service_bursary * 100) /
+                      this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: 'ข้อมูลบุคลิกภาพ ธรรมะ สุขภาพและการปรับตัว',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.Episode1.service_personality,
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(
+                    (this.Episode1.service_personality * 100) /
+                      this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: 'บริการศิษย์เก่า',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.Episode1.service_alumni,
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(
+                    (this.Episode1.service_alumni * 100) /
+                      this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: 'อื่นๆ',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.Episode1.service_other,
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(
+                    (this.Episode1.service_other * 100) /
+                      this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: 'รวม',
+                  alignment: 'center',
+                },
+                {
+                  text: this.dataAssessment.length,
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(
+                    (this.dataAssessment.length * 100) /
+                      this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+              ],
+            ],
+
+            alignment: 'center',
+          },
+        },
+        { text: '', pageBreak: 'before' },
+        {
+          text: '',
+          width: 30,
+          height: 50,
+        },
+        {
+          text: ' ',
+          fontSize: 12,
+          margin: [35, 0, 0, 20],
+          bold: true,
+        },
+        { width: '*', text: '' },
+        {
+          table: {
+            headerRows: 2,
+            widths: [300, '*', '*', '*', '*'],
+            // keepWithHeaderRows: 1,
+            body: [
+              [
+                {
+                  rowSpan: 2,
+                  text: 'หัวข้อประเมิน',
+                  style: 'tableHeader',
+                  alignment: 'center',
+                  bold: true,
+                },
+                {
+                  colSpan: 3,
+                  text: 'ระดับความพึงพอใจ (ร้อยละ)',
+                  style: 'tableHeader',
+                  alignment: 'center',
+                  bold: true,
+                },
+                {},
+                {},
+              ],
+              [
+                {},
+                {
+                  text: 'x',
+                  style: 'tableHeader',
+                  alignment: 'center',
+                  bold: true,
+                },
+                {
+                  text: 'S.D.',
+                  style: 'tableHeader',
+                  alignment: 'center',
+                  bold: true,
+                },
+                {
+                  text: 'ระดับความพึงพอใจ',
+                  style: 'tableHeader',
+                  alignment: 'center',
+                  bold: true,
+                },
+              ],
+              [
+                {
+                  text: '1. คุณลักษณะด้านความสามารถเชิงวิชาการ',
+                  bold: true,
+                },
+                {},
+                {},
+                {},
+              ],
+              [
+                {
+                  text: '1.1 รู้บทบาทหน้าที่ของอาจารย์ที่ปรึกษา',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic1_1 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic1_1),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic1_1,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: '1.2 มีเทคนิคให้คำปรึกษา',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic1_2 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic1_2),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic1_2,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: '1.3 มีความสามารถให้คำแนะนำ',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic1_3 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic1_3),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic1_3,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: '1.4 มีความรู้เกี่ยวกับกฎระเบียบของมหาวิทยาลัย',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic1_4 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic1_4),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic1_4,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: '1.5 มีความรู้ความสนใจเกี่ยวกับเหตุการณ์ปัจจุบัน',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic1_5 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic1_5),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic1_5,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: 'รวม',
+                  alignment: 'center',
+                },
+                {
+                  text: this.getValue(
+                    (this.Episode2.subtopic1_1 / this.dataAssessment.length +
+                      this.Episode2.subtopic1_2 / this.dataAssessment.length +
+                      this.Episode2.subtopic1_3 / this.dataAssessment.length +
+                      this.Episode2.subtopic1_4 / this.dataAssessment.length +
+                      this.Episode2.subtopic1_5 / this.dataAssessment.length) /
+                      5
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.Total1),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.Total1,
+
+                  alignment: 'right',
+                },
+              ],
+
+              [
+                {
+                  text: '2. คุณลักษณะด้านบุคลิกภาพ',
+                  bold: true,
+                },
+                {},
+                {},
+                {},
+              ],
+              [
+                {
+                  text:
+                    '2.1 มีความประพฤติแบบอย่างที่ดี มีความกระตือรือร้นสนใจในหน้าที่',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic2_1 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic2_1),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic2_1,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: '2.2 รับฟังความคิดเห็นของนักศึกษา',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic2_2 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic2_2),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic2_2,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text:
+                    '2.3 มีบุคลิกภาพที่อบอุ่นและสุภาพเรียบร้อย สุขุมรอบคอบคุมอารมณ์',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic2_3 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic2_3),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic2_3,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text:
+                    '2.4 เอาใจใส่นักศึกษาอย่างทั่วถึงกันและสม่ำเสมอเท่าเทียมกัน',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic2_4 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic2_4),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic2_4,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text:
+                    '2.5 มีความพร้อมในการช่วยเหลือให้นักศึกษาเผชิญกับปัญหาต่างๆ',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic2_5 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic2_5),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic2_5,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: 'รวม',
+                  alignment: 'center',
+                },
+                {
+                  text: this.getValue(
+                    (this.Episode2.subtopic2_1 / this.dataAssessment.length +
+                      this.Episode2.subtopic2_2 / this.dataAssessment.length +
+                      this.Episode2.subtopic2_3 / this.dataAssessment.length +
+                      this.Episode2.subtopic2_4 / this.dataAssessment.length +
+                      this.Episode2.subtopic2_5 / this.dataAssessment.length) /
+                      5
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.Total2),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.Total2,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: '3. คุณลักษณะด้านเจตคติ',
+                  bold: true,
+                },
+                {},
+                {},
+                {},
+              ],
+              [
+                {
+                  text:
+                    '3.1 มีความเต็มใจและยินดีในการทำหน้าที่อาจารย์ที่ปรึกษา',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic3_1 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic3_1),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic3_1,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text:
+                    '3.2 มีความมุ่งมั่นต่อคุณภาพงานการให้คำปรึกษาด้านวิชาการ',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic3_2 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic3_2),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic3_2,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: '3.3 การเป็นคนมองโลกในแง่ดี',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic3_3 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic3_3),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic3_3,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: '3.4 การให้ความสำคัญกับนักศึกษาทุกคนเท่าเทียมกัน',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic3_4 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic3_4),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic3_4,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: '3.5 มีความยุติธรรมแก่นักศึกษา',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic3_5 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic3_5),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic3_5,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: 'รวม',
+                  alignment: 'center',
+                },
+                {
+                  text: this.getValue(
+                    (this.Episode2.subtopic3_1 / this.dataAssessment.length +
+                      this.Episode2.subtopic3_2 / this.dataAssessment.length +
+                      this.Episode2.subtopic3_3 / this.dataAssessment.length +
+                      this.Episode2.subtopic3_4 / this.dataAssessment.length +
+                      this.Episode2.subtopic3_5 / this.dataAssessment.length) /
+                      5
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.Total3),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.Total3,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: '4. คุณลักษณะด้านจรรยาบรรณ',
+                  bold: true,
+                },
+                {},
+                {},
+                {},
+              ],
+              [
+                {
+                  text: '4.1 รักษาความลับ ข้อมูลส่วนตัวของนักศึกษา',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic4_1 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic4_1),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic4_1,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: '4.2 คำนึงถึงสวัสดิภาพของนักศึกษา',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic4_2 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic4_2),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic4_2,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: '4.3 การให้กำลังใจแก่นักศึกษาที่เข้ามาขอรับคำปรึกษา',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic4_3 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic4_3),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic4_3,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: '4.4 มีความเมตตา และกรุณากับนักศึกษา',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic4_4 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic4_4),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic4_4,
+
+                  alignment: 'right',
+                },
+              ],
+
+              [
+                {
+                  text: 'รวม',
+                  alignment: 'center',
+                },
+                {
+                  text: this.getValue(
+                    (this.Episode2.subtopic4_1 / this.dataAssessment.length +
+                      this.Episode2.subtopic4_2 / this.dataAssessment.length +
+                      this.Episode2.subtopic4_3 / this.dataAssessment.length +
+                      this.Episode2.subtopic4_4 / this.dataAssessment.length) /
+                      4
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.Total4),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.Total4,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: '5. คุณลักษณะด้านทักษะการปฏิบัติงาน',
+                  bold: true,
+                },
+                {},
+                {},
+                {},
+              ],
+              [
+                {
+                  text: '5.1 ความสามารถนำข้อมูลที่ทันสมัยมาใช้ในการให้คำปรึกษา',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic5_1 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic5_1),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic5_1,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: '5.2 ใช้ภาษาเพื่อถ่ายทอดความคิดในการให้คำปรึกษาได้ดี',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic5_2 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic5_2),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic5_2,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text:
+                    '5.3 มีความสามารถในการแก้ปัญหาเฉพาะหน้าให้กับนักศึกษาได้',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic5_3 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic5_3),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic5_3,
+
+                  alignment: 'right',
+                },
+              ],
+
+              [
+                {
+                  text: 'รวม',
+                  alignment: 'center',
+                },
+                {
+                  text: this.getValue(
+                    (this.Episode2.subtopic5_1 / this.dataAssessment.length +
+                      this.Episode2.subtopic5_2 / this.dataAssessment.length +
+                      this.Episode2.subtopic5_3 / this.dataAssessment.length) /
+                      3
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.Total5),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.Total5,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: '6. คุณลักษณะด้านความรับผิดชอบ',
+                  bold: true,
+                },
+                {},
+                {},
+                {},
+              ],
+              [
+                {
+                  text: '6.1 ใส่ใจการปฏิบัติหน้าที่ให้คำปรึกษา',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic6_1 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic6_1),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic6_1,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text: '6.2 จัดทำแฟ้มข้อมูลนักศึกษาให้เป็นปัจจุบันอยู่เสมอ',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic6_2 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic6_2),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic6_2,
+
+                  alignment: 'right',
+                },
+              ],
+              [
+                {
+                  text:
+                    '6.3 ให้โอกาสนักศึกษา เข้ามารับคำปรึกษาอย่างสะดวกในบรรยากาศที่อบอุ่น',
+                  margin: [15, 0, 0, 0],
+                },
+                {
+                  text: this.getValue(
+                    this.Episode2.subtopic6_3 / this.dataAssessment.length
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.subtopic6_3),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.subtopic6_3,
+
+                  alignment: 'right',
+                },
+              ],
+
+              [
+                {
+                  text: 'รวม',
+                  alignment: 'center',
+                },
+                {
+                  text: this.getValue(
+                    (this.Episode2.subtopic6_1 / this.dataAssessment.length +
+                      this.Episode2.subtopic6_2 / this.dataAssessment.length +
+                      this.Episode2.subtopic6_3 / this.dataAssessment.length) /
+                      3
+                  ),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.getValue(this.totalSD.Total6),
+
+                  alignment: 'right',
+                },
+                {
+                  text: this.rating.Total6,
+
+                  alignment: 'right',
+                },
+              ],
+            ],
+          },
+        },
+        { text: '', pageBreak: 'before', columns: data_st },
+      ],
+
+      defaultStyle: {
+        font: 'THSarabunNew',
+        fontSize: 14,
+      },
+    };
+    pdfMake.createPdf(dd).open();
+  }
+
+  //else {
+  //}
+  // } else {
+  //   alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+  // }
+
+  getBase64ImageFromURL(url) {
+    return new Promise((resolve, reject) => {
+      var img = new Image();
+      img.setAttribute('crossOrigin', 'anonymous');
+      img.onload = () => {
+        var canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        var dataURL = canvas.toDataURL('image/png');
+        resolve(dataURL);
+      };
+      img.onerror = (error) => {
+        reject(error);
+      };
+      img.src = url;
+    });
+  }
+
+  public async createDOC() {
+    var data_row = [
+      new TableRow({
+        children: [
+          new TableCell({
+            children: [
+              new Paragraph({
+                pageBreakBefore: true,
+                children: [
+                  new TextRun({
+                    font: 'TH SarabunPSK',
+                    text: 'ลำดับ',
+                    bold: true,
+                    size: 32,
+                  }),
+                ],
+                alignment: AlignmentType.CENTER,
+              }),
+            ],
+          }),
+
+          new TableCell({
+            children: [
+              new Paragraph({
+                children: [
+                  new TextRun({
+                    font: 'TH SarabunPSK',
+                    text: 'ความคิดเห็น',
+                    bold: true,
+                    size: 32,
+                  }),
+                ],
+                alignment: AlignmentType.CENTER,
+              }),
+            ],
+          }),
+        ],
+        tableHeader: true,
+      }),
+    ];
+    for (var i = 0; i < this.commentAssessment.length; i++) {
+      let dataaaa2 = new TableRow({
+        children: [
+          new TableCell({
+            children: [
+              new Paragraph({
+                children: [
+                  new TextRun({
+                    font: 'TH SarabunPSK',
+                    text: `${i + 1}`,
+                    bold: true,
+                    size: 32,
+                  }),
+                ],
+                alignment: AlignmentType.CENTER,
+              }),
+            ],
+          }),
+
+          new TableCell({
+            children: [
+              new Paragraph({
+                children: [
+                  new TextRun({
+                    font: 'TH SarabunPSK',
+                    text: this.commentAssessment[i],
+                    bold: true,
+                    size: 32,
+                  }),
+                ],
+                alignment: AlignmentType.LEFT,
+              }),
+            ],
+          }),
+        ],
+      });
+      data_row.push(dataaaa2);
+    }
+    const doc = new Document();
+    doc.addSection({
+      properties: {},
+      children: [
+        new Paragraph({
+          children: [
+            new TextRun({
+              font: 'TH SarabunPSK',
+              text:
+                'ผลประเมินความพึงพอใจในการให้บริการให้คำปรึกษาและแนะแนวของอาจารย์ที่ปรึกษา',
+              bold: true,
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.CENTER,
+        }),
+        new Paragraph({
+          children: [
+            new TextRun({
+              font: 'TH SarabunPSK',
+              text: 'ปีการศึกษา' + ' ' + this.assessment_year.value._year,
+              bold: true,
+              size: 32,
+            }),
+          ],
+          alignment: AlignmentType.CENTER,
+        }),
+        new Table({
+          width: {
+            size: 100,
+            type: WidthType.PERCENTAGE,
+          },
+          rows: [
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'ส่วนที่ 1 ข้อมูลส่วนตัว',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'จำนวน',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'ร้อยละ',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '1. เพศ',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'เพศชาย',
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: `${this.Episode1.count_men}`,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.Episode1.count_men * 100) /
+                              this.dataAssessment.length
+                          ),
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'เพศหญิง',
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: `${this.Episode1.count_women}`,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.Episode1.count_women * 100) /
+                              this.dataAssessment.length
+                          ),
+                          size: 32,
+                        }),
+                      ],
+
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'รวม',
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: `${this.dataAssessment.length}`,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.dataAssessment.length * 100) /
+                              this.dataAssessment.length
+                          ),
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '2. ระดับการศึกษา',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'ปวส.',
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: `${this.Episode1.level1}`,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.Episode1.level1 * 100) /
+                              this.dataAssessment.length
+                          ),
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'ปริญญาตรี',
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: `${this.Episode1.level2}`,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.Episode1.level2 * 100) /
+                              this.dataAssessment.length
+                          ),
+                          size: 32,
+                        }),
+                      ],
+
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'รวม',
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: `${this.dataAssessment.length}`,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.dataAssessment.length * 100) /
+                              this.dataAssessment.length
+                          ),
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  columnSpan: 3,
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text:
+                            '3. ' +
+                            this.dataBranch_Faculty.faculty +
+                            ' ' +
+                            this.dataBranch_Faculty.branch,
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '4. ความถี่ในการใช้บริการ',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'ไม่เคยมารับบริการ',
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: `${this.Episode1.frequency_never}`,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.Episode1.frequency_never * 100) /
+                              this.dataAssessment.length
+                          ),
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'น้อยกว่า 5 ครั้ง',
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: `${this.Episode1.frequency_less}`,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.Episode1.frequency_less * 100) /
+                              this.dataAssessment.length
+                          ),
+                          size: 32,
+                        }),
+                      ],
+
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'มากกว่า 5 ครั้ง',
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: `${this.Episode1.frequency_over}`,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.Episode1.frequency_over * 100) /
+                              this.dataAssessment.length
+                          ),
+                          size: 32,
+                        }),
+                      ],
+
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'รวม',
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: `${this.dataAssessment.length}`,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.dataAssessment.length * 100) /
+                              this.dataAssessment.length
+                          ),
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '5. เข้ารับบริการเรื่อง',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'ข้อมูลเรื่องอาชีพ',
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: `${this.Episode1.service_career}`,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.Episode1.service_career * 100) /
+                              this.dataAssessment.length
+                          ),
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'ข้อมูลเรื่องการศึกษา',
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: `${this.Episode1.service_study}`,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.Episode1.service_study * 100) /
+                              this.dataAssessment.length
+                          ),
+                          size: 32,
+                        }),
+                      ],
+
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'ทุนการศึกษา',
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: `${this.Episode1.service_bursary}`,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.Episode1.service_bursary * 100) /
+                              this.dataAssessment.length
+                          ),
+                          size: 32,
+                        }),
+                      ],
+
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'ข้อมูลบุคลิกภาพ ธรรมะ สุขภาพและการปรับตัว',
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: `${this.Episode1.service_personality}`,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.Episode1.service_personality * 100) /
+                              this.dataAssessment.length
+                          ),
+                          size: 32,
+                        }),
+                      ],
+
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'บริการศิษย์เก่า',
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: `${this.Episode1.service_alumni}`,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.Episode1.service_alumni * 100) /
+                              this.dataAssessment.length
+                          ),
+                          size: 32,
+                        }),
+                      ],
+
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'อื่นๆ',
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: `${this.Episode1.service_other}`,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.Episode1.service_other * 100) /
+                              this.dataAssessment.length
+                          ),
+                          size: 32,
+                        }),
+                      ],
+
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'รวม',
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: `${this.dataAssessment.length}`,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.dataAssessment.length * 100) /
+                              this.dataAssessment.length
+                          ),
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+
+          alignment: AlignmentType.CENTER,
+        }),
+
+        new Table({
+          width: {
+            size: 100,
+            type: WidthType.PERCENTAGE,
+          },
+          rows: [
+            new TableRow({
+              children: [
+                new TableCell({
+                  rowSpan: 2,
+                  children: [
+                    new Paragraph({
+                      pageBreakBefore: true,
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'หัวข้อประเมิน',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  columnSpan: 3,
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'ระดับความพึงพอใจ (ร้อยละ)',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+              ],
+              tableHeader: true,
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'x',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'S.D.',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'ระดับความพึงพอใจ',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '1. คุณลักษณะด้านความสามารถเชิงวิชาการ',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '1.1 รู้บทบาทหน้าที่ของอาจารย์ที่ปรึกษา',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic1_1 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic1_1),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic1_1,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '1.2 มีเทคนิคให้คำปรึกษา',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic1_2 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic1_2),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic1_2,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '1.3 มีความสามารถให้คำแนะนำ',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic1_3 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic1_3),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic1_3,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '1.4 มีความรู้เกี่ยวกับกฎระเบียบของมหาวิทยาลัย',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic1_4 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic1_4),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic1_4,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text:
+                            '1.5 มีความรู้ความสนใจเกี่ยวกับเหตุการณ์ปัจจุบัน',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic1_5 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic1_5),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic1_5,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'รวม',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.Episode2.subtopic1_1 /
+                              this.dataAssessment.length +
+                              this.Episode2.subtopic1_2 /
+                                this.dataAssessment.length +
+                              this.Episode2.subtopic1_3 /
+                                this.dataAssessment.length +
+                              this.Episode2.subtopic1_4 /
+                                this.dataAssessment.length +
+                              this.Episode2.subtopic1_5 /
+                                this.dataAssessment.length) /
+                              5
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.Total1),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.Total1,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '2. คุณลักษณะด้านบุคลิกภาพ',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text:
+                            '2.1 มีความประพฤติแบบอย่างที่ดี มีความกระตือรือร้นสนใจในหน้าที่',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic2_1 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic2_1),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic2_1,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '2.2 รับฟังความคิดเห็นของนักศึกษา',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic2_2 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic2_2),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic2_2,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text:
+                            '2.3 มีบุคลิกภาพที่อบอุ่นและสุภาพเรียบร้อย สุขุมรอบคอบคุมอารมณ์',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic2_3 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic2_3),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic2_3,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text:
+                            '2.4 เอาใจใส่นักศึกษาอย่างทั่วถึงกันและสม่ำเสมอเท่าเทียมกัน',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic2_4 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic2_4),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic2_4,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text:
+                            '2.5 มีความพร้อมในการช่วยเหลือให้นักศึกษาเผชิญกับปัญหาต่างๆ',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic2_5 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic2_5),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic2_5,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'รวม',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.Episode2.subtopic2_1 /
+                              this.dataAssessment.length +
+                              this.Episode2.subtopic2_2 /
+                                this.dataAssessment.length +
+                              this.Episode2.subtopic2_3 /
+                                this.dataAssessment.length +
+                              this.Episode2.subtopic2_4 /
+                                this.dataAssessment.length +
+                              this.Episode2.subtopic2_5 /
+                                this.dataAssessment.length) /
+                              5
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.Total2),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.Total2,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '3. คุณลักษณะด้านเจตคติ',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text:
+                            '3.1 มีความเต็มใจและยินดีในการทำหน้าที่อาจารย์ที่ปรึกษา',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic3_1 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic3_1),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic3_1,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text:
+                            '3.2 มีความมุ่งมั่นต่อคุณภาพงานการให้คำปรึกษาด้านวิชาการ',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic3_2 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic3_2),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic3_2,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '3.3 การเป็นคนมองโลกในแง่ดี',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic3_3 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic3_3),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic3_3,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text:
+                            '3.4 การให้ความสำคัญกับนักศึกษาทุกคนเท่าเทียมกัน',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic3_4 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic3_4),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic3_4,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '3.5 มีความยุติธรรมแก่นักศึกษา',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic3_5 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic3_5),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic3_5,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'รวม',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.Episode2.subtopic3_1 /
+                              this.dataAssessment.length +
+                              this.Episode2.subtopic3_2 /
+                                this.dataAssessment.length +
+                              this.Episode2.subtopic3_3 /
+                                this.dataAssessment.length +
+                              this.Episode2.subtopic3_4 /
+                                this.dataAssessment.length +
+                              this.Episode2.subtopic3_5 /
+                                this.dataAssessment.length) /
+                              5
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.Total3),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.Total3,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '4. คุณลักษณะด้านจรรยาบรรณ',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '4.1 รักษาความลับ ข้อมูลส่วนตัวของนักศึกษา',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic4_1 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic4_1),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic4_1,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '4.2 คำนึงถึงสวัสดิภาพของนักศึกษา',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic4_2 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic4_2),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic4_2,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text:
+                            '4.3 การให้กำลังใจแก่นักศึกษาที่เข้ามาขอรับคำปรึกษา',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic4_3 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic4_3),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic4_3,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '4.4 มีความเมตตา และกรุณากับนักศึกษา',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic4_4 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic4_4),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic4_4,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'รวม',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.Episode2.subtopic4_1 /
+                              this.dataAssessment.length +
+                              this.Episode2.subtopic4_2 /
+                                this.dataAssessment.length +
+                              this.Episode2.subtopic4_3 /
+                                this.dataAssessment.length +
+                              this.Episode2.subtopic4_4 /
+                                this.dataAssessment.length) /
+                              4
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.Total4),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.Total4,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '5. คุณลักษณะด้านทักษะการปฏิบัติงาน',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text:
+                            '5.1 ความสามารถนำข้อมูลที่ทันสมัยมาใช้ในการให้คำปรึกษา',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic5_1 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic5_1),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic5_1,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text:
+                            '5.2 ใช้ภาษาเพื่อถ่ายทอดความคิดในการให้คำปรึกษาได้ดี',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic5_2 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic5_2),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic5_2,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text:
+                            '5.3 มีความสามารถในการแก้ปัญหาเฉพาะหน้าให้กับนักศึกษาได้',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic5_3 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic5_3),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic5_3,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'รวม',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.Episode2.subtopic5_1 /
+                              this.dataAssessment.length +
+                              this.Episode2.subtopic5_2 /
+                                this.dataAssessment.length +
+                              this.Episode2.subtopic5_3 /
+                                this.dataAssessment.length) /
+                              3
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.Total5),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.Total5,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '6. คุณลักษณะด้านความรับผิดชอบ',
+                          bold: true,
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: '6.1 ใส่ใจการปฏิบัติหน้าที่ให้คำปรึกษา',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic6_1 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic6_1),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic6_1,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text:
+                            '6.2 จัดทำแฟ้มข้อมูลนักศึกษาให้เป็นปัจจุบันอยู่เสมอ',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic6_2 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic6_2),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic6_2,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text:
+                            '6.3 ให้โอกาสนักศึกษา เข้ามารับคำปรึกษาอย่างสะดวกในบรรยากาศที่อบอุ่น',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.LEFT,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            this.Episode2.subtopic6_3 /
+                              this.dataAssessment.length
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.subtopic6_3),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.subtopic6_3,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            new TableRow({
+              children: [
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: 'รวม',
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.CENTER,
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(
+                            (this.Episode2.subtopic6_1 /
+                              this.dataAssessment.length +
+                              this.Episode2.subtopic6_2 /
+                                this.dataAssessment.length +
+                              this.Episode2.subtopic6_3 /
+                                this.dataAssessment.length) /
+                              3
+                          ),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.getValue(this.totalSD.Total6),
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: 'TH SarabunPSK',
+                          text: this.rating.Total6,
+
+                          size: 32,
+                        }),
+                      ],
+                      alignment: AlignmentType.RIGHT,
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+          alignment: AlignmentType.CENTER,
+        }),
+
+        new Table({
+          width: {
+            size: 100,
+            type: WidthType.PERCENTAGE,
+          },
+          rows: data_row,
+
+          alignment: AlignmentType.CENTER,
+        }),
+      ],
+    });
+    Packer.toBlob(doc).then((blob) => {
+      saveAs(
+        blob,
+        `Assessment_${this.groupName}_${this.assessment_year.value._year}.docx`
+      );
+    });
+  }
 }
