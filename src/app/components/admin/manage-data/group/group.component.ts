@@ -228,7 +228,11 @@ export class GroupComponent implements OnInit {
           win.$('#addGroup').modal('hide');
           this.getGroup();
         } else {
-          Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
+          Swal.fire({
+            icon: 'error',
+            title: 'แก้ไขข้อข้อมูลไม่สำเร็จ',
+            text: 'กลุ่มเรียนซ้ำ!',
+          });
         }
       } else {
         Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');

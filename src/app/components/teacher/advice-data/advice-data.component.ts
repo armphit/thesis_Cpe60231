@@ -115,6 +115,7 @@ export class AdviceDataComponent implements OnInit {
     this.getGroup();
     this.getCURDATE();
     this.getYear();
+    this.http.test = 9;
   }
 
   ngOnInit(): void {

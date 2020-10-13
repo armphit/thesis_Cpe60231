@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 })
 export class HttpService {
   public PathPDF: string = 'http://cpe.rmuti.ac.th/project/advisor/api';
-
+  public test: any = null;
   public rootPath: string =
     'http://cpe.rmuti.ac.th/project/advisor/api/index.php/';
   constructor(public router: Router, private http: HttpClient) {}

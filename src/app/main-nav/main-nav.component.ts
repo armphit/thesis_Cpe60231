@@ -25,18 +25,25 @@ export class MainNavComponent {
     );
 
   public status: any = null;
+  public hidden: any = false;
+  public a: any = this.http.test;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private router: Router,
-    private http: HttpService
+    public http: HttpService
   ) {
     var data: any = JSON.parse(localStorage.userLogin);
     var json: any = data.status;
     this.status = json;
+    console.log(this.http.test);
+    if (this.http.test == 0) {
+      this.hidden = true;
+    }
   }
 
   public onLogout = () => {
+    console.log(this.http.test);
     this.http
       .confirmAlert('คุณต้องการออกจากระบบใช่หรือไม่ ?')
       .then(async (value: any) => {

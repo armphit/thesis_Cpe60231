@@ -391,17 +391,11 @@
             <thead class="thead-dark">
               <tr>
                 <th>
-                  <!-- <div class="form-check">
-                    <input
-                      type="checkbox"
-                      class="form-check-input"
-                      id="tableMaterialCheck1"
-                    />
-                    <label
-                      class="form-check-label"
-                      for="tableMaterialCheck1"
-                    ></label>
-                  </div> -->
+                  <mat-checkbox class="example-margin"
+                  [checked]="allComplete"
+                  [indeterminate]="someComplete()"
+                  (change)="setAll($event.checked)">
+    </mat-checkbox>
                 </th>
                 <th scope="col">ลำดับ</th>
                 <th scope="col">รหัสนักศึกษา</th>
@@ -412,7 +406,7 @@
             <tbody>
               <tr
                 *ngFor="
-                  let i of dataEducational
+                  let i of dataST
                     | paginate
                       : {
                           id: 'pageStudent',
@@ -423,27 +417,19 @@
                 "
               >
                 <th style="padding-top: 15px">
-                  <!-- <div class="form-check">
-                    <input
-                      type="checkbox"
-                      class="form-check-input"
-                      id="tableMaterialCheck1"
-                      (change)="setAll($event)"
-                    />
-                    <label
-                      class="form-check-label"
-                      for="tableMaterialCheck1"
-                    ></label>
-                  </div> -->
+                  <mat-checkbox [(ngModel)]="i.completed"
+                      (ngModelChange)="updateAllComplete(i.id,$event)">
+
+        </mat-checkbox>
                 </th>
                 <th scope="row" style="padding-top: 15px">
                   {{ pageStudent * 10 - 10 + (x + 1) }}
                 </th>
                 <td style="padding-top: 15px">
-                  {{ i.userID }}
+                  {{ i.id }}
                 </td>
                 <td style="padding-top: 15px">
-                  {{ i.titlename }}{{ i.fname }}&nbsp;&nbsp;{{ i.lname }}
+                  {{ i.name}}
                 </td>
                 <td>
                   <button

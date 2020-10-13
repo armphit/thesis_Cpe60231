@@ -23,6 +23,13 @@ export class ManageDataComponent implements OnInit {
   public groupID: any = null;
   public dataBranchEdit: any = null;
   public acronymEdit: any = null;
+  public allComplete: boolean = false;
+  public userData: Array<any> = null;
+  public stdCard: Array<any> = [];
+  public check: boolean = false;
+  public check_All: boolean = false;
+  public select: boolean = false;
+  public dataST: Array<any> = [];
 
   public curriculumFileupdate: any = null;
   public filesName3: any = 'โปรดเลือกไฟล์';
@@ -59,6 +66,9 @@ export class ManageDataComponent implements OnInit {
   public pageStudent: number = 1;
   public codeGroup_Branch: any = null;
   public dataGroup_Branch: any = null;
+  public selectItem: any = {
+    item: false,
+  };
 
   constructor(public http: HttpService, private formBuilder: FormBuilder) {
     this.getGroup();
@@ -184,6 +194,7 @@ export class ManageDataComponent implements OnInit {
               timer: 1500,
             });
             this.getGroup();
+            this.dataEducational = null;
           } else {
             Swal.fire('ไม่สามารถลบข้อมูลได้!', '', 'error');
           }
@@ -456,6 +467,19 @@ export class ManageDataComponent implements OnInit {
     if (getData.connect) {
       if (getData.response.rowCount > 0) {
         this.dataEducational = getData.response.result;
+
+        for (var i = 0; i < this.dataEducational.length; i++) {
+          this.dataST[i] = {
+            name:
+              this.dataEducational[i].titlename +
+              this.dataEducational[i].fname +
+              ' ' +
+              this.dataEducational[i].lname,
+            id: this.dataEducational[i].userID,
+            file_profile: this.dataEducational[i].file_profile,
+            check: false,
+          };
+        }
       } else {
         this.dataEducational = null;
       }
@@ -694,5 +718,82 @@ export class ManageDataComponent implements OnInit {
       }
     }
   };
-  public setAll(e) {}
+
+  updateAllComplete(value, e) {
+    this.allComplete =
+      this.dataST != null && this.dataST.every((t) => t.completed);
+
+    if (e == true) {
+      this.stdCard.push(value);
+    } else {
+      // console.log(this.stdCard);
+      this.stdCard = this.stdCard.filter((item) => {
+        if (item != value) {
+          return item;
+        }
+      });
+    }
+    console.log(this.stdCard);
+  }
+
+  someComplete(): boolean {
+    if (this.dataST == null) {
+      return false;
+    }
+    return (
+      this.dataST.filter((t) => t.completed).length > 0 && !this.allComplete
+    );
+  }
+
+  setAll(completed: boolean) {
+    this.allComplete = completed;
+    if (this.allComplete == true) {
+      for (var i = 0; i < this.dataST.length; i++) {
+        this.stdCard[i] = this.dataST[i].id;
+      }
+    } else {
+      this.stdCard = [];
+    }
+    if (this.dataST == null) {
+      return;
+    }
+    this.dataST.forEach((t) => (t.completed = completed));
+  }
+
+  // checkAll(ev) {
+  //   this.check_All = true;
+  //   this.check = true;
+  //   this.stdCard = [];
+
+  //   this.select = ev.checked;
+
+  //   if (this.select == true) {
+  //     for (var i = 0; i < this.dataEducational.length; i++) {
+  //       this.stdCard[i] = this.dataEducational[i].userID;
+  //     }
+  //   } else {
+  //     // this.dataEducational.forEach((x) => {
+
+  //     //   // x.userID = ev.checked;
+  //     // });
+  //     this.check = false;
+  //     this.stdCard = [];
+  //     console.log(this.stdCard);
+  //   }
+  //   console.log(this.stdCard);
+  // }
+  // addStd = async (e, value) => {
+  //   this.check_All = false;
+  //   this.select = false;
+  //   if (e.checked == true) {
+  //     this.stdCard.push(value);
+  //   } else {
+  //     // console.log(this.stdCard);
+  //     this.stdCard = this.stdCard.filter((item) => {
+  //       if (item != value) {
+  //         return item;
+  //       }
+  //     });
+  //   }
+  // };
 }
