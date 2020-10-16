@@ -30,6 +30,7 @@ export class ManageDataComponent implements OnInit {
   public check_All: boolean = false;
   public select: boolean = false;
   public dataST: Array<any> = [];
+  public dataGroup_Branchhead: any = null;
 
   public curriculumFileupdate: any = null;
   public filesName3: any = 'โปรดเลือกไฟล์';
@@ -64,6 +65,7 @@ export class ManageDataComponent implements OnInit {
   public upload_curriculum: File = null;
   public upload_curriculum_name: any = 'โปรดเลือกไฟล์';
   public pageStudent: number = 1;
+  public pageData: number = 1;
   public codeGroup_Branch: any = null;
   public dataGroup_Branch: any = null;
   public selectItem: any = {
@@ -796,4 +798,20 @@ export class ManageDataComponent implements OnInit {
   //     });
   //   }
   // };
+
+  public clickdataGroup_Branchhead = async (data: any) => {
+    let formData = new FormData();
+    formData.append('group', data.study_group_id);
+
+    let getData: any = await this.http.post('admin/getEducational', formData);
+    if (getData.connect) {
+      if (getData.response.rowCount > 0) {
+        this.dataGroup_Branchhead = getData.response.result;
+      } else {
+        this.dataGroup_Branchhead = null;
+      }
+    } else {
+      Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+    }
+  };
 }

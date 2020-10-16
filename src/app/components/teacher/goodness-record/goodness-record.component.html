@@ -41,6 +41,9 @@
         data-target="#AddGoddness"
         *ngIf="codeGroup!"
         (click)="clickAddGoddness()"
+        [disabled]="advice_year.value._year != yearNow"
+        data-backdrop="static"
+        data-keyboard="false"
       >
         <i class="fas fa-plus"></i> เพิ่มพฤติกรรมดีเด่นของนักศึกษา
       </button>
@@ -296,7 +299,10 @@
         </div>
       </tbody>
     </table>
-    <div *ngIf="dataGoodness != null" style="padding-left: 15px;padding-bottom: 15px">
+    <div
+      *ngIf="dataGoodness != null"
+      style="padding-left: 15px; padding-bottom: 15px"
+    >
       <button type="button" class="btn btn-primary" (click)="makePdf()">
         Export to PDF</button
       >&nbsp;&nbsp;<button

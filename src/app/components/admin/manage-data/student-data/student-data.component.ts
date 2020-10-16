@@ -192,6 +192,7 @@ export class StudentDataComponent implements OnInit {
 
   async uploadFile(evt: any) {
     this.filesName = evt.target.files[0].name;
+    // console.log(evt);
 
     const target: DataTransfer = <DataTransfer>evt.target;
     if (target.files.length !== 1) throw new Error('Cannot use');

@@ -3,57 +3,7 @@
   style="margin-left: 10px; margin-right: 10px"
   *ngIf="actionPlan_year.value._year"
 >
-  <!-- <div class="row">
-    <div class="col-sm-6">
-      <form [formGroup]="actionPlan_year">
-        ปีการศึกษา : &nbsp;&nbsp;
-        <mat-form-field>
-          <mat-label>เลือกปีการศึกษา</mat-label>
-          <mat-select
-            formControlName="_year"
-            (selectionChange)="getYearactionPlan($event.value)"
-            required
-          >
-            <mat-option *ngFor="let i of range" [value]="i.value">
-              {{ i.value }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </form>
-    </div>
 
-    <div class="col-sm-6" style="padding-top: 12px">
-      เลือกเดือนเริ่มต้นปีการศึกษา : &nbsp;&nbsp;
-      <mat-form-field style="width: 10%" *ngIf="dataPlan_month == null">
-        <mat-label>เลือกเดือน</mat-label>
-        <mat-select
-          (selectionChange)="getMonthactionPlan($event.value)"
-          required
-        >
-          <mat-option *ngFor="let i of thmonth" [value]="i">
-            {{ i }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      &nbsp;&nbsp;
-      <button
-        class="btn btn-primary"
-        type="button"
-        (click)="addPlan_month()"
-        *ngIf="dataPlan_month == null"
-      >
-        ตกลง
-      </button>
-      <button
-        class="btn btn-primary"
-        type="button"
-        (click)="delMonth()"
-        *ngIf="dataPlan_month != null"
-      >
-        เปลี่ยนแปลงเดือนเริ่มต้น
-      </button>
-    </div>
-  </div> -->
   <div class="row">
     <div class="col-sm-6">
       คณะ:&nbsp;&nbsp;<mat-form-field style="width: 80%">

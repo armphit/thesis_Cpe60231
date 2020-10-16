@@ -46,6 +46,7 @@
         data-toggle="modal"
         data-target="#addCounsel"
         (click)="clearFrom()"
+        [disabled]="advice_year.value._year != year_now"
       >
         <i class="fas fa-plus"></i>&nbsp; เพิ่มการขอคำปรึกษา
       </button>

@@ -173,28 +173,6 @@ export class ActionPlanComponent implements OnInit {
     this.month2 = [];
     this.dataActionPlan_Completed = null;
   }
-  // public getMonthactionPlan(e) {
-  //   this.Plan_month = e;
-  // }
-  // public addPlan_month = async () => {
-  //   let formData = new FormData();
-  //   formData.append('month', this.Plan_month);
-  //   formData.append('group', this.codeGroup);
-  //   formData.append('year', this.actionPlan_year.value._year);
-
-  //   let getData: any = await this.http.post('teacher/addMonth', formData);
-  //   console.log(getData);
-  //   if (getData.connect) {
-  //     if (getData.response.rowCount > 0) {
-  //       Swal.fire('เพิ่มเดือนเริ่มต้นสำเร็จ', '', 'success');
-  //       this.month_plan();
-  //     } else {
-  //       Swal.fire('เพิ่มข้อมูลไม่ได้', '', 'error');
-  //     }
-  //   } else {
-  //     Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
-  //   }
-  // };
 
   public getYear = () => {
     var now = new Date();

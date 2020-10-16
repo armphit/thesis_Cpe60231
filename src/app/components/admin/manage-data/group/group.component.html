@@ -1,104 +1,4 @@
 <div class="panel-body" style="margin-left: 10px; margin-right: 10px">
-  <!-- คณะ:&nbsp;&nbsp;<mat-form-field style="width: 30%;">
-    <mat-label>โปรดเลือกคณะ</mat-label>
-    <mat-select required>
-      <mat-option
-        *ngFor="let i of dataFaculty; let x = index"
-        [value]="i.name"
-        (click)="clickFaculty(i.code, i.name)"
-      >
-        {{ i.name }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <br />
-  <span *ngIf="codeFaculty!"
-    >สาขา:&nbsp;&nbsp;<mat-form-field style="width: 30%;">
-      <mat-label>โปรดเลือกสาขา</mat-label>
-      <mat-select required>
-        <mat-option
-          *ngFor="let i of dataMajor; let x = index"
-          [value]="i.name"
-          (click)="clickMajor(i.code, i.name, i.acronym)"
-        >
-          {{ i.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field></span
-  >
-  <br />
-  <form
-    [formGroup]="inBranchhead"
-    #formChange="ngForm"
-    (ngSubmit)="inBranchhead.valid ? updateBranchhead() : ''"
-  >
-    <span *ngIf="codeMajor!"
-      >หัวหน้าสาขาวิชา :&nbsp;&nbsp;{{ nameBranchhead }}&nbsp;&nbsp;
-      <button
-        type="button"
-        class="btn btn-primary btn-sm"
-        data-toggle="modal"
-        data-target="#addHead"
-        (click)="getIDBranchhead(IDBranchhead)"
-      >
-        แก้ไขหัวหน้าสาขา
-      </button></span
-    >
-
-    <div class="modal" id="addHead">
-      <div class="modal-dialog">
-        <div class="modal-content">
-
-          <div class="modal-header">
-            <h2 class="modal-title">แก้ไขหัวหน้าสาขา</h2>
-            <button type="button" class="close" data-dismiss="modal">
-              &times;
-            </button>
-          </div>
-
-
-          <div class="modal-body">
-            เลือกหัวหน้าสาขา : &nbsp;&nbsp;
-            <mat-form-field style="width: 30%;">
-              <mat-label>เลือกหัวหน้าสาขา</mat-label>
-              <mat-select formControlName="Branchhead" required>
-                <mat-option
-                  *ngFor="let i of dataTeacher; let x = index"
-                  [value]="i.userID"
-                >
-                  {{ i.titlename }}{{ i.fname }}&nbsp;{{ i.lname }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-
-
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">
-              ยกเลิก
-            </button>
-            <button type="submit" class="btn btn-success">ตกลง</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </form>
-  <br />
-  <span *ngIf="codeMajor!"
-    >โปรแกรมวิชา:&nbsp;&nbsp;<mat-form-field style="width: 50%;">
-      <mat-label>โปรดเลือกโปรแกรมวิชา</mat-label>
-      <mat-select required>
-        <mat-option
-          style="width: auto;"
-          *ngFor="let i of dataBranch; let x = index"
-          [value]="i.name"
-          (click)="clickBranch(i.code, i.name, i.acronym)"
-        >
-          {{ i.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field></span
-  > -->
   <div class="row">
     <div class="col-sm-6">
       คณะ:&nbsp;&nbsp;<mat-form-field style="width: 80%">
@@ -146,25 +46,27 @@
       </mat-form-field>
     </div>
     <div class="col-sm-6" *ngIf="codeBranch!" style="padding-top: 15px">
-      <form
+      <!-- <form
         [formGroup]="inBranchhead"
         #formChange="ngForm"
         (ngSubmit)="inBranchhead.valid ? updateBranchhead() : ''"
-      >
-        <span *ngIf="codeMajor!"
-          >หัวหน้าสาขาวิชา :&nbsp;&nbsp;{{ nameBranchhead }}&nbsp;&nbsp;
-          <button
+      > -->
+      <span *ngIf="codeMajor!"
+        >หัวหน้าสาขาวิชา :&nbsp;&nbsp;{{ nameBranchhead }}</span
+      >&nbsp;&nbsp;
+      <!--    <button
             type="button"
             class="btn btn-primary btn-sm"
             data-toggle="modal"
             data-target="#addHead"
             (click)="getIDBranchhead(IDBranchhead)"
+            data-backdrop="static"
+            data-keyboard="false"
           >
             แก้ไขหัวหน้าสาขา
-          </button></span
-        >
+          </button> -->
 
-        <div class="modal" id="addHead">
+      <!-- <div class="modal" id="addHead">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -202,7 +104,7 @@
             </div>
           </div>
         </div>
-      </form>
+      </form>-->
     </div>
   </div>
 
@@ -219,6 +121,8 @@
       data-target="#addGroup"
       (click)="clearFrom()"
       *ngIf="codeBranch!"
+      data-backdrop="static"
+      data-keyboard="false"
     >
       <i class="fas fa-plus"></i>&nbsp; เพิ่มกลุ่มเรียน
     </button>

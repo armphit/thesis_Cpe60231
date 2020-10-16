@@ -3614,7 +3614,7 @@ export class AssessmentDataComponent implements OnInit {
                   new TextRun({
                     font: 'TH SarabunPSK',
                     text: `${i + 1}`,
-                    bold: true,
+
                     size: 32,
                   }),
                 ],
@@ -3630,7 +3630,7 @@ export class AssessmentDataComponent implements OnInit {
                   new TextRun({
                     font: 'TH SarabunPSK',
                     text: this.commentAssessment[i],
-                    bold: true,
+
                     size: 32,
                   }),
                 ],

@@ -18,6 +18,7 @@ import { StudentComponent } from './components/student/student.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
 import { NotfoundComponent } from './components/notfound/notfound.component';
+import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,15 @@ import { NotfoundComponent } from './components/notfound/notfound.component';
     MatSidenavModule,
     MatListModule,
     SharedModules,
+    NgxLoadingModule.forRoot({
+      animationType: ngxLoadingAnimationTypes.circleSwish,
+      backdropBackgroundColour: 'rgba(0,0,0,0.5)',
+      // fullScreenBackdrop: true,
+      backdropBorderRadius: '0px',
+      primaryColour: '#673ab7',
+      secondaryColour: '#673ab7',
+      tertiaryColour: '#673ab7',
+    }),
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent],

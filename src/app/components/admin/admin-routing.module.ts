@@ -1,3 +1,4 @@
+import { TeacherDataComponent } from './manage-data/teacher-data/teacher-data.component';
 import { AssessmentDataComponent } from './assessment-data/assessment-data.component';
 import { ActionPlanComponent } from './action-plan/action-plan.component';
 import { NgModule } from '@angular/core';
@@ -30,6 +31,10 @@ const routes: Routes = [
           {
             path: 'semester-data',
             component: SemesterDataComponent,
+          },
+          {
+            path: 'teacher-data',
+            component: TeacherDataComponent,
           },
         ],
       },

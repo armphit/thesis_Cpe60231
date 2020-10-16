@@ -11,18 +11,22 @@ export class HttpService {
   public test: any = null;
   public rootPath: string =
     'http://cpe.rmuti.ac.th/project/advisor/api/index.php/';
+  public loading: boolean = false;
   constructor(public router: Router, private http: HttpClient) {}
 
   public post = (path: string, formdata: any = null) => {
+    this.loading = true;
     return new Promise((resolve) => {
       this.http
         .post(this.rootPath + path, formdata)
         .toPromise()
         .then((value) => {
           resolve({ connect: true, response: value });
+          this.loading = false;
         })
         .catch((reason) => {
           resolve({ connect: false, response: reason });
+          this.loading = false;
         });
     });
   };

@@ -511,6 +511,7 @@ export class AssessmentDataComponent implements OnInit {
   public uploadFileAssessment(evt) {
     this.filesName = evt.target.files[0].name;
     const target: DataTransfer = <DataTransfer>evt.target;
+
     if (target.files.length !== 1) throw new Error('Cannot use');
     const reader: FileReader = new FileReader();
     reader.onload = (e: any) => {
@@ -3703,7 +3704,7 @@ export class AssessmentDataComponent implements OnInit {
                   new TextRun({
                     font: 'TH SarabunPSK',
                     text: `${i + 1}`,
-                    bold: true,
+
                     size: 32,
                   }),
                 ],

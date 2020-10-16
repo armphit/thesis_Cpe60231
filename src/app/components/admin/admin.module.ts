@@ -13,6 +13,7 @@ import { GoodnessRecordComponent } from './goodness-record/goodness-record.compo
 import { ActionPlanComponent } from './action-plan/action-plan.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AssessmentDataComponent } from './assessment-data/assessment-data.component';
+import { TeacherDataComponent } from './manage-data/teacher-data/teacher-data.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { AssessmentDataComponent } from './assessment-data/assessment-data.compo
     GoodnessRecordComponent,
     ActionPlanComponent,
     AssessmentDataComponent,
+    TeacherDataComponent,
   ],
   imports: [
     CommonModule,

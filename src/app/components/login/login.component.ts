@@ -24,6 +24,10 @@ export class LoginComponent implements OnInit {
   private teacherPath: string = '/teacher';
 
   ngOnInit(): void {
+    if (localStorage.getItem('userLogin') != null) {
+      this.service.navRouter('/');
+    }
+
     this.formLogin = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required],

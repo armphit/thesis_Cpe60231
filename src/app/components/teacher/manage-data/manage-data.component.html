@@ -15,6 +15,8 @@
                 data-toggle="modal"
                 data-target="#addGroup"
                 (click)="getBranch() && clearFrom()"
+                data-backdrop="static"
+                data-keyboard="false"
               >
                 <i class="fas fa-plus"></i>
                 เพิ่มกลุ่มเรียน
@@ -390,13 +392,13 @@
           <table class="table" *ngIf="dataEducational != null">
             <thead class="thead-dark">
               <tr>
-                <th>
+                <!-- <th>
                   <mat-checkbox class="example-margin"
                   [checked]="allComplete"
                   [indeterminate]="someComplete()"
                   (change)="setAll($event.checked)">
-    </mat-checkbox>
-                </th>
+                  </mat-checkbox>
+                </th> -->
                 <th scope="col">ลำดับ</th>
                 <th scope="col">รหัสนักศึกษา</th>
                 <th scope="col">ชื่อนักศึกษา</th>
@@ -406,7 +408,7 @@
             <tbody>
               <tr
                 *ngFor="
-                  let i of dataST
+                  let i of dataEducational
                     | paginate
                       : {
                           id: 'pageStudent',
@@ -416,20 +418,20 @@
                   let x = index
                 "
               >
-                <th style="padding-top: 15px">
+                <!-- <th style="padding-top: 15px">
                   <mat-checkbox [(ngModel)]="i.completed"
                       (ngModelChange)="updateAllComplete(i.id,$event)">
 
-        </mat-checkbox>
-                </th>
+                 </mat-checkbox>
+                </th> -->
                 <th scope="row" style="padding-top: 15px">
                   {{ pageStudent * 10 - 10 + (x + 1) }}
                 </th>
                 <td style="padding-top: 15px">
-                  {{ i.id }}
+                  {{ i.userID }}
                 </td>
                 <td style="padding-top: 15px">
-                  {{ i.name}}
+                  {{ i.titlename }}{{ i.fname }}{{ " " }}{{ i.lname }}
                 </td>
                 <td>
                   <button
@@ -516,8 +518,10 @@
               data-toggle="modal"
               data-target="#addCalendar"
               (click)="clickCalendar()"
+              data-backdrop="static"
+              data-keyboard="false"
             >
-              <i class="fas fa-cog"></i>&nbsp;จัดการข้อมูลปีการศึกษา
+              <i class="fas fa-plus"></i>&nbsp;จัดการข้อมูลปีการศึกษา
             </button>
             <br /><br />
             <table class="table">
@@ -813,7 +817,7 @@
               {{ i.titlename }}{{ i.fname }}&nbsp;&nbsp;{{ i.lname }}
             </td>
             <td>
-              <button
+              <!-- <button
                 type="button"
                 class="btn btn-success btn-sm"
                 [disabled]="i.file_curriculum == null"
@@ -823,8 +827,130 @@
                   target="_blank"
                   ><font color="white">คลิกดูแผนการเรียน</font></a
                 >
+              </button> -->
+              <button
+                type="button"
+                class="btn btn-primary btn-sm"
+                data-toggle="modal"
+                data-target="#dataGroup"
+                (click)="clickdataGroup_Branchhead(i)"
+              >
+                ข้อมูลกลุ่มเรียน
               </button>
             </td>
+            <!-- The Modal -->
+            <div class="modal" id="dataGroup">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                    <h2 class="modal-title">ข้อมูลกลุ่มเรียน</h2>
+                    <button type="button" class="close" data-dismiss="modal">
+                      &times;
+                    </button>
+                  </div>
+
+                  <!-- Modal body -->
+                  <div class="modal-body">
+                    <div class="row" style="padding-left: 20px">
+                      <div class="col-sm-3.5" style="padding-top: 5px">
+                        <strong>แผนการเรียน</strong> :
+                      </div>
+                      <div class="col-sm-8">
+                        <button
+                          type="button"
+                          class="btn btn-success btn-sm"
+                          [disabled]="i.file_curriculum == null"
+                        >
+                          <a
+                            href="{{ http.PathPDF }}{{ i.file_curriculum }}"
+                            target="_blank"
+                            ><font color="white">คลิกดูแผนการเรียน</font></a
+                          >
+                        </button>
+                      </div>
+                    </div>
+                    <div style="padding-top: 20px; padding-left: 5px">
+                      <strong>รายชื่อนักศึกษา</strong>
+                    </div>
+                    <div>
+                      <table class="table" *ngIf="dataGroup_Branchhead != null">
+                        <thead class="thead-dark">
+                          <tr>
+                            <!-- <th>
+                            <mat-checkbox class="example-margin"
+                            [checked]="allComplete"
+                            [indeterminate]="someComplete()"
+                            (change)="setAll($event.checked)">
+                            </mat-checkbox>
+                          </th> -->
+                            <th scope="col">ลำดับ</th>
+                            <th scope="col">รหัสนักศึกษา</th>
+                            <th scope="col">ชื่อนักศึกษา</th>
+                            <th scope="col"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr
+                            *ngFor="
+                              let i of dataGroup_Branchhead
+                                | paginate
+                                  : {
+                                      id: 'pageData',
+                                      itemsPerPage: 10,
+                                      currentPage: pageData
+                                    };
+                              let x = index
+                            "
+                          >
+                            <!-- <th style="padding-top: 15px">
+                            <mat-checkbox [(ngModel)]="i.completed"
+                                (ngModelChange)="updateAllComplete(i.id,$event)">
+
+                           </mat-checkbox>
+                          </th> -->
+                            <th scope="row" style="padding-top: 15px">
+                              {{ pageStudent * 10 - 10 + (x + 1) }}
+                            </th>
+                            <td style="padding-top: 15px">
+                              {{ i.userID }}
+                            </td>
+                            <td style="padding-top: 15px">
+                              {{ i.titlename }}{{ i.fname }}{{ " "
+                              }}{{ i.lname }}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="text-center">
+                      <pagination-controls
+                        id="pageData"
+                        *ngIf="
+                          dataGroup_Branchhead != null &&
+                          dataGroup_Branchhead.length > 10
+                        "
+                        responsive="true"
+                        previousLabel="ย้อนกลับ"
+                        nextLabel="ถัดไป"
+                        (pageChange)="pageData = $event"
+                      ></pagination-controls>
+                    </div>
+                  </div>
+
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-danger"
+                      data-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </tr>
         </tbody>
       </table>

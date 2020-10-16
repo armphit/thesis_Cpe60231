@@ -411,6 +411,7 @@ export class AdviceDataComponent implements OnInit {
   };
 
   public getStudent = async () => {
+    this.dataAppointment_Student = null;
     let formData = new FormData();
     formData.append('group', this.codeGroup);
     formData.append('year', this.advice_year.value._year);
