@@ -230,7 +230,7 @@ export class GroupComponent implements OnInit {
         } else {
           Swal.fire({
             icon: 'error',
-            title: 'แก้ไขข้อข้อมูลไม่สำเร็จ',
+            title: 'แก้ไขข้อมูลไม่สำเร็จ',
             text: 'กลุ่มเรียนซ้ำ!',
           });
         }

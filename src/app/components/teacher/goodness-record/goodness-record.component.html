@@ -331,20 +331,25 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <div *ngIf="dataGroup_Branch!">
-        กลุ่มเรียน : &nbsp;&nbsp;<mat-form-field style="width: 15%">
-          <mat-label>โปรดเลือกกลุ่มเรียน</mat-label>
-          <mat-select required>
-            <mat-option
-              style="width: auto"
-              *ngFor="let i of dataGroup_Branch; let x = index"
-              [value]="i.study_group_id"
-              (click)="clickGroup_Branch(i.study_group_id)"
-            >
-              {{ i.study_group_name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+      <div class="row">
+        <div class="col-sm-4" *ngIf="dataGroup_Branch!">
+          กลุ่มเรียน : &nbsp;&nbsp;<mat-form-field style="width: 60%">
+            <mat-label>โปรดเลือกกลุ่มเรียน</mat-label>
+            <mat-select required>
+              <mat-option
+                style="width: auto"
+                *ngFor="let i of dataGroup_Branch; let x = index"
+                [value]="i.study_group_id"
+                (click)="clickGroup_Branch(i)"
+              >
+                {{ i.study_group_name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm" *ngIf="codeGroup_Branch!" style="padding-top: 20px">
+          อาจารย์ที่ปรึกษา : {{ nameTeacher }}
+        </div>
       </div>
       <div *ngIf="codeGroup_Branch!">
         <form [formGroup]="goodness_year">

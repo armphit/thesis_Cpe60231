@@ -1098,10 +1098,12 @@
             </tr>
           </tbody>
         </table>
-
       </mat-tab>
     </mat-tab-group>
-    <div style="padding-left: 15px;padding-bottom: 15px" *ngIf="dataAssessment!">
+    <div
+      style="padding-left: 15px; padding-bottom: 15px"
+      *ngIf="dataAssessment!"
+    >
       <button type="button" class="btn btn-primary" (click)="makePdf()">
         Export to PDF</button
       >&nbsp;&nbsp;<button
@@ -1130,7 +1132,27 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <div *ngIf="dataGroup_Branchhead!">
+      <div class="row">
+        <div class="col-sm-4" *ngIf="dataGroup_Branchhead!">
+          กลุ่มเรียน : &nbsp;&nbsp;<mat-form-field style="width: 60%">
+            <mat-label>โปรดเลือกกลุ่มเรียน</mat-label>
+            <mat-select required>
+              <mat-option
+                style="width: auto"
+                *ngFor="let i of dataGroup_Branchhead; let x = index"
+                [value]="i.study_group_id"
+                (click)="clickgroup_Branchhead(i)"
+              >
+                {{ i.study_group_name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm" *ngIf="group_Branchhead!" style="padding-top: 20px">
+          อาจารย์ที่ปรึกษา : {{ nameTeacher }}
+        </div>
+      </div>
+      <!-- <div *ngIf="dataGroup_Branchhead!">
         กลุ่มเรียน:&nbsp;&nbsp;<mat-form-field>
           <mat-label>โปรดเลือกกลุ่มเรียน</mat-label>
           <mat-select required>
@@ -1144,7 +1166,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-      </div>
+      </div> -->
       <div *ngIf="group_Branchhead!">
         <form [formGroup]="assessment_year">
           ปีการศึกษา : &nbsp;&nbsp;

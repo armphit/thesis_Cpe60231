@@ -14,7 +14,51 @@ export class HttpService {
   public loading: boolean = false;
   constructor(public router: Router, private http: HttpClient) {}
 
-  public post = (path: string, formdata: any = null) => {
+  public post = async (path: string, formdata: any = null) => {
+    this.loading = true;
+    let delayres = await this.delay(500);
+    return new Promise((resolve) => {
+      this.http
+        .post(this.rootPath + path, formdata)
+        .toPromise()
+        .then((value) => {
+          resolve({ connect: true, response: value });
+          this.loading = false;
+        })
+        .catch((reason) => {
+          resolve({ connect: false, response: reason });
+          this.loading = false;
+        });
+    });
+  };
+
+  public get = async (path: string) => {
+    this.loading = true;
+    let delayres = await this.delay(500);
+    return new Promise((resolve) => {
+      this.http
+        .get(this.rootPath + path)
+        .toPromise()
+        .then((value) => {
+          resolve({ connect: true, response: value });
+          this.loading = false;
+        })
+        .catch((reason) => {
+          resolve({ connect: false, response: reason });
+          this.loading = false;
+        });
+    });
+  };
+
+  public delay(delayInms) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(2);
+      }, delayInms);
+    });
+  }
+
+  public post_ = async (path: string, formdata: any = null) => {
     this.loading = true;
     return new Promise((resolve) => {
       this.http
@@ -31,19 +75,23 @@ export class HttpService {
     });
   };
 
-  public get = (path: string) => {
+  public get_ = async (path: string) => {
+    this.loading = true;
     return new Promise((resolve) => {
       this.http
         .get(this.rootPath + path)
         .toPromise()
         .then((value) => {
           resolve({ connect: true, response: value });
+          this.loading = false;
         })
         .catch((reason) => {
           resolve({ connect: false, response: reason });
+          this.loading = false;
         });
     });
   };
+
   public navRouter = (path: string, params: any = {}) => {
     this.router.navigate([`${path}`], { queryParams: params });
   };

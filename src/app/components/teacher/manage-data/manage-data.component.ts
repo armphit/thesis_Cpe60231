@@ -71,6 +71,10 @@ export class ManageDataComponent implements OnInit {
   public selectItem: any = {
     item: false,
   };
+  public Group_Branchhead: any = {
+    curriculum: null,
+    nameTeacher: null,
+  };
 
   constructor(public http: HttpService, private formBuilder: FormBuilder) {
     this.getGroup();
@@ -381,7 +385,7 @@ export class ManageDataComponent implements OnInit {
           Form.append(key, this.data[i][key]);
         });
         Form.append('group', this.codeGroup);
-        var getData: any = await this.http.post('admin/uploadStudent', Form);
+        var getData: any = await this.http.post_('admin/uploadStudent', Form);
       }
       if (getData.connect) {
         Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
@@ -769,7 +773,7 @@ export class ManageDataComponent implements OnInit {
 
   //   this.select = ev.checked;
 
-  //   if (this.select == true) {
+  //   if (this.select == true) {ฟก
   //     for (var i = 0; i < this.dataEducational.length; i++) {
   //       this.stdCard[i] = this.dataEducational[i].userID;
   //     }
@@ -800,6 +804,9 @@ export class ManageDataComponent implements OnInit {
   // };
 
   public clickdataGroup_Branchhead = async (data: any) => {
+    this.Group_Branchhead.curriculum = data.file_curriculum;
+    this.Group_Branchhead.nameTeacher =
+      data.titlename + data.fname + ' ' + data.lname;
     let formData = new FormData();
     formData.append('group', data.study_group_id);
 

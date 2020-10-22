@@ -59,6 +59,7 @@ export class AssessmentDataComponent implements OnInit {
   public fileExcel: File;
   public filesName_Excel: any = 'โปรดเลือกไฟล์';
   public dataFileExcel: any = null;
+  public nameTeacher: any = null;
 
   public Episode1 = {
     count_men: 0,
@@ -536,7 +537,7 @@ export class AssessmentDataComponent implements OnInit {
         Form.append('group', this.codeGroup);
         Form.append('year', this.assessment_year.value._year);
 
-        var getData: any = await this.http.post('teacher/addAssessment', Form);
+        var getData: any = await this.http.post_('teacher/addAssessment', Form);
 
         // Form.forEach((value, key) => {
         //   console.log(key + ':' + value);
@@ -2047,6 +2048,7 @@ export class AssessmentDataComponent implements OnInit {
 
   // }
   public async clickgroup_Branchhead(i) {
+    this.nameTeacher = i.titlename + i.fname + ' ' + i.lname;
     this.group_Branchhead = i.study_group_id;
     this.group_name_Branchhead = i.study_group_name;
     this.codeGroup = null;

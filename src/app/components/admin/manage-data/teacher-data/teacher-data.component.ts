@@ -22,6 +22,8 @@ export class TeacherDataComponent implements OnInit {
   public nameBranchhead: any = null;
   public IDBranchhead: any = null;
   public advisorID: any = null;
+  public pageTeacher: number = 1;
+  public teacher: FormGroup;
 
   constructor(public http: HttpService, private formBuilder: FormBuilder) {
     this.getFaculty();
@@ -30,6 +32,12 @@ export class TeacherDataComponent implements OnInit {
   ngOnInit(): void {
     this.inBranchhead = this.formBuilder.group({
       Branchhead: ['', Validators.required],
+    });
+    this.teacher = this.formBuilder.group({
+      code: ['', Validators.required],
+      titlename: ['', Validators.required],
+      fname: ['', Validators.required],
+      lname: ['', Validators.required],
     });
   }
 
@@ -188,5 +196,37 @@ export class TeacherDataComponent implements OnInit {
         }
       }
     });
+  };
+  public insertTeacher = async () => {
+    let formData = new FormData();
+    var input = this.teacher.value.code.trim();
+    formData.append('code', input);
+    formData.append('titlename', this.teacher.value.titlename);
+    formData.append('fname', this.teacher.value.fname);
+    formData.append('lname', this.teacher.value.lname);
+    formData.append('status', '2500');
+    formData.append('branch', this.codeMajor);
+
+    let getData: any = await this.http.post('admin/addTeacher', formData);
+    // formData.forEach((value, key) => {
+    // console.log(key + ':' + value);
+    // });
+    if (getData.connect) {
+      if (getData.response.result) {
+        Swal.fire('เพิ่มข้อมูลเสร็จสิ้น', '', 'success');
+        let win: any = window;
+        win.$('#addTeacher').modal('hide');
+        this.getTeacher();
+        this.teacher.reset();
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'เพิ่มข้อมูลไม่สำเร็จ',
+          text: 'เลขที่ตำแหน่งซ้ำ',
+        });
+      }
+    } else {
+      Swal.fire('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้!', '', 'error');
+    }
   };
 }

@@ -92,6 +92,7 @@ export class ActionPlanComponent implements OnInit {
   public dataActionPlan_Status: any = null;
   public dataActionPlan_Status_Branchhead: any = null;
   public dataBranchhead_action_plan: any = null;
+  public nameTeacher: any = null;
 
   public actionPlan_year: FormGroup;
   public actionPlan_year_Branchhead: FormGroup;
@@ -612,6 +613,7 @@ export class ActionPlanComponent implements OnInit {
   }
   public async clickgroup_Branchhead(i) {
     this.group_Branchhead = i.study_group_id;
+    this.nameTeacher = i.titlename + i.fname + ' ' + i.lname;
     this.getActionPlan_Completed_Branchhead();
     this.month_plan_Branchhead();
     this.getActionPlan_Status_Branchhead();

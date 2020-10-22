@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
         this.service
           .get(`/loginsso?perid=${value.perid}`)
           .then((value: any) => {
-            // console.log(value);
+            console.log(value);
             if (value.response.success) {
               let a = value.response.data.userID;
 

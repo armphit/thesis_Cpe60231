@@ -1915,7 +1915,7 @@ export class AssessmentDataComponent implements OnInit {
         Form.append('group', this.groupID);
         Form.append('year', this.assessment_year.value._year);
 
-        var getData: any = await this.http.post('teacher/addAssessment', Form);
+        var getData: any = await this.http.post_('teacher/addAssessment', Form);
 
         // Form.forEach((value, key) => {
         //   console.log(key + ':' + value);

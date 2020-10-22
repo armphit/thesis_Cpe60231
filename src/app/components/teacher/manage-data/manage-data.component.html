@@ -863,12 +863,19 @@
                           [disabled]="i.file_curriculum == null"
                         >
                           <a
-                            href="{{ http.PathPDF }}{{ i.file_curriculum }}"
+                            href="{{ http.PathPDF }}{{
+                              Group_Branchhead.curriculum
+                            }}"
                             target="_blank"
                             ><font color="white">คลิกดูแผนการเรียน</font></a
                           >
                         </button>
                       </div>
+                    </div>
+                    <div style="padding-top: 20px; padding-left: 5px">
+                      <strong>อาจารย์ที่ปรึกษา</strong>: &nbsp;&nbsp;{{
+                        Group_Branchhead.nameTeacher
+                      }}
                     </div>
                     <div style="padding-top: 20px; padding-left: 5px">
                       <strong>รายชื่อนักศึกษา</strong>

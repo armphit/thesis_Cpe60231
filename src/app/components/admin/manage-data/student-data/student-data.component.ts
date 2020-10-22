@@ -220,7 +220,7 @@ export class StudentDataComponent implements OnInit {
           Form.append(key, this.data[i][key]);
         });
         Form.append('group', this.groupID);
-        var getData: any = await this.http.post('admin/uploadStudent', Form);
+        var getData: any = await this.http.post_('admin/uploadStudent', Form);
       }
       console.log(getData);
       if (getData.connect) {

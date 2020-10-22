@@ -61,6 +61,7 @@ export class GoodnessRecordComponent implements OnInit {
   public dataGoodness_BranchHead: any = null;
   public dataBranchhead: any = null;
   public nameGroup: any = null;
+  public nameTeacher: any = null;
 
   constructor(public http: HttpService, private formBuilder: FormBuilder) {
     this.getGroup();
@@ -118,9 +119,11 @@ export class GoodnessRecordComponent implements OnInit {
       alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
     }
   };
+
   public clickGroup(i) {
     this.codeGroup = i.study_group_id;
     this.nameGroup = i.study_group_name;
+    this.nameTeacher = i.titlename + i.fname + ' ' + i.lname;
     // this.getAdvice();
     // this.getAdvice_notNull();
     this.getGoodnessStudent();
@@ -365,8 +368,9 @@ export class GoodnessRecordComponent implements OnInit {
     });
     this.getGoodness_BranchHead();
   }
-  public async clickGroup_Branch(codeGroup) {
-    this.codeGroup_Branch = codeGroup;
+  public async clickGroup_Branch(i) {
+    this.codeGroup_Branch = i.study_group_id;
+    this.nameTeacher = i.titlename + i.fname + ' ' + i.lname;
     this.getGoodness_BranchHead();
   }
   public async getGoodness_BranchHead() {
