@@ -26,7 +26,7 @@
     "file-saver": "^2.0.2",
     "file-system": "^2.2.2",
     "html2canvas": "^1.0.0-rc.7",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.3.1",
     "moment": "^2.27.0",
     "ngx-loading": "^8.0.0",
     "ngx-pagination": "^4.1.0",
